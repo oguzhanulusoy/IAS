@@ -1,296 +1,395 @@
-from django.contrib.auth.models import User
-#from django.contrib.postgres.fields import ArrayField
-from django.core.validators import MaxValueValidator
 from django.db import models
+from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
+from django.core.mail import send_mail
+from django.utils.translation import ugettext_lazy as _
+from datetime import datetime
+from collections import OrderedDict
+from .managers import UserManager
 from .lists import *
 
-'''
-This model is for applies. The model stores personal, contact, 
-previous education and application information. The acceptance 
-statue will be false as default.'''
+
+class User(AbstractBaseUser, PermissionsMixin):
+    username = models.CharField(_('username'), max_length=15, unique=True)
+    email = models.EmailField(_('email address'), unique=True)
+    first_name = models.CharField(_('first name'), max_length=30)
+    last_name = models.CharField(_('last name'), max_length=30)
+    phone_regex = RegexValidator(regex=r'^\+(?:[0-9] ?){6,14}[0-9]$',
+                                 message='Phone number must be entered in the format: "+905304440044"')
+    phone_number = models.CharField(validators=[phone_regex], max_length=17)  # validators should be a list
+    date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
+    is_active = models.BooleanField(_('active'), default=False)
+    is_superuser = models.BooleanField(_('superuser'), default=False)
+    is_staff = models.BooleanField(_('staff'), default=False)
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+    personal_information = models.ForeignKey('PersonalInformation', on_delete=models.SET_NULL, blank=True, null=True)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email', 'first_name', 'last_name', 'phone_number']
+
+    class Meta:
+        db_table = 'auth_user'
+
+    def generate_unique_username(self):
+        pass
+
+    def __str__(self):
+        return self.full_name
+
+    @property
+    def full_name(self):
+        """
+        Returns the first_name plus the last_name, with a space in between.
+        """
+        full_name = '%s %s' % (self.first_name, self.last_name)
+        return full_name.strip()
+
+    def email_user(self, subject, message, from_email=None, **kwargs):
+        """
+        Sends an email to this User.
+        """
+        send_mail(subject, message, from_email, [self.email], **kwargs)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)  # Call the 'real' save() method.
+
+
 class Visitor(models.Model):
 
-    proxy = True
+    # Personal Information
+    user = models.OneToOneField('User', on_delete=models.CASCADE)
+    tc = models.CharField('TC Number', max_length=11, unique=True)
+    birthday = models.DateField('Birthday')
+    gender = models.CharField('Gender', max_length=10, choices=GENDER)
+    application_date = models.DateField(auto_now_add=True)
 
-    class Meta:
-        verbose_name_plural = "Visitors"
-        verbose_name = "Visitor"
+    # Contact Information
+    address = models.TextField('Address', max_length=60)
+    city = models.CharField('City', max_length=20, choices=CITIES)
 
-    # Personal information:
-    user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
-    joinedDate = models.DateTimeField(auto_now_add=True)
-    tcID = models.CharField(('TC Number'), max_length=11, blank=False, unique=True)
-    birthday = models.DateField(('Birthday'), null=True, blank=False)
-    gender = models.CharField(('Sex'), max_length=5, choices=sex, default='Female')
+    # Previous Education Information
+    degree = models.CharField('Degree', max_length=10, choices=DEGREES)
+    university = models.CharField('University', max_length=50, choices=UNIVERSITIES)
+    gpa = models.DecimalField('GPA', decimal_places=2, max_digits=4, validators=[MinValueValidator(2),
+                                                                                 MaxValueValidator(4)])
 
-    # Contact information:
-    mail = models.EmailField(('E-mail Address'), unique=True)
-    address = models.CharField(('Address'), max_length=40, blank=False)
-    city = models.CharField(('Current city'), max_length=20, choices=listOfCities, blank=False, default='İstanbul')
-    phoneNumber = models.CharField(('Phone Number'), max_length=11, blank=False, null=True, unique=True)
+    # Exam Information
+    ales = models.PositiveIntegerField('ALES', validators=[MinValueValidator(50),
+                                                           MaxValueValidator(100)])
+    yds = models.PositiveIntegerField('YDS', validators=[MinValueValidator(30),
+                                                         MaxValueValidator(100)])
 
-    # Previous education information:
-    degree = models.CharField(('Degree'), max_length=20, choices=listOfDegree, default='Lisans')
-    university = models.CharField(('University'), max_length=50, choices=listOfUniversities, default='Işık Üniversitesi')
-    gpa = models.PositiveSmallIntegerField(('General Point Average'), blank=False, validators=[MaxValueValidator(4)])
-
-    # Application information:
-    referenceName = models.CharField(('Reference Name'), max_length=40, null=True, blank=False)
-    referenceNamePhone = models.CharField(('Reference Phone Number'), max_length=11, blank=False, null=True)
-    referenceJob = models.CharField(('Reference Job'), max_length=40, null=True, blank=False)
-    referenceSector = models.CharField(('Sector'), max_length=20, choices=listOfSectors, blank=False, null=True)
-    scienceExam = models.PositiveSmallIntegerField(('ALES Point'), blank=False, validators=[MaxValueValidator(100)])
-    foreignLanguageExam = models.PositiveSmallIntegerField(('YDS Point'), blank=False, validators=[MaxValueValidator(100)])
-    program = models.ForeignKey('Program', related_name='Program', null=True, blank=False, on_delete=models.CASCADE)
-
-    # Acceptance Statue:
-    acceptance = models.BooleanField(('Acceptance'), blank=False)
+    # Acceptance Status
+    accepted = models.BooleanField('Accepted', default=False)
 
     def __str__(self):
-        return self.user.first_name + str(" ") + self.user.last_name
+        return self.user.first_name + ' ' + self.user.last_name
 
-'''This model is for students. The model receives required 
-information  from relevant Visitor row. Personal, contact, 
-previous education, application informations come from 
-Visitor model. Also, there are going to store enstitute information.'''
+
+class VisitorProgram(models.Model):
+    visitor = models.ForeignKey('Visitor', models.CASCADE)
+    program = models.ForeignKey('Program', models.CASCADE)
+
+    class Meta:
+        pass
+
+    def __str__(self):
+        return str(self.visitor) + ' -> ' + str(self.program)
+
+
+class PersonalInformation(models.Model):
+    id_number = models.CharField('ID Number', max_length=11, primary_key=True)
+    gender = models.CharField('Gender', max_length=10, blank=True, choices=[('M', 'Male'),
+                                                                            ('F', 'Female')])
+    nationality = models.CharField('Nationality', max_length=15, blank=True)
+    birth_date = models.DateField('Birth Date', blank=True, null=True)
+    birth_place = models.CharField('Birth Place', max_length=60, blank=True)
+    marital_status = models.CharField('Marital', max_length=10, blank=True, choices=[('Single', 'Single'),
+                                                                                     ('Married', 'Married')],
+                                      default='Single')
+    religion = models.CharField('Religion', max_length=15, blank=True)
+    blood_type = models.CharField('Blood Type', max_length=5, choices=[('A Rh+', 'A Rh+'),
+                                                                       ('B Rh+', 'B Rh+'),
+                                                                       ('AB Rh+', 'AB Rh+'),
+                                                                       ('0 Rh+', '0 Rh+'),
+                                                                       ('A Rh-', 'A Rh-'),
+                                                                       ('B Rh-', 'B Rh-'),
+                                                                       ('AB Rh-', 'AB Rh-'),
+                                                                       ('0 Rh-', '0 Rh-')], blank=True)
+    province = models.CharField('Province', max_length=60, blank=True)
+    district = models.CharField('District', max_length=60, blank=True)
+    village = models.CharField('Village', max_length=60, blank=True)
+    registration_no = models.CharField('Registration No', max_length=4, blank=True)
+    family_no = models.CharField('Family No', max_length=7, blank=True)
+    order_no = models.CharField('Order No', max_length=4, blank=True)
+    mother_name = models.CharField('Mother\'s Name', max_length=60, blank=True)
+    father_name = models.CharField('Father\'s Name', max_length=60, blank=True)
+
+    class Meta:
+        ordering = ['user']
+
+    def __str__(self):
+        return self.id_number
+
+
 class Student(models.Model):
+    user = models.OneToOneField('User', models.CASCADE)
+    st_id = models.CharField('Student ID', max_length=9, null=True, blank=True)
+    st_email = models.EmailField('School Email Address', max_length=60, blank=True, null=True)
 
-    proxy = True
+    curriculum = models.ForeignKey('Curriculum', models.CASCADE)
+    program = models.ForeignKey('Program', models.CASCADE)
+    advisor = models.ForeignKey('AcademicStaff', models.SET_NULL, blank=True, null=True)
+
+    hold_state = models.BooleanField('Hold State', default=False)
+    reg_open_statue = models.BooleanField('Registration Open Statue', default=False)
+    approval_statue = models.BooleanField('Approval Statue', default=True)
 
     class Meta:
-        verbose_name_plural = "Students"
-        verbose_name = "Student"
-
-    # Personal, contact, previous education, application informations:
-    student = models.OneToOneField(Visitor, on_delete=models.CASCADE, unique=True)
-
-    # Enstitute information:
-    schoolMail = models.CharField(('School Mail'), max_length=80, null=True, blank=True, unique=True)
-    studentID = models.CharField(('Student ID'), max_length=9, null=True, blank=False, unique=True)
-    cirriculum = models.ForeignKey(('Cirriculum'), blank=False, null=True, on_delete=models.CASCADE)
-    holdState = models.BooleanField(('Hold State'), blank=False, default=False)
-    regOpen = models.BooleanField(('Registration Open Statue'), blank=False, default=False)
-    approvalStatue = models.BooleanField(('Approval Statue'), default=True)
+        ordering = ['user']
 
     def __str__(self):
-        return str(self.student) + str(" ") + str(self.studentID)
+        return str(self.user)
 
-'''This model is for all staffs that are academic and institute.
-It uses django-user model like Student or Visitor models. It stores
-extra information. That are personal and contact informations.'''
+
 class Staff(models.Model):
 
-    proxy = True
+    # Personal Information
+    user = models.OneToOneField('User', models.CASCADE)
+    tc = models.CharField('TC Number', max_length=11, unique=True)
+    birthday = models.DateField('Birthday')
+    gender = models.CharField('Gender', max_length=10, choices=GENDER)
+    joined_date = models.DateField(auto_now_add=True)
+
+    # Contact Information
+    main_email = models.EmailField('Main Email', unique=True)
+    school_email = models.EmailField('School Email', unique=True)
+    address = models.TextField('Address', max_length=60, null=True, blank=False)
+    city = models.CharField('City', max_length=20, choices=CITIES)
 
     class Meta:
-        verbose_name_plural = "Staffs"
-        verbose_name = "Staff"
-
-    # Personal information:
-    staff = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
-    joinedDate = models.DateTimeField(auto_now_add=True)
-    tcID = models.CharField(('TC Number'), max_length=11, blank=False, unique=True)
-    birthday = models.DateField(('Birthday'), null=True, blank=False)
-
-    # Contact information:
-    selfMail = models.CharField(('Self Mail'), max_length=80, null=True, blank=False, unique=True)
-    schoolMail = models.CharField(('School Mail'), max_length=80, null=True, blank=True, unique=True)
-    address = models.CharField(('Address'), max_length=40, blank=False)
-    city = models.CharField(('Current city'), max_length=20, choices=listOfCities, blank=False, default='İstanbul')
-    phoneNumber = models.CharField(('Phone Number'), max_length=11, blank=False, null=True, unique=True)
+        ordering = ['user']
 
     def __str__(self):
-        return self.staff.first_name + str(" ") + self.staff.last_name
+        return str(self.user)
 
-'''This model is for Academic Staffs. It inherits Staff model.
-Also, there are some extra attributes.'''
+
 class AcademicStaff(models.Model):
 
-    proxy = True
+    # Personal Information
+    staff = models.OneToOneField('Staff', models.CASCADE)
+    university = models.CharField('University', max_length=60, choices=UNIVERSITIES, default='Işık Üniversitesi')
+    institute = models.ForeignKey('Institute', models.SET_NULL, blank=True, null=True)
 
     class Meta:
-        verbose_name_plural = "Academic Staffs"
-        verbose_name = "Academic Staff"
+        ordering = ['staff']
 
-    academicStaff = models.OneToOneField(Staff, on_delete=models.CASCADE, unique=True)
-    university = models.CharField(('University'), max_length=50, choices=listOfUniversities, default='Işık Üniversitesi')
-    department = models.ForeignKey(('Department'), blank=True, null=True, on_delete=models.CASCADE)
+    @property
+    def first_name(self):
+        return self.staff.user.first_name
 
-    def __str__(self):
-        return str(self.academicStaff)
-
-'''This model is for Program. It stores information about
-programs. A program example is Cyber Security.'''
-class Program(models.Model):
-
-    proxy = True
-
-    class Meta:
-        verbose_name_plural = "Programs"
-        verbose_name = "Program"
-
-    name = models.CharField(('Name'), max_length=30, blank=False, unique=True, null=True)
-    quoataManager = models.ForeignKey(('AcademicStaff'), blank=False, null=True, on_delete=models.CASCADE)
-    thesis = models.BooleanField(('Thesis'), blank=True, default=False)
-    phD = models.BooleanField(('Ph.D'),blank=True, default=False)
+    @property
+    def last_name(self):
+        return self.staff.user.last_name
 
     def __str__(self):
-        return self.name
+        return str(self.staff)
 
-'''This model is for Institute. An institute example is
-Natura Science.'''
+
 class Institute(models.Model):
-
-    proxy = True
+    name = models.CharField('Institute Name', max_length=60)
+    head = models.ForeignKey('AcademicStaff', models.SET_NULL, related_name='inst_head', blank=True, null=True)
 
     class Meta:
-        verbose_name_plural = "Institutes"
-        verbose_name = "Institute"
-
-    name = models.CharField(('Name'), max_length=30, blank=False, null=True, unique=True)
-    head = models.OneToOneField(AcademicStaff, blank=False, null=True, on_delete=models.CASCADE)
+        ordering = ['name']
 
     def __str__(self):
         return self.name
 
-'''This model is for all courses. It stores all courses with
-own attributes. It acts like a archieve for all defined courses.'''
-class Course(models.Model):
 
-    proxy = True
-
-    class Meta:
-        verbose_name_plural = "Courses"
-        verbose_name = "Course"
-
-    name = models.CharField(('Name'), max_length=30, blank=False, null=True)
-    code = models.CharField(('Code'), max_length=3, blank=False, null=True, unique=True)
-    department = models.ForeignKey('Department', on_delete=models.CASCADE, blank=False, null=True)
-    content = models.URLField(('PDF URL'), blank=False)
-    university = models.CharField(('University'), max_length=50, choices=listOfUniversities, blank=False, null=True)
-    credit = models.PositiveSmallIntegerField(('Code'), blank=False, null=True)
-    ECTS = models.PositiveSmallIntegerField(('ECTS'), blank=False, null=True)
-    isValid = models.BooleanField(('is Valid'), blank=True, default=False)
-    deleted = models.BooleanField(('Deleted'), blank=True, default=False)
-
-    def __str__(self):
-        return self.code + str(" ") + self.name
-
-'''This model is for completed courses. It inherits Student model.'''
-class CompletedCourse(models.Model):
-
-    proxy = True
-
-    class Meta:
-        verbose_name_plural = "Completed Courses"
-        verbose_name = "Completed Course"
-
-    student = models.OneToOneField(Student, on_delete=models.CASCADE, blank=False)
-    ccrCourse = models.OneToOneField('CourseType', on_delete=models.CASCADE, blank=False, related_name='CompletedCourse_ccrCourse')
-    actCourse = models.OneToOneField('CourseType', on_delete=models.CASCADE, blank=False, related_name='CompletedCourse_actCourse')
-    grade = models.CharField(('Grade'), max_length=2, blank=False, null=True)
-
-    def __str__(self):
-        return str(self.student) + str(" ") + str(self.ccrCourse) + str(" ") + str(self.grade)
-
-'''This model is for completed courses. It inherits Student model.'''
-class TakenCourse(models.Model):
-
-    proxy = True
-
-    class Meta:
-        verbose_name_plural = "Taken Courses"
-        verbose_name = "Taken Course"
-
-    student = models.OneToOneField(Student, on_delete=models.CASCADE, blank=False)
-    ccrCourse = models.OneToOneField('CourseType', on_delete=models.CASCADE, blank=False)
-    actCourse = models.OneToOneField('Section', on_delete=models.CASCADE, blank=False)
-
-    def __str__(self):
-        return str(self.student) + str(" ") + str(self.actCourse)
-
-'''This model defines Schedules.'''
-class Schedule(models.Model):
-
-    proxy = True
-
-    class Meta:
-        verbose_name_plural = "Schedules"
-        verbose_name = "Schedule"
-
-    section = models.OneToOneField('Section', on_delete=models.CASCADE, blank=False)
-    day = models.CharField(('Day'), choices=listOfDays, max_length=20, blank=False, null=True)
-    slot = models.CharField(('Slot'), choices=listOfSlots, max_length=20, blank=False, null=True)
-    place = models.CharField(('Place'), choices=listOfPlaces, max_length=40, blank=False, null=True)
-
-    def __str__(self):
-        return str(self.section) + str(" ") + str(self.day) + str(" ") + str(self.slot) + str(" ") + str(self.place)
-
-'''This model defines Cirriculum for each program.
-And, inherits Program model.'''
-class Cirriculum(models.Model):
-
-    proxy = True
-
-    class Meta:
-        verbose_name_plural = "Cirriculums"
-        verbose_name = "Cirriculum"
-
-    #courseTypes = ArrayField(models.CharField(('Course List'), max_length=500), blank=True, null=True)
-    year = models.DateField(('Date'), blank=True, null=True)
-    program = models.OneToOneField(Program, on_delete=models.CASCADE, blank=False)
-
-    def __str__(self):
-        return str(self.program) + str(" ") + str(self.year)
-
-'''This model inherits Cirriculum model.'''
-class CourseType(models.Model):
-
-    proxy = True
-
-    class Meta:
-        verbose_name_plural = "Course Types"
-        verbose_name = "Course Type"
-
-    #course = ArrayField(models.CharField(('Course List'), max_length=500), blank=True, null=True)
-    cirriculum = models.OneToOneField(Cirriculum, on_delete=models.CASCADE, blank=False)
-    name = models.CharField(('Name'), max_length=10, blank=False, null=True)
-    semester = models.CharField(('Semester'), max_length=1, blank=False, null=True)
-
-    def __str__(self):
-        return self.name
-
-'''This model inherits Academic Staff model.'''
 class Department(models.Model):
-
-    proxy = True
+    name = models.CharField('Name', max_length=60)
+    institute = models.ForeignKey('Institute', models.CASCADE)
+    dept_head = models.ForeignKey('AcademicStaff', models.SET_NULL, blank=True, null=True)
 
     class Meta:
-        verbose_name_plural = "Departments"
-        verbose_name = "Department"
-
-    name = models.CharField(('Name'), max_length=40, blank=False, null=True, unique=True)
-    code = models.CharField(('Code'), max_length=3, blank=False, null=True, unique=True)
-    head = models.OneToOneField(AcademicStaff, on_delete=models.CASCADE, blank=False, unique=True, related_name='Department_Head')
+        ordering = ['name']
 
     def __str__(self):
-        return str(self.name)
+        return self.name
 
-'''This model inherits Course, Academic Staff models.'''
+
+class Program(models.Model):
+    name = models.CharField('Name', max_length=60)
+    code = models.CharField('Code', max_length=4)
+    type = models.CharField('Type', max_length=60, choices=PROGRAM_TYPES)
+    thesis = models.BooleanField('Thesis', default=False)
+
+    department = models.ForeignKey(Department, models.CASCADE)
+    head = models.ForeignKey('AcademicStaff', models.SET_NULL, related_name='prog_head', blank=True, null=True)
+    quota_manager = models.ForeignKey('AcademicStaff', models.SET_NULL, blank=True, null=True)
+
+    class Meta:
+        unique_together = ['code', 'type', 'thesis']
+        ordering = ['type', 'name']
+
+    def __str__(self):
+        if self.thesis:
+            return self.name + ' (With Thesis)'
+        return self.name + ' (Without Thesis)'
+
+
+class Curriculum(models.Model):
+    program = models.ForeignKey('Program', models.CASCADE, verbose_name='Program', blank=False)
+    year = models.PositiveIntegerField(verbose_name='Year', blank=False,
+                                       validators=[MinValueValidator(2000),
+                                                   MaxValueValidator(datetime.now().year + 1)])
+
+    class Meta:
+        ordering = ['program', 'year']
+
+    def __str__(self):
+        return self.program.name + ' Program ' + str(self.year) + ' Curriculum'
+
+
+class Course(models.Model):
+    code = models.CharField('Course Code', max_length=3, unique=True)
+    title = models.CharField('Course Title', max_length=60, blank=False)
+    description = models.TextField('Course Description', max_length=255, blank=True)
+    credit = models.IntegerField('Course Credit', blank=False)
+    ects_credit = models.IntegerField('Course ECTS Credit', blank=False)
+    program = models.ForeignKey('Program', models.CASCADE)
+    university = models.CharField('University', max_length=60, choices=UNIVERSITIES, default='Işık Üniversitesi')
+    is_valid = models.BooleanField('Is Valid', default=False)
+    is_deleted = models.BooleanField('Deleted', default=False)
+    created_date = models.DateField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['program', 'code']
+
+    def __str__(self):
+        return self.program.code + self.code
+
+
 class Section(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Course')
+    number = models.PositiveIntegerField('Section Number', validators=[MinValueValidator(1)])
 
-    proxy = True
-
-    class Meta:
-        verbose_name_plural = "Sections"
-        verbose_name = "Section"
-
-    course = models.OneToOneField(Course, on_delete=models.CASCADE, blank=False)
-    number = models.PositiveSmallIntegerField(('Number'), blank=False, null=True)
-    quoata = models.PositiveSmallIntegerField(('Quoata'), blank=False, null=True)
-    instructor = models.OneToOneField(AcademicStaff, blank=False, on_delete=models.CASCADE)
-    year = models.CharField(('Year'), max_length=4, blank=False, null=True)
-    semester = models.CharField(('Semester'), max_length=40, choices=listOfSemesters, blank=False, null=True)
+    instructor = models.ForeignKey('AcademicStaff', models.SET_NULL, blank=True, null=True)
+    year = models.CharField('Year', max_length=4, default=datetime.now().year)
+    semester = models.CharField('Semester', max_length=10, choices=SEMESTERS)
 
     def __str__(self):
-        return str(self.course) + str(" ") + str(self.number)
+        if self.number < 10:
+            return self.course.code + '.0' + str(self.number)
+        return self.course.code + str(self.number)
+
+    class Meta:
+        unique_together = ('course', 'number')
+        ordering = ('course', 'number')
+
+
+class Schedule(models.Model):
+    section = models.ForeignKey('Section', verbose_name='Section', max_length=10, on_delete=models.CASCADE)
+    day = models.CharField('Section Day', max_length=15, choices=DAYS)
+    slot = models.CharField('Section Slot', max_length=2, choices=SLOTS)
+    place = models.CharField('Place', max_length=15, choices=PLACES)
+
+    def __str__(self):
+        return '(' + str(self.section) + ') ' + str(self.day) + str(self.slot) + ' / ' + self.place
+
+    class Meta:
+        verbose_name = 'Course Schedule'
+        unique_together = ['section', 'day', 'slot']
+        ordering = ['section', 'day', 'slot']
+
+
+def write_roman(num):
+    roman = OrderedDict()
+    roman[10] = 'X'
+    roman[9] = 'IX'
+    roman[5] = 'V'
+    roman[4] = 'IV'
+    roman[1] = 'I'
+
+    def roman_num(number):
+        for r in roman.keys():
+            x, y = divmod(number, r)
+            yield roman[r] * x
+            number -= (r * x)
+            if number > 0:
+                roman_num(number)
+            else:
+                break
+
+    return ''.join([a for a in roman_num(num)])
+
+
+class CourseType(models.Model):
+    title = models.CharField('Title', max_length=60)
+    code = models.CharField('Code', max_length=15, unique=True)
+
+    class Meta:
+        ordering = ['code']
+
+    def __str__(self):
+        return str(self.code)
+
+
+class CcrCourse(models.Model):
+    ccr = models.ForeignKey('Curriculum', models.CASCADE)
+    type = models.ForeignKey('CourseType', models.CASCADE)
+    no = models.PositiveIntegerField('Course Number', validators=[MinValueValidator(1)], default=1)
+    semester = models.PositiveIntegerField('Semester', validators=[MinValueValidator(1),
+                                                                   MaxValueValidator(10)])
+
+    class Meta:
+        unique_together = ('ccr', 'type', 'no')
+        ordering = ['ccr', 'type', 'no', 'semester']
+
+    def __str__(self):
+        return str(self.ccr.program.code) + '_' + str(self.type.code) \
+               + "-" + str(write_roman(self.no))
+
+
+class OfferedCourse(models.Model):
+    ccr_course = models.ForeignKey('CcrCourse', models.CASCADE)
+    act_course = models.ForeignKey('Course', models.CASCADE)
+
+    class Meta:
+        unique_together = ['ccr_course', 'act_course']
+
+    def __str__(self):
+        return str(self.ccr_course.ccr.program.code) + '_' + str(self.ccr_course.type) \
+               + " -> " + str(self.act_course)
+
+
+class TakenCourse(models.Model):
+    student = models.ForeignKey('Student', models.CASCADE)
+    ccr_course = models.ForeignKey('CcrCourse', models.CASCADE)
+    act_course = models.ForeignKey('Course', models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Taken Course'
+        unique_together = ['student', 'ccr_course', 'act_course']
+
+    def __str__(self):
+        return str(self.student) + ' ' + str(self.act_course)
+
+
+class CompletedCourse(models.Model):
+    student = models.ForeignKey('Student', models.CASCADE)
+    ccr_course = models.ForeignKey('CcrCourse', models.CASCADE)
+    act_course = models.ForeignKey('Course', models.CASCADE)
+    grade = models.CharField('Grade', max_length=2)
+
+    class Meta:
+        verbose_name = 'Completed Course'
+        verbose_name_plural = 'Completed Courses'
+        unique_together = ['student', 'ccr_course', 'act_course']
+
+    def __str__(self):
+        return str(self.student) + ' ' + str(self.ccr_course) + ' ' + str(self.grade)
