@@ -25,6 +25,7 @@ class CompletedCourseAdmin(admin.ModelAdmin):
 # Register your models here.
 admin.site.register(Curriculum)
 admin.site.register(Course)
+admin.site.register(Staff)
 admin.site.register(Section, SectionAdmin)
 admin.site.register(Schedule)
 admin.site.register(CourseType, CourseTypeAdmin)
