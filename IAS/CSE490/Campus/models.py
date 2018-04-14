@@ -242,13 +242,13 @@ class Program(models.Model):
             return self.name + ' (With Thesis)'
         return self.name + ' (Without Thesis)'
 
-
+#established date eklendi
 class Curriculum(models.Model):
     program = models.ForeignKey('Program', models.CASCADE, verbose_name='Program', blank=False)
     year = models.PositiveIntegerField(verbose_name='Year', blank=False,
                                        validators=[MinValueValidator(2000),
                                                    MaxValueValidator(datetime.now().year + 1)])
-
+    establishedDate = models.DateField('established date', null=True)
     class Meta:
         ordering = ['program', 'year']
 

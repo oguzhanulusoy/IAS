@@ -35,16 +35,25 @@ def programs(request):
 def programDetails(request, pk=None):
     post = get_object_or_404(Program, pk=pk)
     programDetails = {'post': post}
+    print(programDetails)
     return render(request, 'program-details.html', programDetails)
 
 def cirriculums(request):
-    return render(request, 'cirriculums.html', {})
+    content = Curriculum.objects.all()
+    curriculums = {'curriculums' : content}
+    return render(request, 'cirriculums.html', curriculums)
 
 def courses(request):
-    return render(request, 'courses.html', {})
+    content = Course.objects.order_by('-created_date')
+    courses = {'courses' : content}
+    return render(request, 'courses.html', courses)
 
 def courseTypes(request):
-    return render(request, 'courseTypes.html', {})
+    content = CourseType.objects.all()
+    courseTypes = {'courseTypes' : content}
+    return render(request, 'course-types.html', courseTypes)
 
 def sections(request):
-    return render(request, 'sections.html', {})
+    content = Section.objects.order_by('-year')
+    sections = {'sections' : content}
+    return render(request, 'sections.html', sections)
