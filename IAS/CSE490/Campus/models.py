@@ -198,10 +198,11 @@ class AcademicStaff(models.Model):
     def __str__(self):
         return str(self.staff)
 
-
+# establishedDate eklendi
 class Institute(models.Model):
     name = models.CharField('Institute Name', max_length=60)
     head = models.ForeignKey('AcademicStaff', models.SET_NULL, related_name='inst_head', blank=True, null=True)
+    establishedDate = models.DateField('established date', null=True)
 
     class Meta:
         ordering = ['name']

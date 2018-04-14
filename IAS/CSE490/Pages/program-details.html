@@ -1,0 +1,62 @@
+{% extends 'institute.html' %}
+{% block content %}
+<!-- Page Content -->
+<div class="container">
+    <div class="row">
+        <!-- Menu -->
+        {% include 'assets/menu/institute.html' %}
+        <div class="col-lg-9">
+            <div class="card card-outline-secondary my-4">
+                <!-- Title -->
+                <div class="card-header">
+                    {{ request.path }}
+                </div>
+                <div class="card-body">
+                    <p>You can see the names and codes of all programs, the department they belong to,
+                        and the heads of programs. You can expand the content by clicking.</p>
+                    <!-- Table -->
+                    <hr>
+
+                    name = models.CharField('Name', max_length=60)
+    code = models.CharField('Code', max_length=4)
+    type = models.CharField('Type', max_length=60, choices=PROGRAM_TYPES)
+    thesis = models.BooleanField('Thesis', default=False)
+
+    department = models.ForeignKey(Department, models.CASCADE)
+    head = models.ForeignKey('AcademicStaff', models.SET_NULL, related_name='prog_head', blank=True, null=True)
+    quota_manager = models.ForeignKey('AcademicStaff', models.SET_NULL, blank=True, null=True)
+
+                    <small class="text-muted">Name</small>
+              <p> {{ programDetails.name }} </p>
+
+                       <small class="text-muted">Code</small>
+              <p> {{ programDetails.code }} </p>
+
+              <hr>
+                    <hr>
+                    <!-- Modal -->
+                    <div class="container">
+                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Program</button>
+                        <div class="modal fade" id="myModal" role="dialog">
+                            <div class="modal-dialog">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Add Program Screen</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Some text in the modal.</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
