@@ -57,7 +57,7 @@ urlpatterns = [
     path('succesfully/', v.succesfully),
     path('application-i/', v.applicationI),
     path('application-ii/', v.applicationII),
-    path('apply-details/<pk>', v.applyDetails),
+    path('application-details/<pk>', v.applicationDetails),
 
 ] + static(settings.STATIC_URL.lstrip('/'), document_root=settings.STATIC_ROOT)
 

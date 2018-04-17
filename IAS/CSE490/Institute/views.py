@@ -62,11 +62,20 @@ def programs(request):
     programs = Program.objects.order_by('name')
     return render(request, url, {'programs' : programs, 'form' : form})
 
+
+
+
+
+
+##########################
 def programDetails(request, id=None):
     post = get_object_or_404(Program, pk=id)
-    programDetails = {'post': post}
-    print(programDetails)
-    return render(request, 'program-details.html', programDetails)
+    print(post)
+    return render(request, 'program-details.html', {'post' : post})
+#########################
+
+
+
 
 def cirriculums(request):
     url = 'cirriculums.html'
@@ -247,13 +256,25 @@ def applies(request):
     applies = {'applies' : content}
     return render(request, 'applies.html', applies)
 
-def applyDetails(request, pk=None):
-    applyDetails = get_object_or_404(Visitor, pk=pk)
-    return render(request, 'apply-details.html', {'applyDetails' : apply})
+
+
+
+
+
+
+##########################
+def applicationDetails(request, pk=None):
+    applicationDetails = get_object_or_404(Visitor, pk=pk)
+    return render(request, 'application-details.html', {'applicationDetails' : applicationDetails})
 
 
 def acceptance(request):
     url = 'acceptance.html'
+##########################
+
+
+
+
 
 
 def invalid(request):
