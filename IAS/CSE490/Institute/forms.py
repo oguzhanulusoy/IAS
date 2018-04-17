@@ -41,16 +41,22 @@ class AddAcademicStaffForm(forms.ModelForm):
 		model = AcademicStaff
 		fields = '__all__'
 
+
 class AddStaffForm(forms.ModelForm):
 	class Meta:
 		model = Staff
 		exclude = ['user', 'staff_id']
 
+class AddVisitorForm(forms.ModelForm):
+	class Meta:
+		model = Visitor
+		exclude = ['application_date', 'user', 'accepted']
+
 class AddUserForm(forms.ModelForm):
 	class Meta:
 		model = User
 		exclude = ['password', 'password1', 'user_permissions', 'last_login', 
-		'personal_information', 'avatar', 'is_active', 'is_superuser', 'groups']
+		'personal_information', 'avatar', 'is_active', 'is_superuser', 'groups', 'is_staff']
 
 		def signup(self, request, user):
 			password = str(User.objects.make_random_password())
