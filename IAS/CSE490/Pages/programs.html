@@ -44,7 +44,12 @@
                                         <h4 class="modal-title">Add Program Screen</h4>
                                     </div>
                                     <div class="modal-body">
-                                        <p>Some text in the modal.</p>
+                                        <p>Enter given fields correctly.</p>
+                                            <form action='' method='post'>{% csrf_token %}
+                                                {{ form.as_p }}
+                                                {{ form.non_field_errors }}
+                                                <input type='submit' value='Submit' />
+                                            </form>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

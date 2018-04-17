@@ -213,7 +213,7 @@ class Institute(models.Model):
 class Department(models.Model):
     name = models.CharField('Name', max_length=60)
     institute = models.ForeignKey('Institute', models.CASCADE)
-    dept_head = models.ForeignKey('AcademicStaff', models.SET_NULL, blank=True, null=True)
+    head = models.ForeignKey('AcademicStaff', models.SET_NULL, blank=True, null=True)
 
     class Meta:
         ordering = ['name']
@@ -241,7 +241,7 @@ class Program(models.Model):
             return self.name + ' (With Thesis)'
         return self.name + ' (Without Thesis)'
 
-#established date eklendi
+#established date eklendi, silinecek
 class Curriculum(models.Model):
     program = models.ForeignKey('Program', models.CASCADE, verbose_name='Program', blank=False)
     year = models.PositiveIntegerField(verbose_name='Year', blank=False,
@@ -393,8 +393,3 @@ class CompletedCourse(models.Model):
 
     def __str__(self):
         return str(self.student) + ' ' + str(self.ccr_course) + ' ' + str(self.grade)
-
-
-class Post(models.Model):
-    content = models.CharField(max_length=256)
-    created_at = models.DateTimeField()

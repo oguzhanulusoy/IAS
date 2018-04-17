@@ -44,6 +44,7 @@ urlpatterns = [
     path('all-institute-staff/', v.allInstituteStaff),
     path('all-grand-student/', v.allGrandStudent),
     path('applies/', v.applies),
+    path('invalid/', v.invalid),
 
 ] + static(settings.STATIC_URL.lstrip('/'), document_root=settings.STATIC_ROOT)
 
