@@ -16,6 +16,11 @@ class AddCirriculumForm(forms.ModelForm):
 		model = Curriculum
 		fields = '__all__'
 
+class AddInstituteForm(forms.ModelForm):
+	class Meta:
+		model = Institute
+		fields = '__all__'
+
 class AddCourseForm(forms.ModelForm):
 	class Meta:
 		model = Course

@@ -21,23 +21,23 @@
                             <th>Course</th>
                             <th>Number</th>
                             <th>Instructor</th>
-                            <th>Year</th>
-                            <th>Semester</th>
+                            <th>Year / Semester</th>
+                            <th>View</th>
                         </tr>
                         {% for i in sections %}
                         <tr>
                             <td>{{ i.course }}</td>
                             <td>{{ i.number }}</td>
                             <td>{{ i.instructor }}</td>
-                            <td>{{ i.year }}</td>
-                            <td>{{ i.semester }}</td>
+                            <td>{{ i.year }} / {{ i.semester }}</td>
+                            <td><a href="/section-details/{{ i.id }}/">View</a></td>
                         </tr>
                         {% endfor %}
                     </table>
                     <hr>
                     <!-- Modal -->
                     <div class="container">
-                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Department</button>
+                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Section</button>
                         <div class="modal fade" id="myModal" role="dialog">
                             <div class="modal-dialog">
                                 <!-- Modal content-->

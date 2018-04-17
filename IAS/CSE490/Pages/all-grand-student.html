@@ -23,6 +23,7 @@
                             <th>E-Mail</th>
                             <th>Program</th>
                             <th>Advisor</th>
+                            <th>View</th>
                         </tr>
                         {% for i in grandStudents %}
                         <tr>
@@ -31,31 +32,11 @@
                             <td>{{ i.st_email }}</td>
                             <td>{{ i.program }}</td>
                             <td>{{ i.advisor }}</td>
+                            <td><a href="/grand-student-details/{{ i.id}}/">View</a></td>
                         </tr>
                         {% endfor %}
                     </table>
                     <hr>
-                    <!-- Modal -->
-                    <div class="container">
-                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Institute</button>
-                        <!-- Modal -->
-                        <div class="modal fade" id="myModal" role="dialog">
-                            <div class="modal-dialog">
-                                <!-- Modal content-->
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Add Institute Screen</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Some text in the modal.</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

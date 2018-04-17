@@ -26,55 +26,6 @@
 					<br><small class="text-muted">isDeleted:  </small> {{ courseDetails.is_deleted }}
 					<br><small class="text-muted">Created Date:  </small> {{ courseDetails.created_date }}
 					<hr>
-					<!-- Modal -->
-					<div class="container">
-						<!-- Modal Close Course-->
-						<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#closeCourse">Close Course</button>
-						<div class="modal fade" id="closeCourse" role="dialog">
-							<div class="modal-dialog">
-								<!-- Modal content-->
-								<div class="modal-content">
-									<div class="modal-header">
-										<h4 class="modal-title">Close Course Screen</h4>
-									</div>
-									<div class="modal-body">
-										<p>Enter given fields correctly.</p>
-										<form action='' method='post'>{% csrf_token %}
-											{{ editForm.as_p }}
-											{{ editForm.non_field_errors }}
-											<input type='submit' value='Submit' />
-										</form>
-									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- Modal Delete Course-->
-						<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#deleteCourse">Delete Course</button>
-						<div class="modal fade" id="deleteCourse" role="dialog">
-							<div class="modal-dialog">
-								<!-- Modal content-->
-								<div class="modal-content">
-									<div class="modal-header">
-										<h4 class="modal-title">Delete Course Screen</h4>
-									</div>
-									<div class="modal-body">
-										<p>Enter given fields correctly.</p>
-										<form action='' method='post'>{% csrf_token %}
-											{{ removeForm.as_p }}
-											{{ removeForm.non_field_errors }}
-											<input type='submit' value='Submit' />
-										</form>
-									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
 				</div>
 			</div>
 		</div>

@@ -12,8 +12,7 @@
                     {{ request.path }}
                 </div>
                 <div class="card-body">
-                    <p>You can see the names of all institutes, the heads of institutes
-                    and the date they establish.</p>
+                    <p>You can see the names of all academic staff and expand them to reach more information about them.</p>
                     <!-- Table -->
                     <hr>
                     <table>
@@ -21,19 +20,21 @@
                             <th>Staff</th>
                             <th>Institute</th>
                             <th>University</th>
+                            <th>View</th>
                         </tr>
                         {% for i in academicStaffs %}
                         <tr>
                             <td>{{ i.staff }}</td>
                             <td>{{ i.institute }}</td>
                             <td>{{ i.university }}</td>
+                            <td><a href="/academic-staff-details/{{ i.id }}/">View</a></td>
                         </tr>
                         {% endfor %}
                     </table>
                     <hr>
                     <!-- Modal -->
                     <div class="container">
-                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Institute</button>
+                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Academic Staff</button>
                         <!-- Modal -->
                         <div class="modal fade" id="myModal" role="dialog">
                             <div class="modal-dialog">

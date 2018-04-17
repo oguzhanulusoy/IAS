@@ -1,0 +1,48 @@
+{% extends 'academic-staffs.html' %}
+{% block content %}
+<!-- Page Content -->
+<div class="container">
+	<div class="row">
+		<!-- Menu -->
+		{% include 'assets/menu/academic-staffs.html' %}
+		<div class="col-lg-9">
+			<div class="card card-outline-secondary my-4">
+				<!-- Title -->
+				<div class="card-header">
+					{{ request.path }}
+				</div>
+				<div class="card-body">
+					<p>You can see the details of {{ academicStaffDetails.staff }}</p>
+					<!-- Content -->
+					<hr>
+					
+					<img src="{{ academicStaffDetails.staff.user.avatar }}">
+
+					<br><br><small class="text-muted">Personal Information  </small>
+					<br><small class="text-muted">First Name:  </small> {{ academicStaffDetails.staff.user.first_name }}
+					<br><small class="text-muted">Last Name:  </small> {{ academicStaffDetails.staff.user.last_name }}
+					<br><small class="text-muted">Academic Staff number:  </small>{{ academicStaffDetails.id }}
+					<br><small class="text-muted">University:  </small> {{ academicStaffDetails.university }}
+					<br><small class="text-muted">Institute:  </small> {{ academicStaffDetails.institute }}
+					<br><small class="text-muted">TC Number:  </small> {{ academicStaffDetails.staff.tc }}
+					<br><small class="text-muted">Birthday:  </small> {{ academicStaffDetails.staff.birthday }}
+					<br><small class="text-muted">Gender:  </small> {{ academicStaffDetails.staff.gender }}
+					<br><small class="text-muted">Joined Date:  </small> {{ academicStaffDetails.staff.joined_date }}
+					<br><br><small class="text-muted">Contact Information  </small>
+					<br><small class="text-muted">Phone Number:  </small> {{ academicStaffDetails.staff.user.phone_number }}
+					<br><small class="text-muted">E-mail:  </small> {{ academicStaffDetails.staff.main_email }}
+					<br><small class="text-muted">School Mail:  </small> {{ academicStaffDetails.staff.school_email }}
+					<br><small class="text-muted">Address:  </small> {{ academicStaffDetails.staff.address }}
+					<br><small class="text-muted">City:  </small> {{ academicStaffDetails.staff.city }}
+
+					<hr>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}
+
+
+
+

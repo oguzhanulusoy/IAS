@@ -21,12 +21,14 @@
                             <th>Name</th>
                             <th>Institute</th>
                             <th>Department Head</th>
+                            <th>View</th>
                         </tr>
                         {% for i in departments %}
                         <tr>
                             <td>{{ i.name }}</td>
                             <td>{{ i.institute }}</td>
                             <td>{{ i.head }}</td>
+                            <td><a href="/department-details/{{ i.id }}/">View</a>
                         </tr>
                         {% endfor %}
                     </table>

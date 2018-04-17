@@ -21,19 +21,21 @@
                             <th>Year</th>
                             <th>Program</th>
                             <th>Established Date</th>
+                            <th>View</th>
                         </tr>
                         {% for i in curriculums %}
                         <tr>
                             <td>{{ i.year }}</td>
                             <td>{{ i.program }}</td>
                             <td>{{ i.establishedDate }}</td>
+                            <td><a href="/cirriculum-details/{{ i.id }}/">View</a></td>
                         </tr>
                         {% endfor %}
                     </table>
                     <hr>
                     <!-- Modal -->
                     <div class="container">
-                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Institute</button>
+                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Cirriculum</button>
                         <!-- Modal -->
                         <div class="modal fade" id="myModal" role="dialog">
                             <div class="modal-dialog">

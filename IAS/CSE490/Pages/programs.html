@@ -13,22 +13,22 @@
                 </div>
                 <div class="card-body">
                     <p>You can see the names and codes of all programs, the department they belong to,
-                        and the heads of programs. You can expand the content by clicking.</p>
+                    and the heads of programs. You can expand the content by clicking.</p>
                     <!-- Table -->
                     <hr>
                     <table>
                         <tr>
-                            <th>Code</th>
                             <th>Name</th>
                             <th>Department</th>
                             <th>Head</th>
+                            <th>View</th>
                         </tr>
                         {% for i in programs %}
                         <tr>
-                            <td><a href="/program-details/{{ i.id }}/">{{ i.code }}</a></td>
-                            <td><a href="/program-details/{{ i.id }}/">{{ i.name }}</a></td>
+                            <td>{{ i.name }}</td>
                             <td>{{ i.department }}</td>
                             <td>{{ i.head }}</td>
+                            <td><a href="/program-details/{{ i.id }}/">View</a></td>
                         </tr>
                         {% endfor %}
                     </table>
@@ -45,11 +45,11 @@
                                     </div>
                                     <div class="modal-body">
                                         <p>Enter given fields correctly.</p>
-                                            <form action='' method='post'>{% csrf_token %}
-                                                {{ form.as_p }}
-                                                {{ form.non_field_errors }}
-                                                <input type='submit' value='Submit' />
-                                            </form>
+                                        <form action='' method='post'>{% csrf_token %}
+                                            {{ form.as_p }}
+                                            {{ form.non_field_errors }}
+                                            <input type='submit' value='Submit' />
+                                        </form>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

@@ -1,10 +1,10 @@
-{% extends 'academic-staffs.html' %}
+{% extends 'institute.html' %}
 {% block content %}
 <!-- Page Content -->
 <div class="container">
     <div class="row">
         <!-- Menu -->
-        {% include 'assets/menu/academic-staffs.html' %}
+        {% include 'assets/menu/institute.html' %}
         <div class="col-lg-9">
             <div class="card card-outline-secondary my-4">
                 <!-- Title -->
@@ -12,18 +12,22 @@
                     {{ request.path }}
                 </div>
                 <div class="card-body">
-                    <p>You can see institute heads.</p>
+                    <p>You can see the all information about courses.</p>
                     <!-- Table -->
                     <hr>
                     <table>
                         <tr>
-                            <th>Institute Name</th>
-                            <th>Head</th>
+                            <th>Code</th>
+                            <th>Title</th>
+                            <th>Program</th>
+                            <th>View</th>
                         </tr>
-                        {% for i in instituteHeads %}
+                        {% for i in courses %}
                         <tr>
-                            <td>{{ i.name }}</td>
-                            <td>{{ i.head }}</td>
+                            <td>{{ i.code }}</td>
+                            <td>{{ i.title }}</td>
+                            <td>{{ i.program }}</td>
+							<td><a href="/course-details/{{ i.id }}/">View</a></td>
                         </tr>
                         {% endfor %}
                     </table>

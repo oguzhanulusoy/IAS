@@ -1,0 +1,40 @@
+{% extends 'grand-students.html' %}
+{% block content %}
+<!-- Page Content -->
+<div class="container">
+    <div class="row">
+        <!-- Menu -->
+        {% include 'assets/menu/grand-students.html' %}
+        <div class="col-lg-9">
+            <div class="card card-outline-secondary my-4">
+                <!-- Title -->
+                <div class="card-header">
+                    {{ request.path }}
+                </div>
+				<div class="card-body">
+					<p>You can see the details of {{ grandStudentDetails.user.first_name }} {{ grandStudentDetails.user.last_name }}</p>
+					<!-- Content -->
+					<hr>
+					
+					<img src="{{ grandStudentDetails.user.avatar }}">
+
+					<br><br><small class="text-muted">About  </small>
+					<br><small class="text-muted">First Name:  </small> {{grandStudentDetails.user.first_name }}
+					<br><small class="text-muted">Last Name:  </small> {{ grandStudentDetails.user.last_name }}
+					<br><small class="text-muted">Grand Student #:  </small>{{ grandStudentDetails.id }}
+					<br><small class="text-muted">Student ID:  </small> {{ grandStudentDetails.st_id }}
+					<br><small class="text-muted">E-mail:  </small> {{ grandStudentDetails.st_email }}
+					<br><small class="text-muted">Phone Number:  </small> {{ grandStudentDetails.user.phone_number }}
+					<br><small class="text-muted">Advisor:  </small> {{ grandStudentDetails.advisor }}
+					<br><small class="text-muted">Curriculum:  </small> {{ grandStudentDetails.curriculum }}
+					<br><small class="text-muted">Program:  </small> {{ grandStudentDetails.program }}
+					<br><small class="text-muted">More Information:  </small> {{ grandStudentDetails.user.personal_information }}
+
+					<hr>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}
+

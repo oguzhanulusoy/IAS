@@ -21,21 +21,23 @@
                             <th>Name</th>
                             <th>Head</th>
                             <th>Established Date</th>
+                            <th>View</th>
                         </tr>
                         {% for i in institutes %}
                         <tr>
                             <td>{{ i.name }}</td>
                             <td>{{ i.head }}</td>
                             <td>{{ i.establishedDate }}</td>
+                            <td><a href="/institute-details/{{ i.id }}/">View</a>
                         </tr>
                         {% endfor %}
                     </table>
                     <hr>
                     <!-- Modal -->
                     <div class="container">
-                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Institute</button>
+                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#institute">Add Institute</button>
                         <!-- Modal -->
-                        <div class="modal fade" id="myModal" role="dialog">
+                        <div class="modal fade" id="institute" role="dialog">
                             <div class="modal-dialog">
                                 <!-- Modal content-->
                                 <div class="modal-content">
@@ -43,7 +45,12 @@
                                         <h4 class="modal-title">Add Institute Screen</h4>
                                     </div>
                                     <div class="modal-body">
-                                        <p>Some text in the modal.</p>
+                                        <p>Enter given fields correctly.</p>
+                                            <form action='' method='post'>{% csrf_token %}
+                                                {{ form.as_p }}
+                                                {{ form.non_field_errors }}
+                                                <input type='submit' value='Submit' />
+                                            </form>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

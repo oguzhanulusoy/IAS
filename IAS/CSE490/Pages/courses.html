@@ -12,36 +12,33 @@
                     {{ request.path }}
                 </div>
                 <div class="card-body">
-                    <p>You can see the names of all departments, the institute they belong to,
-                        and the heads of departments.</p>
+                    <p>You can see the all information about courses.</p>
                     <!-- Table -->
                     <hr>
                     <table>
-                        <tr>
-                            <th>Name</th>
-                            <th>Institute</th>
-                            <th>Department Head</th>
+                            <th>Code</th>
+                            <th>Title</th>
                             <th>Program</th>
+                            <th>View</th>
                         </tr>
                         {% for i in courses %}
                         <tr>
-                            <td><a href="/course-details/{{ i.id }}/">{{ i.code }}</a></td>
+                            <td>{{ i.code }}</td>
                             <td>{{ i.title }}</td>
-                            <td>{{ i.description }}</td>
                             <td>{{ i.program }}</td>
-                        </tr>
+                            <td><a href="/course-details/{{ i.id }}/">View</a></td>
                         {% endfor %}
                     </table>
                     <hr>
                     <!-- Modal -->
                     <div class="container">
-                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Department</button>
+                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Course</button>
                         <div class="modal fade" id="myModal" role="dialog">
                             <div class="modal-dialog">
                                 <!-- Modal content-->
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h4 class="modal-title">Add Department Screen</h4>
+                                        <h4 class="modal-title">Add Course Screen</h4>
                                     </div>
                                     <div class="modal-body">
                                         <p>Enter given fields correctly.</p>

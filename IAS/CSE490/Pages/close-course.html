@@ -12,31 +12,30 @@
                     {{ request.path }}
                 </div>
                 <div class="card-body">
-                    <p>You can see the names of all departments, the institute they belong to,
-                        and the heads of departments.</p>
+                    <p>You can see the all information about courses and close them.</p>
                     <!-- Table -->
                     <hr>
                     <table>
                         <tr>
-                            <th>Name</th>
-                            <th>Institute</th>
-                            <th>Department Head</th>
+                            <th>Code</th>
+                            <th>Title</th>
                             <th>Program</th>
+                            <th>View</th>
                         </tr>
                         {% for i in courses %}
                         <tr>
-                            <td><a href="/close-course-details/{{ i.id }}/">{{ i.code }}</a></td>
+                            <td>{{ i.code }}</td>
                             <td>{{ i.title }}</td>
-                            <td>{{ i.description }}</td>
                             <td>{{ i.program }}</td>
+                            <td><a href="/close-course-details/{{ i.id }}/">View</a></td>
                         </tr>
                         {% endfor %}
                     </table>
                     <hr>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 {% endblock content %}
