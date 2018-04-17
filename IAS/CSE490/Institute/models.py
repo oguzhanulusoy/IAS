@@ -251,6 +251,9 @@ class Program(models.Model):
             return self.name + ' (With Thesis)'
         return self.name + ' (Without Thesis)'
 
+    def get_absolute_url(self):
+        return "/program-details/%s/" %(self.id)
+
 #established date eklendi, silinecek
 class Curriculum(models.Model):
     program = models.ForeignKey('Program', models.CASCADE, verbose_name='Program', blank=False)

@@ -62,8 +62,8 @@ def programs(request):
     programs = Program.objects.order_by('name')
     return render(request, url, {'programs' : programs, 'form' : form})
 
-def programDetails(request, pk=None):
-    post = get_object_or_404(Program, pk=pk)
+def programDetails(request, id=None):
+    post = get_object_or_404(Program, pk=id)
     programDetails = {'post': post}
     print(programDetails)
     return render(request, 'program-details.html', programDetails)
@@ -246,6 +246,15 @@ def applies(request):
     content = Visitor.objects.order_by('user')
     applies = {'applies' : content}
     return render(request, 'applies.html', applies)
+
+def applyDetails(request, pk=None):
+    applyDetails = get_object_or_404(Visitor, pk=pk)
+    return render(request, 'apply-details.html', {'applyDetails' : apply})
+
+
+def acceptance(request):
+    url = 'acceptance.html'
+
 
 def invalid(request):
     url = 'invalid.html'
