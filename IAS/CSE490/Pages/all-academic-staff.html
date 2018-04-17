@@ -13,7 +13,7 @@
                 </div>
                 <div class="card-body">
                     <p>You can see the names of all institutes, the heads of institutes
-                        and the date they establish.</p>
+                    and the date they establish.</p>
                     <!-- Table -->
                     <hr>
                     <table>
@@ -44,13 +44,11 @@
                                     </div>
                                     <div class="modal-body">
                                         <p>Enter given fields correctly.</p>
-                                            <form action='' method='post'>{% csrf_token %}
-                                                {{ formU.as_p }}
-                                                {{ formS.as_p }}
-                                                {{ formA.as_p }}
-                                                {{ form.non_field_errors }}
-                                                <input type='submit' value='Submit' />
-                                            </form>
+                                        <form action='' method='post'>{% csrf_token %}
+                                            {{ formA.as_p }}
+                                            {{ formA.non_field_errors }}
+                                            <input type='submit' value='Submit' />
+                                        </form>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

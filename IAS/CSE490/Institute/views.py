@@ -128,24 +128,49 @@ def sections(request):
     sections = Section.objects.order_by('-year')
     return render(request, url, {'sections' : sections, 'form' : form})
 
+def academicStaffRegistrationI(request):
+    url = 'academic-staff-registration-i.html'
+    if request.method == 'POST':
+        formU = AddUserForm(request.POST)
+        if formU.is_valid():
+            formU.save()
+            return redirect('/academic-staff-registration-ii')
+        else:
+            return redirect('/invalid')
+    else:
+        formU = AddUserForm()
+    return render(request, url, {'formU' : formU})
+
+def academicStaffRegistrationII(request):
+    url = 'academic-staff-registration-ii.html'
+    if request.method == 'POST':
+        formS = AddStaffForm(request.POST)
+        if formS.is_valid():
+            formS.save()
+            return redirect('/succesfully')
+        else:
+            return redirect('/invalid')
+    else:
+        formS = AddStaffForm()
+    return render(request, url, {'formS' : formS})
+
+def succesfully(request):
+    url = 'succesfully.html'
+    return render(request, url, {})
+
+'''Döneceğim buraya '''
 def allAcademicStaff(request):
     url = 'all-academic-staff.html'
     if request.method == 'POST':
         formA = AddAcademicStaffForm(request.POST)
-        formS = AddStaffForm(request.POST)
-        formU = AddUserForm(request.POST)
-        if formA.is_valid() and formS.is_valid() and formU.is_valid():
+        if formA.is_valid():
             formA.save()
-            formS.save()
-            formU.save()
         else:
             return redirect('/invalid')
     else:
         formA = AddAcademicStaffForm()
-        formS = AddStaffForm()
-        formU = AddUserForm()
     academicStaffs = AcademicStaff.objects.order_by('staff')
-    content = {'academicStaffs' : academicStaffs, 'formU' : formU, 'formS' : formS, 'formA' : formA}
+    content = {'academicStaffs' : academicStaffs, 'formA' : formA}
     return render(request, url, content)
 
 def instituteHeads(request):
@@ -154,7 +179,7 @@ def instituteHeads(request):
     return render(request, 'institute-heads.html', instituteHeads)
 
 def departmentHeads(request):
-    content = Department.objects.order_by('dept_head')
+    content = Department.objects.order_by('head')
     departmentHeads = {'departmentHeads' : content}
     return render(request, 'department-heads.html', departmentHeads)
 
@@ -164,19 +189,58 @@ def programHeads(request):
     return render(request, 'program-heads.html', programHeads)
 
 def quoataManagers(request):
-    content = Program.objects.order_by('quota_manager')
-    quoataManagers = {'quoataManagers' : content}
-    return render(request, 'quoata-managers.html', quoataManagers)
+    url = 'quoata-managers.html'
+    if request.method == 'POST':
+        form = AddQuoataManagerForm(request.POST)
+        if form.is_valid():
+            form.save()
+        else:
+            return redirect('/invalid')
+    else:
+        form = AddQuoataManagerForm()
+    quoataManagers = Program.objects.order_by('quota_manager')
+    return render(request, url, {'quoataManagers' : quoataManagers, 'form' : form})
 
 def allInstituteStaff(request):
+    url = 'all-institute-staff.html'
+    if request.method == 'POST':
+        formU = AddUserForm(request.POST)
+        formS = AddStaffForm(request.POST)
+
     content = Staff.objects.order_by('tc')
     instituteStaffs = {'instituteStaffs' : content}
-    return render(request, 'all-institute-staff.html', instituteStaffs)
+    return render(request, url, instituteStaffs)
 
 def allGrandStudent(request):
     content = Student.objects.order_by('user')
     grandStudents = {'grandStudents' : content}
     return render(request, 'all-grand-student.html', grandStudents)
+
+def applicationI(request):
+    url = 'student-application-i.html'
+    if request.method == 'POST':
+        formU = AddUserForm(request.POST)
+        if formU.is_valid():
+            formU.save()
+            return redirect('/application-ii')
+        else:
+            return redirect('/invalid')
+    else:
+        formU = AddUserForm()
+    return render(request, url, {'formU' : formU})
+
+def applicationII(request):
+    url = 'student-application-ii.html'
+    if request.method == 'POST':
+        formV = AddVisitorForm(request.POST)
+        if formV.is_valid():
+            formV.save()
+            return redirect('/succesfully')
+        else:
+            return redirect('/invalid')
+    else:
+        formV = AddVisitorForm()
+    return render(request, url, {'formV' : formV})
 
 def applies(request):
     content = Visitor.objects.order_by('user')

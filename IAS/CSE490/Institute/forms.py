@@ -31,15 +31,20 @@ class AddSectionForm(forms.ModelForm):
 		model = Section
 		exclude = ['year']
 
+class AddQuoataManagerForm(forms.ModelForm):
+	class Meta:
+		model = QuoataManager
+		fields = '__all__'
+
 class AddAcademicStaffForm(forms.ModelForm):
 	class Meta:
 		model = AcademicStaff
-		exclude = ['staff']
+		fields = '__all__'
 
 class AddStaffForm(forms.ModelForm):
 	class Meta:
 		model = Staff
-		exclude = ['user']
+		exclude = ['user', 'staff_id']
 
 class AddUserForm(forms.ModelForm):
 	class Meta:
@@ -51,6 +56,7 @@ class AddUserForm(forms.ModelForm):
 			password = str(User.objects.make_random_password())
 			user.set_password(password)  
 			user.save()
+
 
 
 
