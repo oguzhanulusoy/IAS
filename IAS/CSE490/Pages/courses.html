@@ -25,7 +25,7 @@
                         </tr>
                         {% for i in courses %}
                         <tr>
-                            <td>{{ i.code }}</td>
+                            <td><a href="/course-details/{{ i.id }}/">{{ i.code }}</a></td>
                             <td>{{ i.title }}</td>
                             <td>{{ i.description }}</td>
                             <td>{{ i.program }}</td>
@@ -46,8 +46,8 @@
                                     <div class="modal-body">
                                         <p>Enter given fields correctly.</p>
                                             <form action='' method='post'>{% csrf_token %}
-                                                {{ form.as_p }}
-                                                {{ form.non_field_errors }}
+                                                {{ addForm.as_p }}
+                                                {{ addForm.non_field_errors }}
                                                 <input type='submit' value='Submit' />
                                             </form>
                                     </div>

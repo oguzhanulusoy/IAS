@@ -62,27 +62,17 @@ def programs(request):
     programs = Program.objects.order_by('name')
     return render(request, url, {'programs' : programs, 'form' : form})
 
-
-
-
-
-
-##########################
 def programDetails(request, id=None):
-    post = get_object_or_404(Program, pk=id)
-    print(post)
-    return render(request, 'program-details.html', {'post' : post})
-#########################
-
-
-
+    url = 'program-details.html'
+    programDetails = get_object_or_404(Program, pk=id)
+    return render(request, url, {'programDetails' : programDetails})
 
 def cirriculums(request):
     url = 'cirriculums.html'
     if request.method == 'POST':
         form = AddCirriculumForm(request.POST)
         if form.is_valid():
-            form.save()
+            form.save(request.id)
             program = form.cleaned_data['program']
             year = form.cleaned_data['year']
         else:
@@ -92,18 +82,113 @@ def cirriculums(request):
     curriculums = Curriculum.objects.all()
     return render(request, url, {'curriculums' : curriculums, 'form' : form})
 
+ 
+
+
+
+##############################################
+
+
+
+
+
 def courses(request):
     url = 'courses.html'
     if request.method == 'POST':
-        form = AddCourseForm(request.POST)
-        if form.is_valid():
-            form.save()
+        addForm = AddCourseForm(request.POST)
+        if addForm.is_valid():
+            addForm.save()
+            code = addForm.cleaned_data['code']
+            title = addForm.cleaned_data['title']
+            description = addForm.cleaned_data['description']
+            credit = addForm.cleaned_data['credit']
+            ects_credit = addForm.cleaned_data['ects_credit']
+            program = addForm.cleaned_data['program']
+            university = addForm.cleaned_data['university']
+            is_valid = addForm.cleaned_data['is_valid']
+            is_deleted = addForm.cleaned_data['is_deleted']
+            created_date = addForm.cleaned_data['created_date']
         else:
             return redirect('/invalid')
     else:
-        form = AddCourseForm()
+        addForm = AddCourseForm()
     courses = Course.objects.order_by('-created_date')
-    return render(request, url, {'courses' : courses, 'form' : form})
+    return render(request, url, {'courses' : courses, 'addForm' : addForm})
+
+
+
+def courseDetails(request, id=None):
+    url = 'course-details.html'
+    courseDetails = get_object_or_404(Course, pk=id)
+    if request.method == 'POST':
+        editForm = EditCourseForm(request.POST or None, instance=courseDetails)
+        if editForm.is_valid() :
+            editForm.save()
+            is_valid = editForm.cleaned_data['is_valid']
+        else:
+            return redirect('/invalid')
+    else:
+        editForm = EditCourseForm()
+
+    removeForm = RemoveCourseForm()
+    return render(request, url, {'courseDetails' : courseDetails, 'editForm' : editForm, 'removeForm' : removeForm} )
+
+
+def removeCourseShow(request):
+    url = 'remove-course.html'
+    courses = Course.objects.order_by('-created_date')
+    return render(request, url, {'courses' : courses})
+
+
+def closeCourseShow(request):
+    url = 'close-course.html'
+    courses = Course.objects.order_by('-created_date')
+    return render(request, url, {'courses' : courses})
+
+
+
+
+def removeCourse(request, id=None):
+    url = 'remove-course-details.html'
+    courseDetails = get_object_or_404(Course, pk=id)
+    if request.method == 'POST':
+        removeForm = RemoveCourseForm(request.POST or None, instance=courseDetails)
+        if removeForm.is_valid() :
+            removeForm.save()
+            is_deleted = removeForm.cleaned_data['is_deleted']
+        else:
+            return redirect('/invalid')
+    else:
+        removeForm = RemoveCourseForm()
+    return render(request, url, {'courseDetails' : courseDetails, 'removeForm' : removeForm} )
+
+
+
+def closeCourse(request, id=None):
+    url = 'close-course-details.html'
+    courseDetails = get_object_or_404(Course, pk=id)
+    if request.method == 'POST':
+        editForm = EditCourseForm(request.POST or None, instance=courseDetails)
+        if editForm.is_valid() :
+            editForm.save()
+            is_valid = editForm.cleaned_data['is_valid']
+        else:
+            return redirect('/invalid')
+    else:
+        editForm = EditCourseForm()
+    return render(request, url, {'courseDetails' : courseDetails, 'editForm' : editForm} )
+
+
+
+
+
+
+
+
+
+
+
+
 
 def courseTypes(request):
     url = 'course-types.html'
@@ -262,16 +347,41 @@ def applies(request):
 
 
 
-##########################
-def applicationDetails(request, pk=None):
-    applicationDetails = get_object_or_404(Visitor, pk=pk)
-    return render(request, 'application-details.html', {'applicationDetails' : applicationDetails})
+##############################################
 
 
-def acceptance(request):
-    url = 'acceptance.html'
-##########################
+def applicationDetails(request, id=None):
+    url = 'application-details.html'
+    userDetails = get_object_or_404(User, pk=id)
+    visitorDetails = get_object_or_404(Visitor, pk=userDetails.id)
+    if request.method == 'POST':
+        form = AddStudentForm(request.POST or None, instance=userDetails)
+        if form.is_valid():
+            form.save()
+            userDetails = form.cleaned_data['user']
+            st_id = form.cleaned_data['st_id']
+            st_email = form.cleaned_data['st_email']
+            curriculum = form.cleaned_data['curriculum']
+            program = form.cleaned_data['program']
+            advisor = form.cleaned_data['advisor']
+            hold_state = form.cleaned_data['hold_state']
+            reg_open_statue = form.cleaned_data['reg_open_statue']
+            approval_statue = form.cleaned_data['approval_statue']
+        else:
+            return redirect('/invalid')
+    else:
+        form = AddStudentForm()
+    applicationDetails = {'visitorDetails' : visitorDetails, 'userDetails' : userDetails, 'form' : form}
+    return render(request, url, applicationDetails)
 
+
+
+
+
+
+
+
+##############################################
 
 
 

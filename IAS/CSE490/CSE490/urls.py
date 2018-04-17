@@ -31,14 +31,7 @@ urlpatterns = [
     path('institutes/', v.institutes),
     path('departments/', v.departments),
     path('programs/', v.programs),
-
-
-
     path('program-details/<id>/', v.programDetails),
-
-
-
-
     path('cirriculums/', v.cirriculums),
     path('courses/', v.courses),
     path('course-types/', v.courseTypes),
@@ -57,7 +50,13 @@ urlpatterns = [
     path('succesfully/', v.succesfully),
     path('application-i/', v.applicationI),
     path('application-ii/', v.applicationII),
-    path('application-details/<pk>', v.applicationDetails),
+    path('application-details/<id>/', v.applicationDetails),
+    path('course-details/<id>/', v.courseDetails),
+    path('remove-course/', v.removeCourseShow),
+    path('remove-course-details/<id>/', v.removeCourse),
+    path('close-course/', v.closeCourseShow),
+    path('close-course-details/<id>/', v.closeCourse),
+
 
 ] + static(settings.STATIC_URL.lstrip('/'), document_root=settings.STATIC_ROOT)
 

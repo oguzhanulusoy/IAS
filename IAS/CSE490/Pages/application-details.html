@@ -1,3 +1,95 @@
-{% for i in applicationDetails %}
-{{ i.gender }}
-{{ i.application_date }}
+{% extends 'grand-students.html' %}
+{% block content %}
+<!-- Page Content -->
+<div class="container">
+	<div class="row">
+		<!-- Menu -->
+		{% include 'assets/menu/grand-students.html' %}
+		<div class="col-lg-9">
+			<div class="card card-outline-secondary my-4">
+				<!-- Title -->
+				<div class="card-header">
+					{{ request.path }}
+				</div>
+				<div class="card-body">
+					<p>You can see the details of visitor of {{ userDetails.first_name }} {{ userDetails.last_name }} </p>
+					<!-- Details -->
+					<hr>
+					<img src="{{ userDetails.avatar }}">
+
+					<br><br><small class="text-muted">About</small>
+					<br><small class="text-muted">First Name:  </small> {{ userDetails.first_name }}
+					<br><small class="text-muted">Last Name:  </small> {{ userDetails.last_name }}
+					<br><small class="text-muted">TC Number:  </small> {{ visitorDetails.tc }}
+					<br><small class="text-muted">Birthday:  </small> {{ visitorDetails.birthday }}
+					<br><small class="text-muted">Gender:  </small> {{ visitorDetails.gender }}
+
+					<br><br><small class="text-muted">Application Information</small>
+					<br><small class="text-muted">Application Date:  </small> {{ visitorDetails.application_date }}
+					<br><small class="text-muted">ALES:  </small> {{ visitorDetails.ales }}
+					<br><small class="text-muted">YDS:  </small> {{ visitorDetails.yds }}
+					<br><small class="text-muted">GPA:  </small> {{ visitorDetails.gpa }}
+					<br><small class="text-muted">Graduated University:  </small> {{ visitorDetails.university }}
+					<br><small class="text-muted">Degree:  </small> {{ visitorDetails.degree }}
+
+					<br><br><small class="text-muted">Contact Information</small>
+					<br><small class="text-muted">Phone Number:  </small> {{ userDetails.phone_number }}
+					<br><small class="text-muted">E-Mail:  </small> {{ userDetails.email }}
+					<br><small class="text-muted">Address:  </small> {{ visitorDetails.address }}
+					<br><small class="text-muted">Current City:  </small> {{ visitorDetails.city }}
+					
+					<br><br><small class="text-muted">Personal Information</small>
+					<br><small class="text-muted">Application Date:  </small> {{ userDetails.personal_information}}
+					<hr>
+					<!-- Modal -->
+					<div class="container">
+						<!-- Modal Accept -->
+						<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#accept">Accept</button>
+						<div class="modal fade" id="accept" role="dialog">
+							<div class="modal-dialog">
+								<!-- Modal content-->
+								<div class="modal-content">
+									<div class="modal-header">
+										<h4 class="modal-title">Accept Screen</h4>
+									</div>
+									<div class="modal-body">
+										<p class="card-text">Please, enter given fields correctly.</p>
+										<form action='' method='post'>{% csrf_token %}
+											{{ form.as_p }}
+											{{ form.non_field_errors }}
+											<input type='submit' value='Submit' />
+										</form>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- Modal Reject -->
+						<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#reject">Reject</button> 
+						<div class="modal fade" id="reject" role="dialog">
+							<div class="modal-dialog">
+								<!-- Modal content-->
+								<div class="modal-content">
+									<div class="modal-header">
+										<h4 class="modal-title">Reject Screen</h4>
+									</div>
+									<div class="modal-body">
+										<p>Some text in the modal.</p>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}
+
+

@@ -27,7 +27,7 @@
                         </tr>
                         {% for i in applies %}
                         <tr>
-                            <td>{{ i.user }}</td>
+                            <td><a href="/application-details/{{ i.id }}/">{{ i.user }}</a></td>
                             <td>{{ i.application_date }}</td>
                             <td>{{ i.ales }}</td>
                             <td>{{ i.yds }}</td>

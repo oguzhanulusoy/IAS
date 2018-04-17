@@ -52,6 +52,27 @@ class AddVisitorForm(forms.ModelForm):
 		model = Visitor
 		exclude = ['application_date', 'user', 'accepted']
 
+class AddStudentForm(forms.ModelForm):
+	class Meta:
+		model = Student
+		fields = ['st_id', 'st_email', 'curriculum', 'program', 'advisor', 'hold_state', 'reg_open_statue', 'approval_statue']
+
+class EditCourseForm(forms.ModelForm):
+	editted_date = forms.DateField()
+	
+	class Meta:
+		model = Course
+		fields = ['is_valid']
+
+class RemoveCourseForm(forms.ModelForm):
+
+
+	class Meta:
+		model = Course
+		fields = ['is_deleted']
+
+
+'''
 class AddUserForm(forms.ModelForm):
 	class Meta:
 		model = User
@@ -65,4 +86,4 @@ class AddUserForm(forms.ModelForm):
 
 
 
-
+'''
