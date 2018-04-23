@@ -38,14 +38,13 @@ class AddSectionForm(forms.ModelForm):
 
 class AddQuoataManagerForm(forms.ModelForm):
 	class Meta:
-		model = QuoataManager
+		model = QuotaManager
 		fields = '__all__'
 
 class AddAcademicStaffForm(forms.ModelForm):
 	class Meta:
 		model = AcademicStaff
 		fields = '__all__'
-
 
 class AddStaffForm(forms.ModelForm):
 	class Meta:
@@ -64,14 +63,11 @@ class AddStudentForm(forms.ModelForm):
 
 class EditCourseForm(forms.ModelForm):
 	editted_date = forms.DateField()
-	
 	class Meta:
 		model = Course
 		fields = ['is_valid']
 
 class RemoveCourseForm(forms.ModelForm):
-
-
 	class Meta:
 		model = Course
 		fields = ['is_deleted']

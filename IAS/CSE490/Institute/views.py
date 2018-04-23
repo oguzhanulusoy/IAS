@@ -134,9 +134,9 @@ def courses(request):
             ects_credit = addForm.cleaned_data['ects_credit']
             program = addForm.cleaned_data['program']
             university = addForm.cleaned_data['university']
-            is_valid = addForm.cleaned_data['is_valid']
-            is_deleted = addForm.cleaned_data['is_deleted']
-            created_date = addForm.cleaned_data['created_date']
+            #is_valid = addForm.cleaned_data['is_valid']
+            #is_deleted = addForm.cleaned_data['is_deleted']
+            #created_date = addForm.cleaned_data['created_date']
         else:
             return redirect('/invalid')
     else:
@@ -421,3 +421,99 @@ def succesfully(request):
 def invalid(request):
     url = 'invalid.html'
     return render(request, url, {})
+
+# to display all completed courses for all students in the system
+def allCompletedCourses(request):
+    url = 'allCompletedCourses.html'
+    programs = Program.objects.order_by('name')
+    return render(request, url, {'programs' : programs})
+
+# to display details of selected department-course relationship
+def allCompletedCoursesDetails(request, id=None):
+    url = 'all-completed-courses-details.html'
+    relatedProgram = get_object_or_404(Program, pk=id)
+    courses = Course.objects.filter(program__name = relatedProgram.name)
+    return render(request, url, {'courses' : courses})
+
+# to display details of selected course from all completed course
+def selectedCompletedCourseDetails(request, id=None):
+
+    # to determine the redirecting page
+    url = 'selected-completed-course-details.html'
+
+    # to retrieve data of clicked course
+    courseDetails = get_object_or_404(Course, pk=id)
+
+    # to retrieve data of all completed courses
+    completedCourses = CompletedCourse.objects.all()
+
+    # to store students of relevant completed course
+    student = []
+
+    grade = []
+
+    # to find related courses in the completed courses list
+    for i in completedCourses:
+
+        # to make matching desired course with all course
+        if courseDetails.title == i.act_course.title:
+
+            grade = i.grade
+            student = i.student.st_id
+
+
+
+    print("deneme")
+
+            
+
+
+ 
+
+    return render(request, url, {'grade' : grade, 'student' : student})
+
+
+
+
+'''
+
+    # to determine the redirecting page
+    url = 'selected-completed-course-details.html'
+
+    # to retrieve data of clicked course
+    courseDetails = get_object_or_404(Course, pk=id)
+
+    # to retrieve name of specific data
+    courseName = courseDetails.title
+
+    # new array to store course names
+    completedCourseNames = []
+
+    # to retrieve data of all completed courses
+    completedCourses = CompletedCourse.objects.all()
+
+    # to create the students
+    studentsOfCourse = []
+    
+    # to retrieve course names of completed courses
+    for i in completedCourses:
+        completedCourseNames.append(completedCourses.objects.filter('grade'))
+
+    # to find selected course in completed course table
+    for i in completedCourseNames:
+
+        # to make matching selected course with desired selected course
+        if courseName == completedCourseNames[i]:
+
+            # to get id of selected course
+            idOfCompletedCourse = completedCourses[i].id
+
+            # to select all students in that completed course
+            desiredCourse = CompletedCourse.objects.get(id=idOfCompletedCourse)
+
+            # to retrieve all students in desired course
+            for i in desiredCourse:
+                studentsOfCourse.append(desiredCourse.student)
+                '''
+
+

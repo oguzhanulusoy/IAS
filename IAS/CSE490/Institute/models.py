@@ -221,15 +221,13 @@ class Department(models.Model):
     def __str__(self):
         return self.name
 
-#eklendi
-class QuoataManager(models.Model):
+
+# eklendi.
+class QuotaManager(models.Model):
     quota_manager = models.ForeignKey('AcademicStaff', models.SET_NULL, blank=True, null=True)
 
-    class Meta:
-        ordering = ['quota_manager']
-
     def __str__(self):
-        return str(self.quota_manager)
+        return str(self.quota_manager.staff.user.first_name)+" "+str(self.quota_manager.staff.user.last_name)
 
 #değişiklik
 class Program(models.Model):
@@ -240,7 +238,7 @@ class Program(models.Model):
 
     department = models.ForeignKey(Department, models.CASCADE)
     head = models.ForeignKey('AcademicStaff', models.SET_NULL, related_name='prog_head', blank=True, null=True)
-    quota_manager = models.ForeignKey('QuoataManager', models.SET_NULL, blank=True, null=True)
+    quota_manager = models.ForeignKey('QuotaManager', models.SET_NULL, blank=True, null=True)
 
     class Meta:
         unique_together = ['code', 'type', 'thesis']
@@ -286,11 +284,11 @@ class Course(models.Model):
     def __str__(self):
         return self.program.code + self.code
 
-
+# quoata eklendi
 class Section(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Course')
     number = models.PositiveIntegerField('Section Number', validators=[MinValueValidator(1)])
-
+    quota = models.PositiveIntegerField('Quota Quanitity', validators=[MaxValueValidator(50)], null=True)
     instructor = models.ForeignKey('AcademicStaff', models.SET_NULL, blank=True, null=True)
     year = models.CharField('Year', max_length=4, default=datetime.now().year)
     semester = models.CharField('Semester', max_length=10, choices=SEMESTERS)

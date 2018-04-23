@@ -63,6 +63,9 @@ urlpatterns = [
     path('academic-staff-details/<id>/', v.academicStaffDetails),
     path('grand-student-details/<id>/', v.grandStudentDetails),
     path('available-courses/', v.availableCourses),
+    path('all-completed-courses/', v.allCompletedCourses),
+    path('all-completed-courses-details/<id>/', v.allCompletedCoursesDetails),
+    path('selected-completed-course-details/<id>/', v.selectedCompletedCourseDetails),
 
 ] + static(settings.STATIC_URL.lstrip('/'), document_root=settings.STATIC_ROOT)
 

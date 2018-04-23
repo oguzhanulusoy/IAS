@@ -42,4 +42,4 @@ admin.site.register(Institute)
 admin.site.register(Department)
 admin.site.register(Program)
 admin.site.register(PersonalInformation)
-admin.site.register(QuoataManager)
+
