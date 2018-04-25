@@ -82,21 +82,17 @@ class Visitor(models.Model):
     yds = models.PositiveIntegerField('YDS', validators=[MinValueValidator(30),
                                                          MaxValueValidator(100)])
     # Acceptance Status
-    accepted = models.BooleanField('Accepted', default=False)
+    acceptance = models.CharField('Acceptance', max_length=20, choices=ACCEPTANCE, null=True)
 
+
+    # Visitor program
+    program = models.ForeignKey('Program', models.CASCADE, null=True, default='IN PROGRESS')
+    
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name
 
 
-class VisitorProgram(models.Model):
-    visitor = models.ForeignKey('Visitor', models.CASCADE)
-    program = models.ForeignKey('Program', models.CASCADE)
 
-    class Meta:
-        pass
-
-    def __str__(self):
-        return str(self.visitor) + ' -> ' + str(self.program)
 
 
 class PersonalInformation(models.Model):

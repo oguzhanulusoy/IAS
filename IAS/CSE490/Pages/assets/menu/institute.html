@@ -1,3 +1,4 @@
+{% if user.is_authenticated %}
 <div class="col-lg-3">
     <h1 class="my-4">Institute</h1>
     <div class="list-group">
@@ -12,7 +13,8 @@
         <a href="/remove-course" class="list-group-item"> &emsp;    - Remove Course</a>
         <a href="/course-types" class="list-group-item">Course Types</a>
         <a href="/sections" class="list-group-item">Sections</a>
+        <a href="/removeAllSections" class="list-group-item"> &emsp;    - Remove All Sections</a>
     </div>
 </div>
-
 <br>
+{% endif %}

@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from Institute import views as v
 from django.urls import path
 from django.conf.urls import url, include
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -43,14 +44,14 @@ urlpatterns = [
     path('quoata-managers/', v.quoataManagers),
     path('all-institute-staff/', v.allInstituteStaff),
     path('all-grand-student/', v.allGrandStudent),
-    path('applies/', v.applies),
+    path('applications/', v.applies),
     path('invalid/', v.invalid),
     path('academic-staff-registration-i/', v.academicStaffRegistrationI),
     path('academic-staff-registration-ii/', v.academicStaffRegistrationII),
     path('succesfully/', v.succesfully),
     path('application-i/', v.applicationI),
     path('application-ii/', v.applicationII),
-    path('application-details/<id>/', v.applicationDetails),
+    path('application-details/<tc>/', v.applicationDetails),
     path('course-details/<id>/', v.courseDetails),
     path('remove-course/', v.removeCourseShow),
     path('remove-course-details/<id>/', v.removeCourse),
@@ -66,6 +67,13 @@ urlpatterns = [
     path('all-completed-courses/', v.allCompletedCourses),
     path('all-completed-courses-details/<id>/', v.allCompletedCoursesDetails),
     path('selected-completed-course-details/<id>/', v.selectedCompletedCourseDetails),
+    path('removeSelectedApplication/<tc>/', v.removeSelectedApplication),
+    path('removeAllAplications/', v.removeAllAplications),
+    path('removeAllSections/', v.removeAllSections),
+    path('apply/',v.apply),
+    path('login/', auth_views.login, name='login'),
+    path('logout/', auth_views.logout, name='logout'),
+
 
 ] + static(settings.STATIC_URL.lstrip('/'), document_root=settings.STATIC_ROOT)
 

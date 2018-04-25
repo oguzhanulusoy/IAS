@@ -1,3 +1,4 @@
+{% if user.is_authenticated %}
 <div class="col-lg-3">
     <h1 class="my-4">Academic Staffs</h1>
     <div class="list-group">
@@ -8,3 +9,4 @@
         <a href="/quoata-managers" class="list-group-item">Quoata Managers</a>
     </div>
 </div>
+{% endif %}

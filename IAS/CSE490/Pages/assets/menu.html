@@ -1,8 +1,12 @@
-        <div class="col-lg-3">
-          <h1 class="my-4">Shop Name</h1>
-          <div class="list-group">
-            <a href="#" class="list-group-item active">Category 1</a>
-            <a href="#" class="list-group-item">Category 2</a>
-            <a href="#" class="list-group-item">Category 3</a>
-          </div>
-        </div>
+<div class="col-lg-3">
+	<h1 class="my-4">Isik University</h1>
+	<div class="list-group">
+		<a href="/application-i" class="list-group-item">Apply for Institute (Student)</a>
+		<a href="/academic-staff-registration-i" class="list-group-item">Apply for Institute (Staff)</a>
+		{% if user.is_authenticated %}
+		<a href="{% url 'logout' %}" class="list-group-item">Logout</a>
+		{% else %}
+		<a href="{% url 'login' %}" class="list-group-item">Login</a>
+		{% endif %}
+	</div>
+</div>

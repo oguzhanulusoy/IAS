@@ -130,3 +130,6 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_ROOT = "staticdev/"
+
+LOGIN_REDIRECT_URL = '/base'
+LOGOUT = '/base'

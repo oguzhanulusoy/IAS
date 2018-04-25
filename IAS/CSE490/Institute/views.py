@@ -249,6 +249,25 @@ def sectionDetails(request, id=None):
     sectionDetails = get_object_or_404(Section, pk=id)
     return render(request, url, {'sectionDetails' : sectionDetails})
  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # to make registration of academic staff - i
 def academicStaffRegistrationI(request):
     url = 'academic-staff-registration-i.html'
@@ -256,6 +275,7 @@ def academicStaffRegistrationI(request):
         formU = AddUserForm(request.POST)
         if formU.is_valid():
             formU.save()
+            print(formU)
             return redirect('/academic-staff-registration-ii')
         else:
             return redirect('/invalid')
@@ -263,13 +283,32 @@ def academicStaffRegistrationI(request):
         formU = AddUserForm()
     return render(request, url, {'formU' : formU})
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 # to make registration of academic staff - ii
 def academicStaffRegistrationII(request):
     url = 'academic-staff-registration-ii.html'
+    desiredUser = User.objects.all().last()
     if request.method == 'POST':
         formS = AddStaffForm(request.POST)
         if formS.is_valid():
-            formS.save()
+            staff = Staff(user=desiredUser, tc=formS.cleaned_data['tc'], gender=formS.cleaned_data['gender'], 
+                main_email=formS.cleaned_data['main_email'], school_email=formS.cleaned_data['school_email'],
+                address=formS.cleaned_data['address'], birthday=formS.cleaned_data['birthday'], 
+                city=formS.cleaned_data['birthday'] )
+            staff.save(force_insert=True)
+
             return redirect('/succesfully')
         else:
             return redirect('/invalid')
@@ -360,6 +399,7 @@ def applicationI(request):
         formU = AddUserForm(request.POST)
         if formU.is_valid():
             formU.save()
+            print(formU)
             return redirect('/application-ii')
         else:
             return redirect('/invalid')
@@ -370,10 +410,16 @@ def applicationI(request):
 # to make registration of visitor - ii
 def applicationII(request):
     url = 'student-application-ii.html'
+    desiredUser = User.objects.all().last()
     if request.method == 'POST':
         formV = AddVisitorForm(request.POST)
         if formV.is_valid():
-            formV.save()
+            visitor = Visitor(user=desiredUser, tc=formV.cleaned_data['tc'], birthday=formV.cleaned_data['birthday'],
+                gender=formV.cleaned_data['gender'],
+                address=formV.cleaned_data['address'], city=formV.cleaned_data['city'], degree=formV.cleaned_data['degree'],
+                university=formV.cleaned_data['university'], gpa=formV.cleaned_data['gpa'], ales=formV.cleaned_data['ales'],
+                yds=formV.cleaned_data['yds'], program=formV.cleaned_data['program'])
+            visitor.save(force_insert=True)
             return redirect('/succesfully')
         else:
             return redirect('/invalid')
@@ -381,36 +427,69 @@ def applicationII(request):
         formV = AddVisitorForm()
     return render(request, url, {'formV' : formV})
 
+# to apply
+def apply(request):
+    url = "apply.html"
+    if request.method == 'POST':
+        form = AddVisitorForm(request.POST)
+        user_form = AddUserForm(request.POST)
+
+        if form.is_valid() and user_form.is_valid():
+            form.save()
+            user_form.save()
+        else:
+            return redirect('/invalid')
+    else:
+        form =AddVisitorForm()
+        user_form = AddUserForm()
+    return render(request, url, {'form':form, 'user_form':user_form})
+
 # to display all applies
 def applies(request):
     content = Visitor.objects.order_by('user')
     applies = {'applies' : content}
     return render(request, 'applies.html', applies)
-
+ 
 # to display details of selected application
-def applicationDetails(request, id=None):
+def applicationDetails(request, tc=None):
     url = 'application-details.html'
-    userDetails = get_object_or_404(User, pk=id)
-    visitorDetails = get_object_or_404(Visitor, pk=userDetails.id)
-    if request.method == 'POST':
-        form = AddStudentForm(request.POST or None, instance=userDetails)
-        if form.is_valid():
-            form.save()
-            #userDetails = form.cleaned_data['user']
-            st_id = form.cleaned_data['st_id']
-            st_email = form.cleaned_data['st_email']
-            curriculum = form.cleaned_data['curriculum']
-            program = form.cleaned_data['program']
-            advisor = form.cleaned_data['advisor']
-            hold_state = form.cleaned_data['hold_state']
-            reg_open_statue = form.cleaned_data['reg_open_statue']
-            approval_statue = form.cleaned_data['approval_statue']
-        else:
-            return redirect('/invalid')
-    else:
+    visitorDetails = get_object_or_404(Visitor, tc=tc)
+    desiredUser = visitorDetails.user
+    if request.method == 'GET':
         form = AddStudentForm()
-    applicationDetails = {'visitorDetails' : visitorDetails, 'userDetails' : userDetails, 'form' : form}
+    else:
+        form = AddStudentForm(request.POST)
+        if form.is_valid():
+            student = Student(user=desiredUser, st_id=form.cleaned_data['st_id'],
+                st_email=form.cleaned_data['st_email'], curriculum=form.cleaned_data['curriculum'],
+                program=form.cleaned_data['program'], advisor=form.cleaned_data['advisor'], 
+                hold_state=form.cleaned_data['hold_state'], reg_open_statue=form.cleaned_data['reg_open_statue'],
+                approval_statue=form.cleaned_data['approval_statue'])
+            student.save(force_insert=True)
+            return redirect('/succesfully')
+    applicationDetails = {'visitorDetails' : visitorDetails, 'form' : form}
     return render(request, url, applicationDetails)
+
+# to remove selected application
+def removeSelectedApplication(request, tc=None):
+    url = 'applies.html'
+    visitor = Visitor.objects.get(tc=tc)
+    visitor.delete() 
+    return render(request, url, {'action' : 'Delete tasks'})
+
+# to remove all applications
+def removeAllAplications(request):
+    url = 'succesfully.html'
+    all_visitors = Visitor.objects.all()
+    all_visitors.delete() 
+    return render(request, url, {'action' : 'Delete tasks'})
+
+# to remove all sections
+def removeAllSections(request):
+    url = 'succesfully.html'
+    all_sections = Section.objects.all()
+    all_sections.delete() 
+    return render(request, url, {'action' : 'Delete tasks'})
 
 # to redirect succesfully
 def succesfully(request):
@@ -460,18 +539,8 @@ def selectedCompletedCourseDetails(request, id=None):
 
             grade = i.grade
             student = i.student.st_id
-
-
-
     print("deneme")
-
-            
-
-
- 
-
     return render(request, url, {'grade' : grade, 'student' : student})
-
 
 
 
@@ -514,6 +583,8 @@ def selectedCompletedCourseDetails(request, id=None):
             # to retrieve all students in desired course
             for i in desiredCourse:
                 studentsOfCourse.append(desiredCourse.student)
-                '''
+            
 
 
+
+'''

@@ -1,6 +1,11 @@
 GENDER = [('F', 'Female'),
           ('M', 'Male')]
 
+
+ACCEPTANCE = [('REJECTED', 'REJECTED'),
+              ('APPROVED', 'APPROVED'),
+              ('IN PROGRESS', 'IN PROGRESS')]
+
 '''This list is to choose city.'''
 CITIES = [('1', 'Adana'),
           ('2', 'Adıyaman'),

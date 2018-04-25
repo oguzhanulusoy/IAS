@@ -2,8 +2,7 @@ from django.contrib import admin
 from .models import *
 
 
-class VisitorAdmin(admin.ModelAdmin):
-    readonly_fields = ('accepted',)
+
 
 
 class TakenCourseAdmin(admin.ModelAdmin):
@@ -33,8 +32,7 @@ admin.site.register(CcrCourse)
 admin.site.register(OfferedCourse)
 admin.site.register(TakenCourse, TakenCourseAdmin)
 admin.site.register(CompletedCourse, CompletedCourseAdmin)
-admin.site.register(Visitor, VisitorAdmin)
-admin.site.register(VisitorProgram)
+admin.site.register(Visitor)
 admin.site.register(User)
 admin.site.register(AcademicStaff)
 admin.site.register(Student)
