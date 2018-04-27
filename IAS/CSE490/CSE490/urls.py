@@ -73,6 +73,7 @@ urlpatterns = [
     path('apply/',v.apply),
     path('login/', auth_views.login, name='login'),
     path('logout/', auth_views.logout, name='logout'),
+    path('ali/', v.ali),
 
 
 ] + static(settings.STATIC_URL.lstrip('/'), document_root=settings.STATIC_ROOT)

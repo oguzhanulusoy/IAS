@@ -278,7 +278,7 @@ class Course(models.Model):
         ordering = ['program', 'code']
 
     def __str__(self):
-        return self.program.code + self.code
+        return self.title
 
 # quoata eklendi
 class Section(models.Model):
@@ -377,14 +377,14 @@ class OfferedCourse(models.Model):
 class TakenCourse(models.Model):
     student = models.ForeignKey('Student', models.CASCADE)
     ccr_course = models.ForeignKey('CcrCourse', models.CASCADE)
-    act_course = models.ForeignKey('Course', models.CASCADE)
+    act_course = models.ForeignKey('Section', models.CASCADE)
 
     class Meta:
         verbose_name = 'Taken Course'
         unique_together = ['student', 'ccr_course', 'act_course']
 
     def __str__(self):
-        return str(self.student) + ' ' + str(self.act_course)
+        return str(self.student) + '_' + str(self.act_course.course.title)
 
 
 class CompletedCourse(models.Model):

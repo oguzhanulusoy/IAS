@@ -542,6 +542,73 @@ def selectedCompletedCourseDetails(request, id=None):
     print("deneme")
     return render(request, url, {'grade' : grade, 'student' : student})
 
+def ali(request):
+    url = 'deneme.html'
+
+    # DERS VERDİĞİM ÖĞRENCİLERİ VE DETAYLARINI ELDE ETMEK İÇİN:
+
+    # to retrieve all sections
+    sections = []
+    sections = Section.objects.all()
+
+    # to retrieve all taken courses
+    takenCourses = []
+    takenCourses = TakenCourse.objects.all()
+
+    # to retrieve the instructor's sections (data type: section)
+    sections_list = []
+
+    # to desired data
+    desiredData = []
+
+    # to visit all sections
+    for index in range(len(sections)-1):
+
+        # to chech request and the instructor
+        if request.user.first_name == sections[index].instructor.staff.user.first_name and request.user.last_name == sections[index].instructor.staff.user.last_name:
+
+            # to check course control
+            if sections[index].course.is_valid == True and sections[index].course.is_deleted == False:
+
+                # to get related sections
+                sections_list.append(sections[index])
+
+    # to visit related sections
+    for index in range(len(sections)-1):
+
+        # to make matching same ones
+        takenCourse = TakenCourse.objects.get(act_course=sections_list[index])
+
+        # to add it to desired data content
+        desiredData.append(takenCourse)
+
+    # ADVISOR I OLDUĞUM ÖĞRENCİLERİ VE DETAYLARINI ELDE EDEBİLMEK İÇİN:
+
+    # to retrieve all students
+    students = []
+    students = Student.objects.all()
+
+    # to obtain related students
+    related_students = []
+
+    # to visit all students
+    for student in students:
+
+        # to obtain advisor and the person (who did request)
+        if student.advisor.staff.user.id == request.user.id:
+
+            # to add related student in to the list
+            related_students.append(student)
+
+        # otherwise
+        else:
+
+            # to redirect to invalid page
+            return redirect("/invalid")
+
+    content = {'desiredData' : desiredData, 'related_students' : related_students}
+
+    return render(request, url, content)
 
 
 '''
