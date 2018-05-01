@@ -288,6 +288,8 @@ class Section(models.Model):
     instructor = models.ForeignKey('AcademicStaff', models.SET_NULL, blank=True, null=True)
     year = models.CharField('Year', max_length=4, default=datetime.now().year)
     semester = models.CharField('Semester', max_length=10, choices=SEMESTERS)
+    special_quota = models.ManyToManyField(Student, blank=True, null=True, related_name='special_quota')
+    students = models.ManyToManyField(Student, blank=True, null=True, related_name='students')
 
     def __str__(self):
         if self.number < 10:
@@ -384,7 +386,7 @@ class TakenCourse(models.Model):
         unique_together = ['student', 'ccr_course', 'act_course']
 
     def __str__(self):
-        return str(self.student) + '_' + str(self.act_course.course.title)
+        return str(self.student)+ ' ' +str(self.act_course.course.title)
 
 
 class CompletedCourse(models.Model):

@@ -4,6 +4,10 @@ from django.urls import reverse
 from .models import *
 from .forms import *
 
+
+
+
+
 def base(request):
     return render(request, 'base.html', {})
 
@@ -542,6 +546,10 @@ def selectedCompletedCourseDetails(request, id=None):
     print("deneme")
     return render(request, url, {'grade' : grade, 'student' : student})
 
+
+
+
+
 def ali(request):
     url = 'deneme.html'
 
@@ -561,18 +569,28 @@ def ali(request):
     # to desired data
     desiredData = []
 
+    # to check what is the name of person who did request
+    print(request.user.first_name)
+
+    # to check all sections
+    print(sections)
+
     # to visit all sections
     for index in range(len(sections)-1):
+
+        print(i.student.user.first_name)
 
         # to chech request and the instructor
         if request.user.first_name == sections[index].instructor.staff.user.first_name and request.user.last_name == sections[index].instructor.staff.user.last_name:
 
+            
             # to check course control
             if sections[index].course.is_valid == True and sections[index].course.is_deleted == False:
 
                 # to get related sections
                 sections_list.append(sections[index])
 
+    
     # to visit related sections
     for index in range(len(sections)-1):
 
@@ -609,9 +627,9 @@ def ali(request):
     content = {'desiredData' : desiredData, 'related_students' : related_students}
 
     return render(request, url, content)
-
-
 '''
+
+
 
     # to determine the redirecting page
     url = 'selected-completed-course-details.html'

@@ -1,56 +1,5 @@
-<style>
-table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-}
+{% for i in desiredData %}
 
-td, th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-}
+ {{ i.student.user.first_name }}
 
-tr:nth-child(even) {
-    background-color: #dddddd;
-}
-</style>
-
-<h2>ders verdiğim öğrenciler kısmı:</h2>
-<table>
-                            <th>Ders Adı</th>
-                            <th>Öğrenci</th>
-                            <th>CCR</th>
-                            <th>Transkript</th>
-                            <th>Haftalık Programı</th>
-                        </tr>
-                        {% for i in desiredData %}
-                        <tr>
-                            <td>{{ i.act_course.course.title }}</td>
-                            <td>{{ i.student.user.first_name }} {{ i.student.user.last_name }}</td>
-                                                        <td><a href="/ccr-details/{{ i.student.st_id }}/">ccr</a></td>
-                            <td><a href="/Transkript-details/{{ i.student.st_id }}/">Transkript</a></td>
-                                     <td><a href="/haftalıkprogram-details/{{ i.student.st_id }}/">haftalık program</a></td>
-                        {% endfor %}
-                    </table>
-
-
-
-<h2>danışmanı olduğum öğrenciler</h2>
-
-<table>
-                            <th>isim</th>
-                            <th>soyisim</th>
-                            <th>CCR</th>
-                            <th>Transkript</th>
-                            <th>Haftalık Programı</th>
-                        </tr>
-                        {% for i in related_students %}
-                        <tr>
-                            <td>{{ i.user.first_name }}</td>
-                            <td>{{ i.user.last_name }}</td>
-                                                        <td><a href="/ccr-details/{{ i.st_id }}/">ccr</a></td>
-                            <td><a href="/Transkript-details/{{ i.st_id }}/">Transkript</a></td>
-                                     <td><a href="/haftalıkprogram-details/{{ i.st_id }}/">haftalık program</a></td>
-                        {% endfor %}
-                    </table>
+{% endfor %}

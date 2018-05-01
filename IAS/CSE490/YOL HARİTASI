@@ -20,3 +20,4 @@ for takenCourse in takenCourses:
 	if act_course == specificSection:
 		for student in act_course:
 			students += student
+
