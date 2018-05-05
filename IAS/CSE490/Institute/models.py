@@ -11,6 +11,9 @@ from .lists import *
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+
+    proxy = True
+
     username = models.CharField(_('username'), max_length=15, unique=True)
     email = models.EmailField(_('email address'), unique=True)
     first_name = models.CharField(_('first name'), max_length=30)
@@ -59,43 +62,33 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Visitor(models.Model):
 
-    # Personal Information
+    proxy = True
+
     user = models.OneToOneField('User', on_delete=models.CASCADE)
     tc = models.CharField('TC Number', max_length=11, unique=True)
     birthday = models.DateField('Birthday')
     gender = models.CharField('Gender', max_length=10, choices=GENDER)
     application_date = models.DateField(auto_now_add=True)
-
-    # Contact Information
     address = models.TextField('Address', max_length=60)
     city = models.CharField('City', max_length=20, choices=CITIES)
-
-    # Previous Education Information
     degree = models.CharField('Degree', max_length=10, choices=DEGREES)
     university = models.CharField('University', max_length=50, choices=UNIVERSITIES)
     gpa = models.DecimalField('GPA', decimal_places=2, max_digits=4, validators=[MinValueValidator(2),
                                                                                  MaxValueValidator(4)])
-
-    # Exam Information
     ales = models.PositiveIntegerField('ALES', validators=[MinValueValidator(50),
                                                            MaxValueValidator(100)])
     yds = models.PositiveIntegerField('YDS', validators=[MinValueValidator(30),
                                                          MaxValueValidator(100)])
-    # Acceptance Status
     acceptance = models.CharField('Acceptance', max_length=20, choices=ACCEPTANCE, null=True)
-
-
-    # Visitor program
-    program = models.ForeignKey('Program', models.CASCADE, null=True, default='IN PROGRESS')
+    program = models.ForeignKey('Program', models.CASCADE, null=True)
     
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name
 
-
-
-
-
 class PersonalInformation(models.Model):
+
+    proxy = True 
+
     id_number = models.CharField('ID Number', max_length=11, primary_key=True)
     gender = models.CharField('Gender', max_length=10, blank=True, choices=[('M', 'Male'),
                                                                             ('F', 'Female')])
@@ -129,16 +122,16 @@ class PersonalInformation(models.Model):
     def __str__(self):
         return self.id_number
 
-
 class Student(models.Model):
+
+    proxy = True
+
     user = models.OneToOneField('User', models.CASCADE)
     st_id = models.CharField('Student ID', max_length=9, null=True, blank=True)
     st_email = models.EmailField('School Email Address', max_length=60, blank=True, null=True)
-
     curriculum = models.ForeignKey('Curriculum', models.CASCADE)
     program = models.ForeignKey('Program', models.CASCADE)
     advisor = models.ForeignKey('AcademicStaff', models.SET_NULL, blank=True, null=True)
-
     hold_state = models.BooleanField('Hold State', default=False)
     reg_open_statue = models.BooleanField('Registration Open Statue', default=False)
     approval_statue = models.BooleanField('Approval Statue', default=True)
@@ -152,14 +145,13 @@ class Student(models.Model):
 
 class Staff(models.Model):
 
-    # Personal Information
+    proxy = True
+
     user = models.OneToOneField('User', models.CASCADE)
     tc = models.CharField('TC Number', max_length=11, unique=True)
     birthday = models.DateField('Birthday')
     gender = models.CharField('Gender', max_length=10, choices=GENDER)
     joined_date = models.DateField(auto_now_add=True)
-
-    # Contact Information
     main_email = models.EmailField('Main Email', unique=True)
     school_email = models.EmailField('School Email', unique=True)
     address = models.TextField('Address', max_length=60, null=True, blank=False)
@@ -174,7 +166,8 @@ class Staff(models.Model):
 
 class AcademicStaff(models.Model):
 
-    # Personal Information
+    proxy = True
+
     staff = models.OneToOneField('Staff', models.CASCADE)
     university = models.CharField('University', max_length=60, choices=UNIVERSITIES, default='Işık Üniversitesi')
     institute = models.ForeignKey('Institute', models.SET_NULL, blank=True, null=True)
@@ -193,8 +186,10 @@ class AcademicStaff(models.Model):
     def __str__(self):
         return str(self.staff)
 
-# establishedDate eklendi
 class Institute(models.Model):
+
+    proxy = True
+
     name = models.CharField('Institute Name', max_length=60)
     head = models.ForeignKey('AcademicStaff', models.SET_NULL, related_name='inst_head', blank=True, null=True)
     establishedDate = models.DateField('established date')
@@ -205,8 +200,10 @@ class Institute(models.Model):
     def __str__(self):
         return self.name
 
-
 class Department(models.Model):
+
+    proxy = True
+
     name = models.CharField('Name', max_length=60)
     institute = models.ForeignKey('Institute', models.CASCADE)
     head = models.ForeignKey('AcademicStaff', models.SET_NULL, blank=True, null=True)
@@ -217,21 +214,24 @@ class Department(models.Model):
     def __str__(self):
         return self.name
 
-
-# eklendi.
 class QuotaManager(models.Model):
+
+    proxy = True
+
     quota_manager = models.ForeignKey('AcademicStaff', models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
         return str(self.quota_manager.staff.user.first_name)+" "+str(self.quota_manager.staff.user.last_name)
 
-#değişiklik
+# ALİ'NİN MODELDE QUOTA_MANAGER FOREIGN KEY'İ QUOTA MANAGER DEĞİL, ACADEMIC STAFF
 class Program(models.Model):
+
+    proxy = True
+
     name = models.CharField('Name', max_length=60)
     code = models.CharField('Code', max_length=4)
     type = models.CharField('Type', max_length=60, choices=PROGRAM_TYPES)
     thesis = models.BooleanField('Thesis', default=False)
-
     department = models.ForeignKey(Department, models.CASCADE)
     head = models.ForeignKey('AcademicStaff', models.SET_NULL, related_name='prog_head', blank=True, null=True)
     quota_manager = models.ForeignKey('QuotaManager', models.SET_NULL, blank=True, null=True)
@@ -248,13 +248,14 @@ class Program(models.Model):
     def get_absolute_url(self):
         return "/program-details/%s/" %(self.id)
 
-#established date eklendi, silinecek
 class Curriculum(models.Model):
+
+    proxy = True
+
     program = models.ForeignKey('Program', models.CASCADE, verbose_name='Program', blank=False)
     year = models.PositiveIntegerField(verbose_name='Year', blank=False,
                                        validators=[MinValueValidator(2000),
                                                    MaxValueValidator(datetime.now().year + 1)])
-    establishedDate = models.DateField('established date', null=True)
     class Meta:
         ordering = ['program', 'year']
 
@@ -263,6 +264,9 @@ class Curriculum(models.Model):
 
 
 class Course(models.Model):
+
+    proxy = True
+
     code = models.CharField('Course Code', max_length=3, unique=True)
     title = models.CharField('Course Title', max_length=60, blank=False)
     description = models.TextField('Course Description', max_length=255, blank=True)
@@ -280,8 +284,10 @@ class Course(models.Model):
     def __str__(self):
         return self.title
 
-# quoata eklendi
 class Section(models.Model):
+
+    proxy = True
+
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Course')
     number = models.PositiveIntegerField('Section Number', validators=[MinValueValidator(1)])
     quota = models.PositiveIntegerField('Quota Quanitity', validators=[MaxValueValidator(50)], null=True)
@@ -300,8 +306,10 @@ class Section(models.Model):
         unique_together = ('course', 'number')
         ordering = ('course', 'number')
 
-
 class Schedule(models.Model):
+
+    proxy = True
+
     section = models.ForeignKey('Section', verbose_name='Section', max_length=10, on_delete=models.CASCADE)
     day = models.CharField('Section Day', max_length=15, choices=DAYS)
     slot = models.CharField('Section Slot', max_length=2, choices=SLOTS)
@@ -314,7 +322,6 @@ class Schedule(models.Model):
         verbose_name = 'Course Schedule'
         unique_together = ['section', 'day', 'slot']
         ordering = ['section', 'day', 'slot']
-
 
 def write_roman(num):
     roman = OrderedDict()
@@ -336,8 +343,10 @@ def write_roman(num):
 
     return ''.join([a for a in roman_num(num)])
 
-
 class CourseType(models.Model):
+
+    proxy = True
+
     title = models.CharField('Title', max_length=60)
     code = models.CharField('Code', max_length=15, unique=True)
 
@@ -349,22 +358,27 @@ class CourseType(models.Model):
 
 
 class CcrCourse(models.Model):
-    ccr = models.ForeignKey('Curriculum', models.CASCADE)
+
+    proxy = True
+
+    curriculum = models.ForeignKey('Curriculum', models.CASCADE)
     type = models.ForeignKey('CourseType', models.CASCADE)
     no = models.PositiveIntegerField('Course Number', validators=[MinValueValidator(1)], default=1)
     semester = models.PositiveIntegerField('Semester', validators=[MinValueValidator(1),
                                                                    MaxValueValidator(10)])
 
     class Meta:
-        unique_together = ('ccr', 'type', 'no')
-        ordering = ['ccr', 'type', 'no', 'semester']
+        unique_together = ('curriculum', 'type', 'no')
+        ordering = ['curriculum', 'type', 'no', 'semester']
 
     def __str__(self):
-        return str(self.ccr.program.code) + '_' + str(self.type.code) \
+        return str(self.curriculum.program.code) + '_' + str(self.type.code) \
                + "-" + str(write_roman(self.no))
 
-
 class OfferedCourse(models.Model):
+
+    proxy = True
+
     ccr_course = models.ForeignKey('CcrCourse', models.CASCADE)
     act_course = models.ForeignKey('Course', models.CASCADE)
 
@@ -375,11 +389,14 @@ class OfferedCourse(models.Model):
         return str(self.ccr_course.ccr.program.code) + '_' + str(self.ccr_course.type) \
                + " -> " + str(self.act_course)
 
-
 class TakenCourse(models.Model):
+
+    proxy = True
+
     student = models.ForeignKey('Student', models.CASCADE)
     ccr_course = models.ForeignKey('CcrCourse', models.CASCADE)
     act_course = models.ForeignKey('Section', models.CASCADE)
+    accepted = models.NullBooleanField('Acceptance', default=False)
 
     class Meta:
         verbose_name = 'Taken Course'
@@ -388,8 +405,10 @@ class TakenCourse(models.Model):
     def __str__(self):
         return str(self.student)+ ' ' +str(self.act_course.course.title)
 
-
 class CompletedCourse(models.Model):
+
+    proxy = True
+    
     student = models.ForeignKey('Student', models.CASCADE)
     ccr_course = models.ForeignKey('CcrCourse', models.CASCADE)
     act_course = models.ForeignKey('Course', models.CASCADE)
