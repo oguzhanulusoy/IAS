@@ -23,6 +23,7 @@ from django.conf.urls import url, include
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
+    path('/', v.home),
     path('admin/', admin.site.urls),
     path('base/', v.base),
     path('academic-staffs/', v.academicStaffs),
@@ -73,6 +74,7 @@ urlpatterns = [
     path('apply/',v.apply),
     path('login/', auth_views.login, name='login'),
     path('logout/', auth_views.logout, name='logout'),
+
     path('ali', v.ali),
 
 ] + static(settings.STATIC_URL.lstrip('/'), document_root=settings.STATIC_ROOT)

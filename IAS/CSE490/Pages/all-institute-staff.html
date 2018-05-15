@@ -21,7 +21,7 @@
                             <th>Institute</th>
                             <th>University</th>
                         </tr>
-                        {% for i in academicStaffs %}
+                        {% for i in instituteStaffs %}
                         <tr>
                             <td>{{ i.staff }}</td>
                             <td>{{ i.institute }}</td>
@@ -32,17 +32,24 @@
                     <hr>
                     <!-- Modal -->
                     <div class="container">
-                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Institute</button>
+                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Institute Staff - 1</button>
                         <!-- Modal -->
                         <div class="modal fade" id="myModal" role="dialog">
                             <div class="modal-dialog">
                                 <!-- Modal content-->
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h4 class="modal-title">Add Institute Screen</h4>
+                                        <h4 class="modal-title">Add Institute Staff - 1 Screen</h4>
                                     </div>
                                     <div class="modal-body">
-                                        <p>Some text in the modal.</p>
+                                        <p>Please, type correctly given fields.</p>
+
+                                        <form action='' method='post'>{% csrf_token %}
+                                                {{ formU.as_p }}
+                                                {{ formU.non_field_errors }}                     
+                                                <input type='submit' value='Submit' />
+                                            </form>
+
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -51,6 +58,37 @@
                             </div>
                         </div>
                     </div>
+<br>
+                    <!-- Modal -->
+                    <div class="container">
+                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Institute Staff - 2</button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal" role="dialog">
+                            <div class="modal-dialog">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Add Institute Staff - 2 Screen</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Please, type correctly given fields.</p>
+
+                                        <form action='' method='post'>{% csrf_token %}
+                                                {{ formS.as_p }}
+                                                {{ formS.non_field_errors }}                     
+                                                <input type='submit' value='Submit' />
+                                            </form>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         </div>

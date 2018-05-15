@@ -1,12 +1,16 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect, render_to_response
 from django.urls import reverse
 from .models import *
 from .forms import *
+from django.core.mail import send_mail, BadHeaderError
+from django.contrib import messages
+from django.conf import settings
 
 
-
-
+# to display home
+def home(request):
+    return render(request, 'index.html', {})
 
 def base(request):
     return render(request, 'base.html', {})
@@ -253,25 +257,6 @@ def sectionDetails(request, id=None):
     sectionDetails = get_object_or_404(Section, pk=id)
     return render(request, url, {'sectionDetails' : sectionDetails})
  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # to make registration of academic staff - i
 def academicStaffRegistrationI(request):
     url = 'academic-staff-registration-i.html'
@@ -286,19 +271,6 @@ def academicStaffRegistrationI(request):
     else:
         formU = AddUserForm()
     return render(request, url, {'formU' : formU})
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # to make registration of academic staff - ii
 def academicStaffRegistrationII(request):
@@ -376,13 +348,9 @@ def quoataManagers(request):
 # to display all institute staff
 def allInstituteStaff(request):
     url = 'all-institute-staff.html'
-    if request.method == 'POST':
-        formU = AddUserForm(request.POST)
-        formS = AddStaffForm(request.POST)
-
-    content = Staff.objects.order_by('tc')
-    instituteStaffs = {'instituteStaffs' : content}
-    return render(request, url, instituteStaffs)
+    instituteStaffs = Staff.objects.order_by('tc')
+    content = {'instituteStaffs' : instituteStaffs}
+    return render(request, url, content)
 
 # to display all grand student
 def allGrandStudent(request):
@@ -411,6 +379,19 @@ def applicationI(request):
         formU = AddUserForm()
     return render(request, url, {'formU' : formU})
 
+# to make registration of staff - i
+def instituteStaffI(request):
+    url = 'all-institute-staff.html'
+    if request.method == 'POST':
+        formU = AddUserForm(request.POST)
+        if formU.is_valid():
+            formU.save()
+        else:
+            return redirect('#')
+    else:
+        formU = AddUserForm()
+    return render(request, url, {'formU' : formU})
+
 # to make registration of visitor - ii
 def applicationII(request):
     url = 'student-application-ii.html'
@@ -430,6 +411,11 @@ def applicationII(request):
     else:
         formV = AddVisitorForm()
     return render(request, url, {'formV' : formV})
+
+# to make registration of staff - ii
+
+
+
 
 # to apply
 def apply(request):
@@ -548,128 +534,3 @@ def selectedCompletedCourseDetails(request, id=None):
 
 
 
-
-
-def ali(request):
-    url = 'deneme.html'
-
-    # DERS VERDİĞİM ÖĞRENCİLERİ VE DETAYLARINI ELDE ETMEK İÇİN:
-
-    # to retrieve all sections
-    sections = []
-    sections = Section.objects.all()
-
-    # to retrieve all taken courses
-    takenCourses = []
-    takenCourses = TakenCourse.objects.all()
-
-    # to retrieve the instructor's sections (data type: section)
-    sections_list = []
-
-    # to desired data
-    desiredData = []
-
-    # to check what is the name of person who did request
-    print(request.user.first_name)
-
-    # to check all sections
-    print(sections)
-
-    # to visit all sections
-    for index in range(len(sections)-1):
-
-        print(i.student.user.first_name)
-
-        # to chech request and the instructor
-        if request.user.first_name == sections[index].instructor.staff.user.first_name and request.user.last_name == sections[index].instructor.staff.user.last_name:
-
-            
-            # to check course control
-            if sections[index].course.is_valid == True and sections[index].course.is_deleted == False:
-
-                # to get related sections
-                sections_list.append(sections[index])
-
-    
-    # to visit related sections
-    for index in range(len(sections)-1):
-
-        # to make matching same ones
-        takenCourse = TakenCourse.objects.get(act_course=sections_list[index])
-
-        # to add it to desired data content
-        desiredData.append(takenCourse)
-
-    # ADVISOR I OLDUĞUM ÖĞRENCİLERİ VE DETAYLARINI ELDE EDEBİLMEK İÇİN:
-
-    # to retrieve all students
-    students = []
-    students = Student.objects.all()
-
-    # to obtain related students
-    related_students = []
-
-    # to visit all students
-    for student in students:
-
-        # to obtain advisor and the person (who did request)
-        if student.advisor.staff.user.id == request.user.id:
-
-            # to add related student in to the list
-            related_students.append(student)
-
-        # otherwise
-        else:
-
-            # to redirect to invalid page
-            return redirect("/invalid")
-
-    content = {'desiredData' : desiredData, 'related_students' : related_students}
-
-    return render(request, url, content)
-'''
-
-
-
-    # to determine the redirecting page
-    url = 'selected-completed-course-details.html'
-
-    # to retrieve data of clicked course
-    courseDetails = get_object_or_404(Course, pk=id)
-
-    # to retrieve name of specific data
-    courseName = courseDetails.title
-
-    # new array to store course names
-    completedCourseNames = []
-
-    # to retrieve data of all completed courses
-    completedCourses = CompletedCourse.objects.all()
-
-    # to create the students
-    studentsOfCourse = []
-    
-    # to retrieve course names of completed courses
-    for i in completedCourses:
-        completedCourseNames.append(completedCourses.objects.filter('grade'))
-
-    # to find selected course in completed course table
-    for i in completedCourseNames:
-
-        # to make matching selected course with desired selected course
-        if courseName == completedCourseNames[i]:
-
-            # to get id of selected course
-            idOfCompletedCourse = completedCourses[i].id
-
-            # to select all students in that completed course
-            desiredCourse = CompletedCourse.objects.get(id=idOfCompletedCourse)
-
-            # to retrieve all students in desired course
-            for i in desiredCourse:
-                studentsOfCourse.append(desiredCourse.student)
-            
-
-
-
-'''

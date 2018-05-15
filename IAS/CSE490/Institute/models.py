@@ -9,6 +9,9 @@ from collections import OrderedDict
 from .managers import UserManager
 from .lists import *
 
+class adamEkle(models.Model):
+    email = models.EmailField(_('email address'), unique=True)
+    
 
 class User(AbstractBaseUser, PermissionsMixin):
 
