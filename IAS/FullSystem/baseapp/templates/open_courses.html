@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css"/>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.16/datatables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable();
+        } );
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <table id="example" class="table table-striped table-bordered table-sm" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Course Code</th>
+                        <th>Course Title</th>
+                        <th>Credit</th>
+                        <th>ECTS Credit</th>
+                        <th>Instructor</th>
+                        <th>Schedule</th>
+                        <th>Room</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for section in open_courses %}
+                        <tr>
+                            <td>{{ section }}</td>
+                            <td>{{ section.title }}</td>
+                            <td>{{ section.course.credit }}</td>
+                            <td>{{ section.course.ects_credit }}</td>
+                            <td>{{ section.instructor }}</td>
+                            <td>{{ section.schedules }}</td>
+                            <td>{{ section.places }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Course Code</th>
+                        <th>Course Title</th>
+                        <th>Credit</th>
+                        <th>ECTS Credit</th>
+                        <th>Instructor</th>
+                        <th>Schedule</th>
+                        <th>Room</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+{% endblock %}

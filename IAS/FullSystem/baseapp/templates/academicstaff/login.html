@@ -1,0 +1,44 @@
+
+
+
+{% include 'assets/head.html' %}
+{% block content %}
+
+
+
+
+
+
+
+<div class="login-box">
+  <div class="login-logo">
+    <a href="../../index2.html"><b>Işık </b>University</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">Something</p>
+ <div class="form-group has-feedback">
+   <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit"  class="btn btn-primary btn-block btn-flat">Login</button>
+  </form>
+
+   </div>
+
+    <a href="#">I forgot my password</a><br>
+    
+
+  </div>
+  {% include 'assets/scripts.html' %}
+  <!-- /.login-box-body -->
+</div>
+
+
+
+
+
+
+
+ 
+{% endblock content %}

@@ -1,0 +1,34 @@
+{% extends 'staff/base.html' %}
+
+{% block content %}
+
+{% include 'staff/assets/contents/table.html' %}
+
+    <!-- Page Content -->
+    <div class="container">
+      <div class="row">
+<!-- Menu -->
+{% include 'staff/assets/menu/institute.html' %}
+
+
+        <div class="col-lg-9">
+
+          <div class="card mt-4">
+            <div class="card-body">
+              <h3 class="card-title">Institute Side</h3>
+              <p class="card-text">You can reach to institutes, departments, program, curriculums, courses, course types and sections with own details. You can add new institute, department, program, curriculum, course type with own attributes.
+                <br><br>You can define a new course. You may view all available courses in this semester. You can also open or close an existing course. Or, you can assign a course to remove.
+                <br><br>You can define a new section for a specific course. You can delete a section from section list, or you can remove all section to clean the whole semester.</p>
+            </div>
+          </div>
+          <!-- /.card -->
+
+
+        </div>
+        <!-- /.col-lg-9 -->
+<br>
+      </div>
+<br>
+    </div>
+
+{% endblock content %}

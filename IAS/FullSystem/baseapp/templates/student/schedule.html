@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        {% for slot in slots %}
+                            <th scope="col">{{ slot.1 }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key, value in dict.items %}
+                        <tr>
+                            <th scope="row">{{ key }}</th>
+                            {% for section in value %}
+                                <td {% if section|length > 1 %} class="bg-danger" {% endif %}>
+                                    {% for sec in section %}
+                                        {{ sec.section }}
+                                        {{ sec.place_value }}
+                                    {% empty %}
+                                        -
+                                    {% endfor %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <style>
+
+        .table td, .table th {
+            padding: 0.60em;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .table td {
+            height: 80px;
+            width: 100px;
+        }
+
+    </style>
+
+{% endblock %}

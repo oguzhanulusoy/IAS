@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            {% for semester, courses in semesters.items %}
+                <table class="table table-sm table-responsive">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col" colspan="6">{{ semester }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Course Code</td>
+                                <td>Course Title</td>
+                                <td>Credits</td>
+                                <td>Status</td>
+                                <td>Grade</td>
+                                <td>Points</td>
+                            </tr>
+                            {% for course in courses %}
+                                <tr>
+                                    <td>{{ course.act_course.course }}</td>
+                                    <td>{{ course.act_course.course.title }}</td>
+                                    <td>{{ course.credit }}</td>
+                                    <td>Status</td>
+                                    <td>{{ course.grade }}</td>
+                                    <td>{{ course.grade|point:course.credit }}</td>
+                                </tr>
+                            {% endfor %}
+                            <tr class="table-dark">
+                                <td>Credits Attempted</td>
+                                <td>Credits Completed</td>
+                                <td>Points Earned</td>
+                                <td>SPA</td>
+                                <td colspan="2">Semester Status</td>
+                            </tr>
+                            <tr>
+                                <td>{{ semester_info|get_info:semester|get_info:"credits_attempted" }}</td>
+                                <td>{{ semester_info|get_info:semester|get_info:"credits_comp" }}</td>
+                                <td>{{ semester_info|get_info:semester|get_info:"points_earned" }}</td>
+                                <td>{{ semester_info|get_info:semester|get_info:"spa" }}</td>
+                                <td>{{ semester_info|get_info:semester|get_info:"semester_status" }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

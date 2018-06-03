@@ -1,0 +1,30 @@
+{% extends 'staff/institute.html' %}
+{% block content %}
+<!-- Page Content -->
+<div class="container">
+	<div class="row">
+		<!-- Menu -->
+		{% include 'staff/assets/menu/institute.html' %}
+		<div class="col-lg-9">
+			<div class="card card-outline-secondary my-4">
+				<!-- Title -->
+				<div class="card-header">
+					{{ request.path }}
+				</div>
+				<div class="card-body">
+					<p>You can see the details of {{ sectionDetails.course }}</p>
+					<!-- Content -->
+					<hr>
+					<small class="text-muted">Section number:  </small> {{ sectionDetails.id }}
+					<br><small class="text-muted">Course:  </small> {{ sectionDetails.course }}
+					<br><small class="text-muted">Year:  </small> {{ sectionDetails.year }}
+					<br><small class="text-muted">Semester:  </small> {{ sectionDetails.semester }}
+					<br><small class="text-muted">Quantity:  </small> {{ sectionDetails.number }}
+					<br><small class="text-muted">Instructor:  </small> {{ sectionDetails.instructor }}
+					<hr>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}

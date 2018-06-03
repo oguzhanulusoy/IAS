@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container" style="margin-bottom: 15px;">
+    <div class="row">
+
+        <div class="col-md-12">
+            {% if warnings %}
+                {% for warning in warnings %}
+                    <div class="alert alert-warning" role="alert">
+                        {{ warning }}
+                    </div>
+                {% endfor %}
+            {% elif error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">Registered Courses<span style="float: right;"><a href="{% url 'student_send_approve' %}">Send for Approval</a></span> </div>
+                {% if taken_courses %}
+                <table class="table table-bordered table-responsive-lg">
+                    <thead>
+                        <tr>
+                            <th scope="col">Taker For</th>
+                            <th scope="col">Code</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Instructor</th>
+                            <th scope="col">Credit</th>
+                            <th scope="col">Schedule</th>
+                            <th scope="col">Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for course in taken_courses %}
+                            <tr>
+                                <td>{{ course.ccr_course.code }}</td>
+                                <td>{{ course.act_course }}</td>
+                                <td>{{ course.title }}</td>
+                                <td>{{ course.instructor }}</td>
+                                <td>{{ course.credit }}</td>
+                                <td>{{ course.act_course.schedule }}</td>
+                                <td><a href=" {% url 'student_remove_taken_course' course.ccr_course.id course.act_course.id %}" class="btn btn-danger btn-sm">Remove</a> </td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="4"></td>
+                            <td>{{ taken_credit }}</td>
+                            <td colspan="2"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                {% else %}
+                    <div class="card-body">
+                        No registered course yet
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-sm text-center">
+                  <a href="{% url 'student_ccr_external' %}" target="_blank" class="list-group-item list-group-item-action">CCR</a>
+                </div>
+                <div class="col-sm text-center">
+                  <a href="{% url 'student_schedule' %}" target="_blank" class="list-group-item list-group-item-action">Schedule</a>
+                </div>
+                <div class="col-sm text-center">
+                  <a href="{% url 'open_courses' %}" target="_blank" class="list-group-item list-group-item-action">Open Courses</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                {% for key, value in courses.items %}
+                    <li class="nav-item">
+                    <a class="nav-link
+                    {% if not selected_course and forloop.first %}
+                        active
+                    {% elif selected_course.semester|slugify == key|slugify %}
+                        active
+                    {% endif %}"
+                    id="semester-{{ key }}-tab" data-toggle="tab" href="#semester-{{ key }}" role="tab">{{ key }}. Semester</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="card" style="border-top-left-radius: 0; border-top-right-radius:0; margin-top: -2px;">
+                <div class="tab-content" id="semesterTabList">
+                    {% for key, value in courses.items %}
+                    <div class="tab-pane fade
+                    {% if not selected_course and forloop.first %}
+                        show active
+                    {% elif selected_course.semester|slugify == key|slugify %}
+                        show active
+                    {% endif %}"
+                    id="semester-{{ key }}" role="tabpanel" aria-labelledby="semester-{{ key }}-tab">
+                        <table class="table">
+                        <tbody>
+                            {% for course in value %}
+                                {% if selected_course.id|slugify == course.id|slugify %}
+                                    <tr class="table-warning">
+                                {% elif course.taken %}
+                                    <tr class="table-primary">
+                                {% elif course.other.grade is not None and course.other is not None %}
+                                    <tr class="table-success">
+                                {% else %}
+                                    <tr class="table-active">
+                                {% endif %}
+                                        <td>{{ course.code }}</td>
+                                        <td>{{ course.title }}</td>
+                                        <td>{{ course.credit }} credit</td>
+                                        <td>
+                                            {% if course.other.grade or course.completed and not course.taken %}
+                                                ({{ course.other.year }} {{ course.other.semester }} {{ course.other.grade }})
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if not course.completed and not course.taken %}
+                                                <a href="{% url 'student_register_course_param' course.id %}">Show Offered</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="card">
+                {% if selected_course %}
+                <div class="card-header">Available Sections for {{ selected_course.code }}</div>
+                    <table class="table table-bordered table-responsive-lg">
+                        <thead>
+                            <tr>
+                                <th scope="col">Code</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">Instructor</th>
+                                <th scope="col">Credit</th>
+                                <th scope="col">Schedule</th>
+                                <th scope="col">Quota</th>
+                                <th scope="col">Select</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for course in offered_courses %}
+                                {% for section in course.sections %}
+                                    <tr>
+                                        <td>{{ section }}</td>
+                                        <td>{{ section.course.title }}</td>
+                                        <td>{{ section.instructor}}</td>
+                                        <td>{{ section.course.credit }}</td>
+                                        <td>{{ section.schedule }}</td>
+                                        <td>{{ section.quota }}</td>
+                                        <td>
+                                            {% if section.quota > 0 %}
+                                            <a href=" {% url 'student_add_taken_course' selected_course.id section.id %}" class="btn btn-primary btn-sm">Select</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% empty %}
+                                    <tr><td colspan="7">There is no offered section for this course</td></tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                <div class="card-header">Available Section</div>
+                <div class="card-body">Please select a course from CCR</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .col-md-12 {
+        margin-bottom: 15px;
+    }
+
+    .table {
+        margin: 0;
+        line-height: 1;
+    }
+
+    .table td, .table th {
+        vertical-align: middle;
+        text-align: center;
+    }
+</style>
+{% endblock %}

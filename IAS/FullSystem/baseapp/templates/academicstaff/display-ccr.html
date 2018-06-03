@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered table-sm">
+                <tbody>
+            <tr>
+                <th scope="row">Name</th>
+                <td>{{ student.user.first_name }} {{ student.user.last_name }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Student No</th>
+                <td>{{ student.user.username }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Institute</th>
+                <td>{{ student.program.department.institute }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Department</th>
+                <td>{{ student.program.department }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Program</th>
+                <td>({{ student.program.code }}) {{ student.program }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Standing</th>
+                <td>{{ student.standing }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Program Credits Completed</th>
+                <td>{{ student.completed_credit }}</td>
+            </tr>
+            <tr>
+                <th scope="row">GPA</th>
+                <td>{{ student.calculate_gpa }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Registration Status</th>
+                <td>
+                    {% if student.approval_statue %}
+                        Approved
+                    {% else %}
+                        Waiting for approval
+                    {% endif %}
+                </td>
+            </tr>
+      </tbody>
+            </table>
+        </div>
+    </div>
+    <br>
+    {% for key, value in courses.items %}
+        {% if forloop.counter0|divisibleby:2 == True %}
+            <div class="row justify-content-center">
+        {% endif %}
+        <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">{{ key }}. Semester</div>
+                    <div class="card-body" style="padding: 0;">
+                        <table class="table">
+                            <tbody>
+                                {% for course in value %}
+                                <tr class="{% if course.taken %}table-primary{% elif course.other.grade and course.other.grade != 'F' %}table-active{% endif %}">
+                                    <td>{{ course.code }}</td>
+                                    <td>{{ course.title }}</td>
+                                    <td>{{ course.credit }} Credit</td>
+                                    <td>
+                                        {% if course.other.grade %}
+                                        ({{ course.other.year }} {{ course.other.semester }} {{ course.other.grade }})
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        </div>
+        {% if forloop.counter0|divisibleby:2 == False %}
+            </div>
+            <br>
+        {% endif %}
+    {% endfor %}
+</div>
+    <style>
+        .table td {
+            font-size: 0.95em;
+        }
+    </style>
+{% endblock %}

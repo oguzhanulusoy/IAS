@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+
+<div class="row">
+    <div class="col-md-10 col-md-offset-1"  style="margin-top: 10px;">
+        <div class="col-md-12">
+
+<div class="container">
+
+<h2>My Courses</h2>
+  
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Course Name</th>
+        <th>Code</th>
+        <th>Not ver</th>
+      </tr>
+    </thead>
+    <tbody>
+
+{% for i in myCourses %}
+      <tr>
+        <td>{{ i.course.code}}</td>
+        <td>	{{ i.course.title }}</td>
+        <td><a href="/myCourseDetails/{{ i.pk }}/">Students</a></td>
+
+      </tr>
+     
+{% endfor %}
+    </tbody>
+  </table>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+{% endblock content %}

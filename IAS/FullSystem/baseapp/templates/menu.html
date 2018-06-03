@@ -1,0 +1,16 @@
+{% if user.is_authenticated %}
+
+{% else %}
+    <div class="col-md-3">
+        <div class="card">
+        <div class="card-header">Login<a href="{% url 'register' %}" style="float: right">Register</a></div>
+        <div class="card-body text-center">
+            <form method="POST" class="post-form" action="{% url 'login' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+            </form>
+        </div>
+    </div>
+    </div>
+{% endif %}

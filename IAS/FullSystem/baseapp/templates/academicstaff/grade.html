@@ -1,0 +1,27 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-10 col-md-offset-1"  style="margin-top: 10px;">
+        <div class="col-md-12">
+
+<div class="container">
+
+<h2>Letter Grade</h2>
+  <p>{{ student.st_id  }}</p>            
+ 
+<form action='' method='post'>{% csrf_token %}
+											{{ form.as_p }}
+											{{ form.non_field_errors }}
+											<input type='submit' value='Submit' class="btn btn-primary" />
+										</form>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+{% endblock content %}

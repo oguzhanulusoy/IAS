@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+                {% if error %}
+                    <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                    </div>
+                {% endif %}
+
+                <div class="card">
+                    <div class="card-header">Application Form</div>
+                    <div class="card-body">
+                        <form method="post" action="{% url 'application' %}">
+                            {% csrf_token %}
+                            {% for item in form %}
+                                <div class="form-group">
+                                    <label for="{{ item.html_name }}">{{ item.label }}</label>
+                                    {{ item }}
+                                    {% if item == form.program %}
+                                        <small id="programHelp" class="form-text text-muted">You can select multiple programs</small>
+                                    {% endif %}
+                                    <div class="invalid-feedback" {% if item.errors %} style="display: inline" {% endif %}>
+                                      {% for error in item.errors %}
+                                          {{ error }}
+                                      {% endfor %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <br>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-block">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

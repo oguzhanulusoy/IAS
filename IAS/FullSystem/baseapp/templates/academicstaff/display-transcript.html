@@ -1,0 +1,51 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-10 col-md-offset-1"  style="margin-top: 10px;">
+        <div class="col-md-12">
+
+<div class="container">
+
+<h2>Transcript</h2>
+            
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Course Type Title</th>
+        <th>Course Type Code</th>
+        <th>Credit</th>
+        <th>Grade</th>
+
+          <th>Course Code</th>
+         <th>Course Name</th>
+      </tr>
+    </thead>
+    <tbody>
+
+{% for i in completedCourses %}
+      <tr>
+
+        <td>{{ i.ccr_course.type.title }}</td>
+        <td>{{ i.ccr_course.type.code }}</td>
+        <td>{{ i.act_course.credit }}</td>
+        <td>{{ i.grade }}</td>
+
+        <td>{{ i.act_course.code }}</td>
+        <td>{{ i.act_course.title }}</td>
+
+      </tr>
+     
+{% endfor %}
+    </tbody>
+  </table>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+{% endblock content %}

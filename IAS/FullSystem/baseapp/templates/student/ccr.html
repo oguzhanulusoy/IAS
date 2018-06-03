@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+
+        {% include 'left-menu.html' %}
+
+        <div class="col-md-9">
+            <div class="row">
+                {% if user.student %}
+                    <div class="col-md-12">
+                        <table class="table table-bordered table-sm">
+                            <tbody>
+                        <tr>
+                            <th scope="row">Name</th>
+                            <td>{{ user.first_name }} {{ user.last_name }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Student No</th>
+                            <td>{{ user.username }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Institute</th>
+                            <td>{{ user.student.program.department.institute }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Department</th>
+                            <td>{{ user.student.program.department }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Program</th>
+                            <td>({{ user.student.program.code }}) {{ user.student.program }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Standing</th>
+                            <td>{{ user.student.standing }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Program Credits Completed</th>
+                            <td>{{ user.student.completed_credit }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">GPA</th>
+                            <td>{{ user.student.calculate_gpa }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Registration Status</th>
+                            <td>
+                                {% if user.student.approval_statue %}
+                                    Approved
+                                {% else %}
+                                    Waiting for approval
+                                {% endif %}
+                            </td>
+                        </tr>
+                  </tbody>
+                        </table>
+                    </div>
+                    <br>
+                    <div class="col-md-12">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            {% for key, value in courses.items %}
+                                <li class="nav-item">
+                                <a class="nav-link
+                                {% if not selected_course and forloop.first %}
+                                    active
+                                {% elif selected_course.semester|slugify == key|slugify %}
+                                    active
+                                {% endif %}"
+                                id="semester-{{ key }}-tab" data-toggle="tab" href="#semester-{{ key }}" role="tab">{{ key }}. Semester</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <div class="card" style="border-top-left-radius: 0; border-top-right-radius:0; margin-top: -2px;">
+                            <div class="tab-content" id="semesterTabList">
+                                {% for key, value in courses.items %}
+                                <div class="tab-pane fade
+                                {% if not selected_course and forloop.first %}
+                                    show active
+                                {% elif selected_course.semester|slugify == key|slugify %}
+                                    show active
+                                {% endif %}"
+                                id="semester-{{ key }}" role="tabpanel" aria-labelledby="semester-{{ key }}-tab">
+                                    <table class="table" style="margin-bottom: 0">
+                                    <tbody>
+                                        {% for course in value %}
+                                            {% if selected_course.id|slugify == course.id|slugify %}
+                                                <tr class="table-warning">
+                                            {% elif course.taken %}
+                                                <tr class="table-primary">
+                                            {% elif course.other.grade is not None and course.other is not None %}
+                                                <tr class="table-success">
+                                            {% else %}
+                                                <tr class="table-active">
+                                            {% endif %}
+                                                    <td>{{ course.code }}</td>
+                                                    <td>{{ course.title }}</td>
+                                                    <td>{{ course.credit }} credit</td>
+                                                    <td>
+                                                        {% if course.other.grade or course.completed and not course.taken %}
+                                                            ({{ course.other.year }} {{ course.other.semester }} {{ course.other.grade }})
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

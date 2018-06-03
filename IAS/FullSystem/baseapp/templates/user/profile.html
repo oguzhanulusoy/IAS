@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+
+        {% include 'left-menu.html' %}
+
+        <div class="col-md-6">
+            <div class="row">
+                {% if user.student %}
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Next Lecture</h5>
+                                <p class="card-text">
+                                    Your next lecture is {{ next_lecture.section }}
+                            </div>
+                            <div class="card-footer">
+                                <small class="text-muted">
+                                    Day: {{ next_lecture.day }} <br>
+                                    Slot: {{ next_lecture.hour }} <br>
+                                    Place: {{ next_lecture.place }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% include 'right-menu.html' %}
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+
+        {% include 'left-menu.html' %}
+
+        <div class="col-md-6">
+            <div class="row">
+                {% if user.student %}
+                    <div class="col-md-12">
+
+                        {% if reg_statue == 1 %}
+                            <div class="card border-danger mb-3">
+                              <div class="card-body text-danger text-center">
+                                <h5 class="card-text">
+                                    Your course registration period started but you have registration hold.
+                                    Please contact registrar's office.
+                                </h5>
+                              </div>
+                            </div>
+                        {% elif reg_statue == 2 %}
+                            <div class="card border-warning mb-3">
+                              <div class="card-body text-warning text-center">
+                                <h5 class="card-text">Your program waiting for approval.</h5>
+                              </div>
+                            </div>
+                        {% elif reg_statue == 3 %}
+                            <div class="card border-info mb-3">
+                              <div class="card-body text-info text-center">
+                                <h5 class="card-text">Your course registration process continues...</h5>
+                              </div>
+                            </div>
+                        {% endif %}
+
+                        {% if next_lecture and reg_statue == 0 %}
+                            <div class="card">
+                                <div class="card-body">
+                                    <p class="card-text text-center" style="font-size: 15px;">
+                                        Your next lecture <i>{{ next_lecture.section }}</i>
+                                        will be <i>{{ next_lecture.day }}</i>
+                                        at <i>{{ next_lecture.hour }}</i>
+                                        on <i>{{ next_lecture.place }}</i>
+                                </div>
+                            </div>
+                            <br>
+                        {% endif %}
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="card-text text-center" style="font-size: 15px;">
+                                    {% if user.student.advisor %}
+                                        Your advisor is <i>{{ user.student.advisor }}</i>
+                                    {% else %}
+                                        Your advisor has not been assigned yet.
+                                    {% endif %}
+
+                            </div>
+                        </div>
+                        <br>
+                        <div class="card-deck text-center">
+                            <div class="card list-group-item-action">
+                                <div class="card-body">
+                                    <a href="{% url 'student_ccr' %}">
+                                        <img title="Curriculum" src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTguMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDQ0MiA0NDIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDQ0MiA0NDI7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iNjRweCIgaGVpZ2h0PSI2NHB4Ij4KPGc+Cgk8cGF0aCBkPSJNMzg1LjUzNSw2OC40NjRsLTY3LTY3QzMxNy41OTgsMC41MjcsMzE2LjMyNiwwLDMxNSwwSDYwYy0yLjc2MiwwLTUsMi4yMzktNSw1djQzMmMwLDIuNzYxLDIuMjM4LDUsNSw1aDMyMiAgIGMyLjc2MiwwLDUtMi4yMzksNS01VjcyQzM4Nyw3MC42NzQsMzg2LjQ3NCw2OS40MDIsMzg1LjUzNSw2OC40NjR6IE0zMjAsMTcuMDcxTDM2OS45MjksNjdIMzIwVjE3LjA3MXogTTM3Nyw0MzJINjVWMTBoMjQ1djYyICAgYzAsMi43NjEsMi4yMzgsNSw1LDVoNjJWNDMyeiIgZmlsbD0iIzAwMDAwMCIvPgoJPHBhdGggZD0iTTE1NS41LDg4aC00NmMtMi43NjIsMC01LDIuMjM5LTUsNXY0NmMwLDIuNzYxLDIuMjM4LDUsNSw1aDQ2YzIuNzYyLDAsNS0yLjIzOSw1LTVWOTNDMTYwLjUsOTAuMjM5LDE1OC4yNjIsODgsMTU1LjUsODh6ICAgIE0xNTAuNSwxMzRoLTM2Vjk4aDM2VjEzNHoiIGZpbGw9IiMwMDAwMDAiLz4KCTxwYXRoIGQ9Ik0xNTUuNSwxNTUuNjMxaC00NmMtMi43NjIsMC01LDIuMjM5LTUsNXY0NmMwLDIuNzYxLDIuMjM4LDUsNSw1aDQ2YzIuNzYyLDAsNS0yLjIzOSw1LTV2LTQ2ICAgQzE2MC41LDE1Ny44NywxNTguMjYyLDE1NS42MzEsMTU1LjUsMTU1LjYzMXogTTE1MC41LDIwMS42MzFoLTM2di0zNmgzNlYyMDEuNjMxeiIgZmlsbD0iIzAwMDAwMCIvPgoJPHBhdGggZD0iTTE1NS41LDIyMy4yNjJoLTQ2Yy0yLjc2MiwwLTUsMi4yMzktNSw1djQ2YzAsMi43NjEsMi4yMzgsNSw1LDVoNDZjMi43NjIsMCw1LTIuMjM5LDUtNXYtNDYgICBDMTYwLjUsMjI1LjUsMTU4LjI2MiwyMjMuMjYyLDE1NS41LDIyMy4yNjJ6IE0xNTAuNSwyNjkuMjYyaC0zNnYtMzZoMzZWMjY5LjI2MnoiIGZpbGw9IiMwMDAwMDAiLz4KCTxwYXRoIGQ9Ik0xNTUuNSwyOTAuODkzaC00NmMtMi43NjIsMC01LDIuMjM5LTUsNXY0NmMwLDIuNzYxLDIuMjM4LDUsNSw1aDQ2YzIuNzYyLDAsNS0yLjIzOSw1LTV2LTQ2ICAgQzE2MC41LDI5My4xMzIsMTU4LjI2MiwyOTAuODkzLDE1NS41LDI5MC44OTN6IE0xNTAuNSwzMzYuODkzaC0zNnYtMzZoMzZWMzM2Ljg5M3oiIGZpbGw9IiMwMDAwMDAiLz4KCTxwYXRoIGQ9Ik0xODQuNSwxMzljMCwyLjc2MSwyLjIzOCw1LDUsNWgxNDNjMi43NjIsMCw1LTIuMjM5LDUtNXMtMi4yMzgtNS01LTVoLTE0M0MxODYuNzM4LDEzNCwxODQuNSwxMzYuMjM5LDE4NC41LDEzOXoiIGZpbGw9IiMwMDAwMDAiLz4KCTxwYXRoIGQ9Ik0zMzIuNSwyMDEuNjMxaC0xNDNjLTIuNzYyLDAtNSwyLjIzOS01LDVzMi4yMzgsNSw1LDVoMTQzYzIuNzYyLDAsNS0yLjIzOSw1LTVTMzM1LjI2MiwyMDEuNjMxLDMzMi41LDIwMS42MzF6IiBmaWxsPSIjMDAwMDAwIi8+Cgk8cGF0aCBkPSJNMzMyLjUsMjY5LjI2MmgtMTQzYy0yLjc2MiwwLTUsMi4yMzktNSw1czIuMjM4LDUsNSw1aDE0M2MyLjc2MiwwLDUtMi4yMzksNS01UzMzNS4yNjIsMjY5LjI2MiwzMzIuNSwyNjkuMjYyeiIgZmlsbD0iIzAwMDAwMCIvPgoJPHBhdGggZD0iTTMzMi41LDMzNi44OTNoLTE0M2MtMi43NjIsMC01LDIuMjM5LTUsNXMyLjIzOCw1LDUsNWgxNDNjMi43NjIsMCw1LTIuMjM5LDUtNVMzMzUuMjYyLDMzNi44OTMsMzMyLjUsMzM2Ljg5M3oiIGZpbGw9IiMwMDAwMDAiLz4KCTxwYXRoIGQ9Ik0xMjYuNTI4LDE5NS4yMzZjMC44MDcsMS42MTQsMi40MjEsMi42NjcsNC4yMjMsMi43NTdjMC4wODMsMC4wMDQsMC4xNjcsMC4wMDYsMC4yNSwwLjAwNmMxLjcwOSwwLDMuMzA4LTAuODc1LDQuMjI3LTIuMzMgICBsMTItMTljMS40NzUtMi4zMzQsMC43NzctNS40MjMtMS41NTgtNi44OTdjLTIuMzM1LTEuNDc1LTUuNDIzLTAuNzc3LTYuODk3LDEuNTU4bC03LjI2NiwxMS41MDRsLTEuMjM1LTIuNDcgICBjLTEuMjM1LTIuNDY5LTQuMjM3LTMuNDcxLTYuNzA4LTIuMjM2Yy0yLjQ3LDEuMjM1LTMuNDcxLDQuMjM4LTIuMjM1LDYuNzA4TDEyNi41MjgsMTk1LjIzNnoiIGZpbGw9IiMwMDAwMDAiLz4KCTxwYXRoIGQ9Ik0yODAsNjNjMC0yLjc2MS0yLjIzOC01LTUtNUgxNjdjLTIuNzYyLDAtNSwyLjIzOS01LDVzMi4yMzgsNSw1LDVoMTA4QzI3Ny43NjIsNjgsMjgwLDY1Ljc2MSwyODAsNjN6IiBmaWxsPSIjMDAwMDAwIi8+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPC9zdmc+Cg==" />
+                                    </a>
+                                </div>
+                                <div class="card-footer">
+                                    Curriculum
+                                </div>
+                            </div>
+                            <div class="card list-group-item-action">
+                                <div class="card-body">
+                                    <a href="{% url 'student_schedule' %}" target="_blank">
+                                    <img title="Schedule" src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjY0cHgiIGhlaWdodD0iNjRweCIgdmlld0JveD0iMCAwIDMxLjE4MyAzMS4xODMiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDMxLjE4MyAzMS4xODM7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPGc+Cgk8Zz4KCQk8cGF0aCBkPSJNMTUuNTkxLDIuMzU5QzguMDQ2LDIuMzU5LDEuOTMsOC40NzYsMS45MywxNi4wMmMwLDMuNzQzLDEuNTA3LDcuMTMyLDMuOTQ1LDkuNmMtMC40MzQsMC41NTYtMS4xMDEsMS40MDgtMi4wMTYsMi41ODMgICAgYy0wLjUsMC42NDItMC4zODQsMS41NjUsMC4yNTcsMi4wNjZjMC4yNjksMC4yMDksMC41ODcsMC4zMTEsMC45MDQsMC4zMTFjMC40MzgsMCwwLjg3My0wLjE5NCwxLjE2My0wLjU2NiAgICBjMCwwLDEuMjMyLTEuNTgyLDEuOTc5LTIuNTM2YzIuMTQsMS4zOTIsNC42ODgsMi4yMDcsNy40MywyLjIwN3M1LjI5MS0wLjgxNSw3LjQzMi0yLjIwN2MwLjc0NiwwLjk1NCwxLjk3OCwyLjUzNiwxLjk3OCwyLjUzNiAgICBjMC4yOTEsMC4zNzIsMC43MjYsMC41NjYsMS4xNjMsMC41NjZjMC4zMTYsMCwwLjYzNi0wLjEwMiwwLjkwMy0wLjMxMWMwLjY0Mi0wLjUwMSwwLjc1Ny0xLjQyNiwwLjI1Ny0yLjA2NiAgICBjLTAuOTE1LTEuMTc1LTEuNTgyLTIuMDI4LTIuMDE2LTIuNTg0YzIuNDM3LTIuNDY3LDMuOTQzLTUuODU1LDMuOTQzLTkuNTk5QzI5LjI1Miw4LjQ3NiwyMy4xMzYsMi4zNTksMTUuNTkxLDIuMzU5eiAgICAgTTQuNTYyLDE2LjAyYzAtNi4wODEsNC45NDktMTEuMDI5LDExLjAzLTExLjAyOWM2LjA4MywwLDExLjAzLDQuOTQ4LDExLjAzLDExLjAyOWMwLDYuMDg0LTQuOTQ2LDExLjAzMy0xMS4wMywxMS4wMzMgICAgQzkuNTA5LDI3LjA1Myw0LjU2MiwyMi4xMDQsNC41NjIsMTYuMDJ6IiBmaWxsPSIjMDAwMDAwIi8+CgkJPHBhdGggZD0iTTE2LjQ5MiwxNC4xNjdsMC4wMDctMy44M2MwLTAuNDg1LTAuMzkxLTAuODc4LTAuODc2LTAuODc5Yy0wLjQ4NC0wLjAwMS0wLjg3NywwLjM5MS0wLjg3OCwwLjg3N2wtMC4wMDcsMy44MDYgICAgYy0wLjQ3MiwwLjIxNS0wLjg1MSwwLjU5OC0xLjA1MywxLjA3NmwtNi4zNTEtMC4wMTJjLTAuNDg1LTAuMDAxLTAuODc3LDAuMzkzLTAuODc4LDAuODc4Yy0wLjAwMSwwLjQ4LDAuMzksMC44NzUsMC44NzUsMC44NzYgICAgbDYuNDMzLDAuMDExYzAuMzQ0LDAuNjYzLDEuMDI5LDEuMTIsMS44MjgsMS4xMmMxLjE0NSwwLDIuMDY4LTAuOTI3LDIuMDY4LTIuMDY5QzE3LjY1OSwxNS4yMDMsMTcuMTgzLDE0LjUwMiwxNi40OTIsMTQuMTY3eiIgZmlsbD0iIzAwMDAwMCIvPgoJCTxwYXRoIGQ9Ik0xLjU4MywyLjE1NGMtMi4wMTMsMS45OTktMi4xMDUsNS4xOTEtMC4yNzcsNy4zMDNsNy41ODMtNy41MjFDNi43OTEsMC4wOTIsMy41OTQsMC4xNTgsMS41ODMsMi4xNTR6IiBmaWxsPSIjMDAwMDAwIi8+CgkJPHBhdGggZD0iTTI5LjYwMywyLjE1NGMtMi4wMTYtMS45OTUtNS4yMDgtMi4wNjItNy4zMDctMC4yMTdsNy41ODEsNy41MjFDMzEuNzA1LDcuMzQ1LDMxLjYxNCw0LjE1MywyOS42MDMsMi4xNTR6IiBmaWxsPSIjMDAwMDAwIi8+Cgk8L2c+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPC9zdmc+Cg==" />
+                                    </a>
+                                </div>
+                                <div class="card-footer">
+                                    Schedule
+                                </div>
+                            </div>
+                            <div class="card list-group-item-action">
+                                <div class="card-body">
+                                    <a href="{% url 'student_transcript' %}" target="_blank">
+                                        <img title="Transcript" src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjY0cHgiIGhlaWdodD0iNjRweCIgdmlld0JveD0iMCAwIDMxLjQyNiAzMS40MjYiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDMxLjQyNiAzMS40MjY7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPGc+Cgk8Zz4KCQk8cGF0aCBkPSJNMTUuMzQyLDBoLTMuODg4aC0wLjE2OUwyLjY2OCw5LjAxOXYwLjEyNXY0LjE2MnYxOC4xMmgyNi4wOVYwSDE1LjM0MnogTTExLjQ2NSw0LjA3bDAuMDE1LDUuMDE1TDYuNjU3LDkuMTE3ICAgIEwxMS40NjUsNC4wN3ogTTI1LjgxMSwyOC40OEg1LjYxNFYxMi4wN2w4LjgyLTAuMDZsLTAuMDI2LTkuMDY0aDExLjQwMlYyOC40OHoiIGZpbGw9IiMwMDAwMDAiLz4KCQk8cGF0aCBkPSJNMjIuMDY0LDE1LjEzSDkuNDk0Yy0wLjU0MywwLTAuOTgxLDAuNDM4LTAuOTgxLDAuOTgxczAuNDM4LDAuOTgyLDAuOTgxLDAuOTgyaDEyLjU3YzAuNTQzLDAsMC45ODItMC40MzksMC45ODItMC45ODIgICAgUzIyLjYwNywxNS4xMywyMi4wNjQsMTUuMTN6IiBmaWxsPSIjMDAwMDAwIi8+CgkJPHBhdGggZD0iTTIyLjA2NCwxOS40NzJIOS40OTRjLTAuNTQzLDAtMC45ODEsMC40NC0wLjk4MSwwLjk4MnMwLjQzOCwwLjk4MSwwLjk4MSwwLjk4MWgxMi41N2MwLjU0MywwLDAuOTgyLTAuNDM5LDAuOTgyLTAuOTgxICAgIEMyMy4wNDgsMTkuOTEyLDIyLjYwNywxOS40NzIsMjIuMDY0LDE5LjQ3MnoiIGZpbGw9IiMwMDAwMDAiLz4KCQk8cGF0aCBkPSJNMjIuMDY0LDIzLjgxNEg5LjQ5NGMtMC41NDMsMC0wLjk4MSwwLjQzOS0wLjk4MSwwLjk4MnMwLjQzOCwwLjk4MiwwLjk4MSwwLjk4MmgxMi41N2MwLjU0MywwLDAuOTgyLTAuNDM5LDAuOTgyLTAuOTgyICAgIFMyMi42MDcsMjMuODE0LDIyLjA2NCwyMy44MTR6IiBmaWxsPSIjMDAwMDAwIi8+CgkJPHBhdGggZD0iTTIxLjcwNCw4Ljc1M2MwLjU1NC0wLjM4OSwwLjkxNi0xLjAyOCwwLjkxNi0xLjc1NWMwLTEuMTg3LTAuOTYyLTIuMTQ4LTIuMTQ3LTIuMTQ4Yy0xLjE4NywwLTIuMTQ4LDAuOTYyLTIuMTQ4LDIuMTQ4ICAgIGMwLDAuNzI3LDAuMzYzLDEuMzY3LDAuOTE2LDEuNzU1Yy0xLjMxMSwwLjQ5Ni0yLjI0OCwxLjc0OS0yLjI2NCwzLjIzaDYuOTlDMjMuOTUyLDEwLjUwMSwyMy4wMTYsOS4yNDksMjEuNzA0LDguNzUzeiIgZmlsbD0iIzAwMDAwMCIvPgoJPC9nPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=" />
+                                    </a>
+                                </div>
+                                <div class="card-footer">
+                                    Transcript
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+
+                        <div class="card text-center">
+                            <ul class="list-group list-group-flush">
+                                <a href="{% url 'open_courses' %}" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Current Course Schedule</a>
+                                {% if reg_statue == 3 %}
+                                <a href="{% url 'student_register_course' %}" class="list-group-item list-group-item-action"><span class="oi oi-plus"></span>Course Registration</a>
+                                {% else %}
+                                <p class="btn list-group-item list-group-item-action disabled"><span class="oi oi-plus"></span>Course Registration</p>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        <br>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% include 'right-menu.html' %}
+    </div>
+</div>
+
+{% endblock %}

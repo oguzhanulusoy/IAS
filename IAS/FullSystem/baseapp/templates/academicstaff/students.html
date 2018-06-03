@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-md-10 col-md-offset-1"  style="margin-top: 10px;">
+        <div class="col-md-12">
+
+<div class="container">
+
+<h2>My Students</h2>
+             
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Firstname</th>
+        <th>Lastname</th>
+      </tr>
+    </thead>
+    <tbody>
+
+{% for student in students %}
+      <tr>
+        <td> {{student.user.first_name}} </td>
+        <td>{{student.user.last_name}}</td>
+      </tr>
+{% endfor %}
+    </tbody>
+  </table>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+{% endblock content %}

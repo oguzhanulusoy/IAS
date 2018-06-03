@@ -1,0 +1,49 @@
+
+
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-10 col-md-offset-1"  style="margin-top: 10px;">
+        <div class="col-md-12">
+
+<div class="container">
+
+<h2>Schedule</h2>
+            
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Course Name</th>
+        <th>Course Code</th>
+        <th>Slot</th>
+        <th>Place</th>
+         <th>Day</th>
+      </tr>
+    </thead>
+    <tbody>
+
+{% for i in related_schedules %}
+      <tr>
+      	 <td>{{ i.section.course.title }}</td>
+        <td>{{ i.section.course.code }}</td>
+       
+        <td>{{ i.slot }}</td>
+        <td>{{ i.place }}</td>
+        <td>{{ i.day}}</td>
+      </tr>
+     
+{% endfor %}
+    </tbody>
+  </table>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+{% endblock content %}

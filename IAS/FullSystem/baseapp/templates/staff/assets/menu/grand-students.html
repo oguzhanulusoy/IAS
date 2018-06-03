@@ -1,0 +1,11 @@
+{% if user.is_authenticated %}
+<div class="col-lg-3">
+	<h1 class="my-4">Grad Students</h1>
+	<div class="list-group">
+		<a href="/all-grand-student" class="list-group-item">All Grad Students</a>
+		<a href="/applications" class="list-group-item">Applications</a>
+		<a href="/removeAllAplications" class="list-group-item"> &emsp;    - Remove All Applications</a>
+		<a href="/all-completed-courses" class="list-group-item">All Completed Courses</a>
+	</div>
+</div>
+{% endif %}

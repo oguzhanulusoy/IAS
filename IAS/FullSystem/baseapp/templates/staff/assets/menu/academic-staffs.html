@@ -1,0 +1,12 @@
+{% if user.is_authenticated %}
+<div class="col-lg-3">
+    <h1 class="my-4">Academic Staffs</h1>
+    <div class="list-group">
+        <a href="/all-academic-staff" class="list-group-item">All Academic Staff</a>
+        <a href="/institute-heads" class="list-group-item">Institute Heads</a>
+        <a href="/department-heads" class="list-group-item">Department Heads</a>
+        <a href="/program-heads" class="list-group-item">Program Heads</a>
+        <a href="/quoata-managers" class="list-group-item">Quoata Managers</a>
+    </div>
+</div>
+{% endif %}

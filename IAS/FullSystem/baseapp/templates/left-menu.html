@@ -1,0 +1,72 @@
+{% load static %}
+
+{% if user.is_authenticated %}
+    <div class="col-md-3">
+        <div class="card">
+        <img class="card-img-top" src="{{ user.avatar.url }}" alt="Profile Picture">
+        <div class="card-body">
+            <h4 class="card-title">{{ user.first_name }} {{ user.last_name }}</h4>
+            <h6 class="card-subtitle mb-2 text-muted">{{ user.username }} {% if user.student %} - {{ user.student.standing }} {% endif %}</h6>
+            <p class="card-text" style="font-size: 0.8em;">
+                {% if user.student %}
+                    {{ user.student.program.name }}
+                {% elif user.staff %}
+                    {% if user.staff.academicstaff %}
+                        {{ user.staff.academicstaff.institute }}
+                    {% else %}
+                        Staff
+                    {% endif %}
+                {% endif %}
+            </p>
+        </div>
+        <ul class="list-group list-group-flush">
+            {% if user.student %}
+
+            {% elif user.staff %}
+                {% if user.staff.academicstaff %}
+                    << Academic Staff Menu >>
+                {% else %}
+                    << Staff Menu >>
+                {% endif %}
+            {% endif %}
+        </ul>
+        <ul class="list-group list-group-flush">
+            <a href="{% url 'home' %}" class="list-group-item list-group-item-action"><span class="oi oi-home"></span>Home</a>
+            <a href="{% url 'profile' %}" class="list-group-item list-group-item-action"><span class="oi oi-person"></span>Profile</a>
+            <a href="{% url 'logout' %}" class="list-group-item list-group-item-action"><span class="oi oi-account-logout"></span>Logout</a>
+        </ul>
+    </div>
+    </div>
+{% else %}
+    <div class="col-md-3">
+        <div class="card">
+        <div class="card-header">Login<a href="#" style="float: right">Register</a></div>
+        <div class="card-body text-center">
+            <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                {% for item in form %}
+                    <div class="form-group">
+                    {{ item }}
+                    {% if item.name == 'password' %}
+                        {% if error %}
+                            <div class="invalid-feedback" style="display: inline;">
+                              {{ error }}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                    </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+            </form>
+        </div>
+    </div>
+    </div>
+{% endif %}
+
+<style>
+
+    ul .oi {
+        padding-right: 10px;
+    }
+
+</style>

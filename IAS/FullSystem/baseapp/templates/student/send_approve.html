@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    {% if errors %}
+    <div class="row justify-content-md-center">
+        <div class="col-md-6">
+            <div class="card text-white bg-danger">
+                <div class="card-header">Errors</div>
+                <div class="card-body">
+                    {% for error in errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <br>
+    {% if not warnings %}
+    <div class="row justify-content-md-center">
+        <div class="col-md-6">
+            <div class="card text-white bg-warning">
+                <div class="card-header">Warnings</div>
+                <div class="card-body">
+                    {% for warning in warnings %}
+                        {{ warning }}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <br>
+    <div class="row justify-content-md-center">
+        <div class="col-md-6">
+            <div class="card text-center">
+                <ul class="list-group list-group-flush">
+                    <a href="{% url 'student_send_approve_last' %}" class="list-group-item list-group-item-action">Send Approve</a>
+                    <a href="{% url 'student_register_course' %}" class="list-group-item list-group-item-action">Turn Back Registration Page</a>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
