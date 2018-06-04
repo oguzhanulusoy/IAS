@@ -1,0 +1,18 @@
+{% extends 'staff-base.html' %}
+{% block content %}
+<div class="container">
+	<div class="row">
+		{% include 'left-menu.html' %}
+		<div class="col-md-6">
+			<hr>
+			<small class="text-muted">Date:  </small> {{ announcementDetails.date }}
+			<br><small class="text-muted">Title:  </small> {{ announcementDetails.title }}
+			<br><small class="text-muted">Description:  </small> {{ announcementDetails.description }}
+			<br><small class="text-muted">Sender:  </small> {{ announcementDetails.sender }}
+			<hr>
+		</div>
+	</div>
+</div>
+</div>
+{% endblock %}
+

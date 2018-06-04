@@ -1,42 +1,34 @@
-
 {% extends 'base.html' %}
-
 {% block content %}
-<div class="row">
-    <div class="col-md-10 col-md-offset-1"  style="margin-top: 10px;">
-        <div class="col-md-12">
-
 <div class="container">
-
-<h2>Class List</h2>
-             
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-
-{% for i in students %}
-      <tr>
-        <td>{{ i.student.user.first_name }}</td>
-        <td>{{ i.student.user.last_name }}</td>
-       
-        <td><a href="/grade/{{ i.student.st_id }}/">GRADE</a></td>
-      </tr>
-     
-{% endfor %}
-    </tbody>
-  </table>
-
+  <div class="row">
+    {% include 'left-menu.html' %}
+    <div class="col-md-6">
+      <div class="row">
+      </div>
+      <h2>Class List</h2>       
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Grade</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in students %}
+          <tr>
+            <td>{{ i.student.user.first_name }}</td>
+            <td>{{ i.student.user.last_name }}</td>
+            <td><a href="/grade/{{ i.student.st_id }}/">Grade</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 </div>
 </div>
-</div>
+{% endblock %}
 
-
-
-{% endblock content %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+	<div class="row">
+		{% include 'left-menu.html' %}
+		<div class="col-md-6">
+			<div class="row">
+			</div>
+			<h2>All Sections</h2>
+			<div class="list-group col-md-10">
+				{% for section in sections %}
+				<a href="/change-quota/{{section.pk}}" class="list-group-item">{{section.course.code}}.{{section.number}}</a>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+{% endblock %}
+

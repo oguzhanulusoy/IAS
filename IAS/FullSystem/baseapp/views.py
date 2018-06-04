@@ -20,14 +20,19 @@ from .lists import *
 # Ömer Berkhan - Burak Sağlam
 
 
+
+
+#### DEGiSikLiK ####
 def index(request):
     if request.user.is_authenticated:
         if request.user.get_type() is Student:
             return HttpResponseRedirect('/student')
         elif request.user.get_type() is AcademicStaff:
             academic_staff = request.user.staff.academicstaff
+            return HttpResponseRedirect('/instructor')
         elif request.user.get_type() is Staff:
             staff = request.user.staff
+            return HttpResponseRedirect('/staff')
     else:
         return HttpResponseRedirect('/login')
     form = LoginForm()
@@ -64,7 +69,6 @@ def logout_view(request):
 
 def profile_view(request):
     return render(request, 'user/profile.html')
-
 
 def student_home_view(request):
     if request.user.is_authenticated and request.user.get_type() is Student:
@@ -431,7 +435,7 @@ def instructor_advising_students_view(request):
 
 class SectionUpdateView(UpdateView):
     model = Section
-    template_name = 'academicstaff/change_section.html'
+    template_name = 'academicstaff/change-quota.html'
     fields = [
         'quota',
     ]
@@ -448,7 +452,7 @@ def special_quota(request):
     context = {
         'sections': sections
     }
-    return render(request, 'academicstaff/special_quota.html', context)
+    return render(request, 'academicstaff/special-quota.html', context)
 
 
 @login_required
@@ -510,7 +514,7 @@ def give_note(request):
 @login_required
 def studentsOfMyCourses(request):
     # VERDİĞİM DERSLERİN ÖĞRENCİLERİ
-    url = 'academicstaff/studentsOfMyCourses.html'
+    url = 'academicstaff/students-of-my-courses.html'
     staff = get_object_or_404(Staff, user=request.user)
     user = get_object_or_404(AcademicStaff, staff=staff)
     sections = Section.objects.all()
@@ -540,7 +544,7 @@ def student_courses(request, pk=None):
     return render(request, 'academicstaff/student_courses.html', context)
 
 
-@login_required
+'''@login_required
 def instructor_base_view(request):
     url = 'academicstaff/base.html'
 
@@ -555,48 +559,71 @@ def instructor_base_view(request):
 
     content = {'myCourses': myCourses}
 
-    return render(request, url, content)
+    return render(request, url, content)'''
 
 
 @login_required
 def display_transcript(request, st_id=None):
     url = 'academicstaff/display-transcript.html'
-    student = get_object_or_404(Student, id=st_id)
+    student = get_object_or_404(Student, st_id=st_id)
     completedCourses = CompletedCourse.objects.filter(student=student)
 
     return render(request, url, {'completedCourses': completedCourses})
 
 
-@login_required
-def display_schedule(request, st_username):
-    if request.user.is_authenticated and request.user.get_type() is AcademicStaff:
-        student = User.objects.get(username=st_username).student
-
-        if student:
-            schedule = student.get_schedule()
-            content = {'dict': schedule, 'slots': SLOTS}
-            return render(request, 'student/schedule.html', content)
-        else:
-            return HttpResponseRedirect('instructor/myStudents')
-    else:
-        return HttpResponseRedirect('/')
-
 
 @login_required
-def display_curriculum(request, st_username):
-    if request.user.is_authenticated and request.user.get_type() is AcademicStaff:
-        student = User.objects.get(username=st_username).student
+def displaySchedule(request, st_id=None):
+    url = 'academicstaff/display-schedule.html'
 
-        if student:
-            ccr = student.get_curriculum()
-            comp_courses = student.get_completed_courses()
-            content = {'student': student, 'courses': ccr, 'comp_courses': comp_courses}
-            return render(request, 'academicstaff/display-ccr.html', content)
-        else:
-            return HttpResponseRedirect('instructor/myStudents')
-    else:
-        return HttpResponseRedirect('/')
+    # ilgili öğrenciyi çekme
+    student = get_object_or_404(Student, st_id=st_id)
 
+    # ilgili öğrencinin tüm derslerini takenCourse dan alma
+    takenCourses = TakenCourse.objects.filter(student=student)
+    sections = []
+
+    # öğrencinin aldığı derslerdeki section bilgilerini yeni bir listede tutma
+    for tc in takenCourses:
+        sections.append(tc.act_course)
+
+    # tüm scheduleları çekme
+    schedules = Schedule.objects.all()
+    related_schedules = []
+
+    # tüm schedule lardaki sectionlar ile kendi sectionlarımı karşılaştırıp, ilgili olan scheduleları yeni bir listeye atama
+    for sc in schedules:
+        for sec in sections:
+            if sc.section == sec:
+                related_schedules.append(sc)
+
+    content = {'related_schedules' : related_schedules}
+
+    return render(request, url, content)
+
+
+@login_required
+def displayCurriculum(request, st_id=None):
+    url = 'academicstaff/display-curriculum.html'
+    student = get_object_or_404(Student, st_id=st_id)
+    curriculum = CcrCourse.objects.filter(ccr=student.curriculum)
+    content = {'curriculum' : curriculum}
+
+
+    print(student.curriculum)
+    print(curriculum)
+    return render(request, url, content )
+
+
+
+@login_required
+def displayCCR(request, st_id=None):
+    url = 'academicstaff/display-ccr.html'
+    student = get_object_or_404(Student, st_id=st_id)
+    completedCourses = CompletedCourse.objects.filter(student=student)
+    takenCourses = TakenCourse.objects.filter(student=student)
+    content = {'completedCourses' : completedCourses, 'takenCourses' : takenCourses}
+    return render(request, url, content)
 
 @login_required
 def openNewSection(request):
@@ -631,7 +658,73 @@ def myCourses(request):
             myCourses.append(section)
 
     content = {'myCourses': myCourses}
+
     return render(request, url, content)
+
+
+
+
+
+
+
+@login_required
+def studentsInMyCourses(request, pk=None):
+    url = 'academicstaff/students-in-my-courses.html'
+    staff = get_object_or_404(Staff, user=request.user)
+    user = get_object_or_404(AcademicStaff, staff=staff)
+    sections = Section.objects.all()
+    myCourses = []
+
+    for section in sections:
+        if user == section.instructor:
+            myCourses.append(section)
+
+    takenCourses = TakenCourse.objects.all()
+    students = []
+
+    for takenCourse in takenCourses:
+        for course in myCourses:
+            if takenCourse.act_course == course:
+                students.append(takenCourse)
+
+    content = {'students': students}
+    return render(request, url, content)
+
+
+@login_required
+def myStudents(request):
+
+    url = 'academicstaff/my-students.html'
+
+    # ADVISORI OLDUGUM OGRENCILER
+
+    # to retrieve all students
+    students = []
+    students = Student.objects.all()
+
+    # to obtain related students
+    related_students = []
+
+    # to visit all students
+    for student in students:
+
+        # to obtain advisor and the person (who did request)
+        if student.advisor.staff.user.first_name == request.user.first_name and student.advisor.staff.user.last_name == request.user.last_name:
+
+            # to add related student in to the list
+            related_students.append(student)
+
+        # otherwise
+        else:
+            # to redirect to invalid page
+            return redirect("/invalid")
+
+    print(request.user.first_name)
+    content = {'related_students' : related_students}
+
+    return render(request, url, content)
+
+
 
 
 @login_required
@@ -645,19 +738,20 @@ def myCourseDetails(request, pk=None):
 
 @login_required
 def grade(request, st_id=None, course_id=None):
+
     url = 'academicstaff/grade.html'
-    student = get_object_or_404(Student, id=st_id)
+    student = get_object_or_404(Student, st_id=st_id)
 
     if request.method == 'GET':
         form = Grade2Student()
     else:
         form = Grade2Student(request.POST)
         if form.is_valid():
-            completedCourse = CompletedCourse(student=student, grade=form.cleaned_data['grade'])
+            completedCourse =CompletedCourse(student=student, grade=form.cleaned_data['grade'])
             completedCourse.save(force_insert=True)
             return redirect('/succesfully')
 
-    return render(request, url, {'form': form})
+    return render(request,url,{'form':form})
 
 
 @login_required
@@ -679,498 +773,637 @@ def ScheduleApproveOrReject(request, st_id=None):
 
 @login_required
 def sectionlar(request):
-    url = 'academicstaff/secitons.html'
+    url = 'academicstaff/sections.html'
     sections = Section.objects.all()
 
     return render(request, url, {'sections': sections})
 
 
-# Oğuz
+#### OGUZHAN ULUSOY ####
 
 # to display academic staff home
-def academicStaffs(request):
-    return render(request, 'staff/academic-staffs.html', {})
-
+def academicStaff(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        return render(request, 'staff/academic-staff-home.html', {})
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display institute staff home
-def instituteStaffs(request):
-    return render(request, 'staff/institute-staffs.html', {})
+def instituteStaff(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        return render(request, 'staff/institute-staff-home.html', {})
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 
 # to display grand student home
-def grandStudents(request):
-    return render(request, 'staff/grand-students.html', {})
+def gradStudent(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        return render(request, 'staff/grad-student-home.html', {})
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 
 # to display institute home
 def institute(request):
-    return render(request, 'staff/institute.html', {})
-
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        return render(request, 'staff/institute-home.html', {})
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display institutes
 def institutes(request):
-    url = 'staff/institutes.html'
-    institutes = Institute.objects.all()
-    if request.method == 'POST':
-        form = AddInstituteForm(request.POST)
-        if form.is_valid():
-            form.save()
-            name = form.cleaned_data['name']
-            head = form.cleaned_data['head']
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/institutes.html'
+        institutes = Institute.objects.all()
+        if request.method == 'POST':
+            form = AddInstituteForm(request.POST)
+            if form.is_valid():
+                form.save()
+                name = form.cleaned_data['name']
+                head = form.cleaned_data['head']
+            else:
+                return redirect('/invalid')
         else:
-            return redirect('/invalid')
+            form = AddInstituteForm()
+        return render(request, url, {'institutes': institutes, 'form': form})
     else:
-        form = AddInstituteForm()
-
-    return render(request, url, {'institutes': institutes, 'form': form})
-
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display details of selected institute
 def instituteDetails(request, id=None):
-    url = 'staff/institute-details.html'
-    instituteDetails = get_object_or_404(Institute, pk=id)
-    return render(request, url, {'instituteDetails': instituteDetails})
-
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/institute-details.html'
+        instituteDetails = get_object_or_404(Institute, pk=id)
+        return render(request, url, {'instituteDetails': instituteDetails})
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display departments
 def departments(request):
-    url = 'staff/departments.html'
-    if request.method == 'POST':
-        form = AddDepartmentForm(request.POST)
-        if form.is_valid():
-            form.save()
-            name = form.cleaned_data['name']
-            institute = form.cleaned_data['institute']
-            head = form.cleaned_data['head']
-            return redirect('/departments')
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/departments.html'
+        if request.method == 'POST':
+            form = AddDepartmentForm(request.POST)
+            if form.is_valid():
+                form.save()
+                name = form.cleaned_data['name']
+                institute = form.cleaned_data['institute']
+                dept_head = form.cleaned_data['dept_head']
+                return redirect('/departments')
+            else:
+                return redirect('/invalid')
         else:
-            return redirect('/invalid')
+            form = AddDepartmentForm()
+        departments = Department.objects.order_by('name')
+        return render(request, url, {'departments': departments, 'form': form})
     else:
-        form = AddDepartmentForm()
-    departments = Department.objects.order_by('name')
-    return render(request, url, {'departments': departments, 'form': form})
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 
 # to display details of selected department
 def departmentDetails(request, id=None):
-    url = 'staff/department-details.html'
-    departmentDetails = get_object_or_404(Department, pk=id)
-    return render(request, url, {'departmentDetails': departmentDetails})
-
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/department-details.html'
+        departmentDetails = get_object_or_404(Department, pk=id)
+        return render(request, url, {'departmentDetails': departmentDetails})
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display programs
 def programs(request):
-    url = 'staff/programs.html'
-    if request.method == 'POST':
-        form = AddProgramForm(request.POST)
-        if form.is_valid():
-            form.save()
-            name = form.cleaned_data['name']
-            code = form.cleaned_data['code']
-            type = form.cleaned_data['type']
-            thesis = form.cleaned_data['thesis']
-            department = form.cleaned_data['department']
-            head = form.cleaned_data['head']
-            quota_manager = form.cleaned_data['quota_manager']
-            return redirect('/programs')
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/programs.html'
+        if request.method == 'POST':
+            form = AddProgramForm(request.POST)
+            if form.is_valid():
+                form.save()
+                name = form.cleaned_data['name']
+                code = form.cleaned_data['code']
+                type = form.cleaned_data['type']
+                thesis = form.cleaned_data['thesis']
+                department = form.cleaned_data['department']
+                head = form.cleaned_data['head']
+                quota_manager = form.cleaned_data['quota_manager']
+                return redirect('/programs')
+            else:
+                return redirect('/invalid')
         else:
-            return redirect('/invalid')
+            form = AddProgramForm()
+        programs = Program.objects.order_by('name')
+        return render(request, url, {'programs': programs, 'form': form})
     else:
-        form = AddProgramForm()
-    programs = Program.objects.order_by('name')
-    return render(request, url, {'programs': programs, 'form': form})
-
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display details of selected program
 def programDetails(request, id=None):
-    url = 'staff/program-details.html'
-    programDetails = get_object_or_404(Program, pk=id)
-    return render(request, url, {'programDetails': programDetails})
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/program-details.html'
+        programDetails = get_object_or_404(Program, pk=id)
+        return render(request, url, {'programDetails': programDetails})
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 
 # to display cirriculums
-def cirriculums(request):
-    url = 'staff/cirriculums.html'
-    if request.method == 'POST':
-        form = AddCirriculumForm(request.POST)
-        if form.is_valid():
-            form.save(request.id)
-            program = form.cleaned_data['program']
-            year = form.cleaned_data['year']
+def curriculums(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/curriculums.html'
+        if request.method == 'POST':
+            form = AddCirriculumForm(request.POST)
+            if form.is_valid():
+                form.save()
+                program = form.cleaned_data['program']
+                year = form.cleaned_data['year']
+            else:
+                return redirect('/invalid')
         else:
-            return redirect('/invalid')
+            form = AddCirriculumForm()
+        curriculums = Curriculum.objects.all()
+        return render(request, url, {'curriculums': curriculums, 'form': form})
     else:
-        form = AddCirriculumForm()
-    curriculums = Curriculum.objects.all()
-    return render(request, url, {'curriculums': curriculums, 'form': form})
-
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display details of selected cirriculum
-def cirriculumDetails(request, id=None):
-    url = 'staff/cirriculum-details.html'
-    cirriculumDetails = get_object_or_404(Curriculum, pk=id)
-    return render(request, url, {'cirriculumDetails': cirriculumDetails})
-
+def curriculumDetails(request, id=None):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/curriculum-details.html'
+        cirriculumDetails = get_object_or_404(Curriculum, pk=id)
+        return render(request, url, {'cirriculumDetails': cirriculumDetails})
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display all courses and define new course
 def courses(request):
-    url = 'staff/courses.html'
-    if request.method == 'POST':
-        addForm = AddCourseForm(request.POST)
-        if addForm.is_valid():
-            addForm.save()
-            code = addForm.cleaned_data['code']
-            title = addForm.cleaned_data['title']
-            description = addForm.cleaned_data['description']
-            credit = addForm.cleaned_data['credit']
-            ects_credit = addForm.cleaned_data['ects_credit']
-            program = addForm.cleaned_data['program']
-            university = addForm.cleaned_data['university']
-            # is_valid = addForm.cleaned_data['is_valid']
-            # is_deleted = addForm.cleaned_data['is_deleted']
-            # created_date = addForm.cleaned_data['created_date']
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/courses.html'
+        if request.method == 'POST':
+            addForm = AddCourseForm(request.POST)
+            if addForm.is_valid():
+                addForm.save()
+                code = addForm.cleaned_data['code']
+                title = addForm.cleaned_data['title']
+                description = addForm.cleaned_data['description']
+                credit = addForm.cleaned_data['credit']
+                ects_credit = addForm.cleaned_data['ects_credit']
+                program = addForm.cleaned_data['program']
+                university = addForm.cleaned_data['university']
+                # is_valid = addForm.cleaned_data['is_valid']
+                # is_deleted = addForm.cleaned_data['is_deleted']
+                # created_date = addForm.cleaned_data['created_date']
+            else:
+                return redirect('/invalid')
         else:
-            return redirect('/invalid')
+            addForm = AddCourseForm()
+        courses = Course.objects.order_by('-created_date')
+        return render(request, url, {'courses': courses, 'addForm': addForm})
     else:
-        addForm = AddCourseForm()
-    courses = Course.objects.order_by('-created_date')
-    return render(request, url, {'courses': courses, 'addForm': addForm})
-
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display available courses
 def availableCourses(request):
-    url = 'staff/available-courses.html'
-    availableCourses = Course.objects.filter(is_valid=True)
-    return render(request, url, {'availableCourses': availableCourses})
-
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/available-courses.html'
+        availableCourses = Course.objects.filter(is_valid=True)
+        return render(request, url, {'availableCourses': availableCourses})
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display details of selected course
 def courseDetails(request, id=None):
-    url = 'staff/course-details.html'
-    courseDetails = get_object_or_404(Course, pk=id)
-    if request.method == 'POST':
-        editForm = EditCourseForm(request.POST or None, instance=courseDetails)
-        if editForm.is_valid():
-            editForm.save()
-            is_valid = editForm.cleaned_data['is_valid']
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/course-details.html'
+        courseDetails = get_object_or_404(Course, pk=id)
+        if request.method == 'POST':
+            editForm = EditCourseForm(request.POST or None, instance=courseDetails)
+            if editForm.is_valid():
+                editForm.save()
+                is_valid = editForm.cleaned_data['is_valid']
+            else:
+                return redirect('/invalid')
         else:
-            return redirect('/invalid')
+            editForm = EditCourseForm()
+
+        removeForm = RemoveCourseForm()
+        return render(request, url, {'courseDetails': courseDetails, 'editForm': editForm, 'removeForm': removeForm})
     else:
-        editForm = EditCourseForm()
-
-    removeForm = RemoveCourseForm()
-    return render(request, url, {'courseDetails': courseDetails, 'editForm': editForm, 'removeForm': removeForm})
-
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display courses that would be removed
-def removeCourseShow(request):
-    url = 'staff/remove-course.html'
-    courses = Course.objects.order_by('-created_date')
-    return render(request, url, {'courses': courses})
-
+def removeCourseHome(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/remove-course.html'
+        courses = Course.objects.order_by('-created_date')
+        return render(request, url, {'courses': courses})
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display courses that would be closed
-def closeCourseShow(request):
-    url = 'staff/close-course.html'
-    courses = Course.objects.order_by('-created_date')
-    return render(request, url, {'courses': courses})
-
+def openCloseCourseHome(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/open-or-close-course.html'
+        courses = Course.objects.order_by('-created_date')
+        return render(request, url, {'courses': courses})
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display details of selected course and remove
 def removeCourse(request, id=None):
-    url = 'staff/remove-course-details.html'
-    courseDetails = get_object_or_404(Course, pk=id)
-    if request.method == 'POST':
-        removeForm = RemoveCourseForm(request.POST or None, instance=courseDetails)
-        if removeForm.is_valid():
-            removeForm.save()
-            is_deleted = removeForm.cleaned_data['is_deleted']
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/remove-course-details.html'
+        courseDetails = get_object_or_404(Course, pk=id)
+        if request.method == 'POST':
+            removeForm = RemoveCourseForm(request.POST or None, instance=courseDetails)
+            if removeForm.is_valid():
+                removeForm.save()
+                is_deleted = removeForm.cleaned_data['is_deleted']
+            else:
+                return redirect('/invalid')
         else:
-            return redirect('/invalid')
+            removeForm = RemoveCourseForm()
+        return render(request, url, {'courseDetails': courseDetails, 'removeForm': removeForm})
     else:
-        removeForm = RemoveCourseForm()
-    return render(request, url, {'courseDetails': courseDetails, 'removeForm': removeForm})
-
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to dispaly details of selected course and close
-def closeCourse(request, id=None):
-    url = 'staff/close-course-details.html'
-    courseDetails = get_object_or_404(Course, pk=id)
-    if request.method == 'POST':
-        editForm = EditCourseForm(request.POST or None, instance=courseDetails)
-        if editForm.is_valid():
-            editForm.save()
-            is_valid = editForm.cleaned_data['is_valid']
+def openCloseCourse(request, id=None):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/open-or-close-course-details.html'
+        courseDetails = get_object_or_404(Course, pk=id)
+        if request.method == 'POST':
+            editForm = EditCourseForm(request.POST or None, instance=courseDetails)
+            if editForm.is_valid():
+                editForm.save()
+                is_valid = editForm.cleaned_data['is_valid']
+            else:
+                return redirect('/invalid')
         else:
-            return redirect('/invalid')
+            editForm = EditCourseForm()
+        return render(request, url, {'courseDetails': courseDetails, 'editForm': editForm})
     else:
-        editForm = EditCourseForm()
-    return render(request, url, {'courseDetails': courseDetails, 'editForm': editForm})
-
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display course types
 def courseTypes(request):
-    url = 'staff/course-types.html'
-    if request.method == 'POST':
-        form = AddCourseTypeForm(request.POST)
-        if form.is_valid():
-            form.save()
-            title = form.cleaned_data['title']
-            code = form.cleaned_data['code']
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/course-types.html'
+        if request.method == 'POST':
+            form = AddCourseTypeForm(request.POST)
+            if form.is_valid():
+                form.save()
+                title = form.cleaned_data['title']
+                code = form.cleaned_data['code']
+            else:
+                return redirect('/invalid')
         else:
-            return redirect('/invalid')
+            form = AddCourseTypeForm()
+        courseTypes = CourseType.objects.all()
+        return render(request, url, {'courseTypes': courseTypes, 'form': form})
     else:
-        form = AddCourseTypeForm()
-    courseTypes = CourseType.objects.all()
-    return render(request, url, {'courseTypes': courseTypes, 'form': form})
-
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display sections
 def sections(request):
-    url = 'staff/sections.html'
-    if request.method == 'POST':
-        form = AddSectionForm(request.POST)
-        if form.is_valid():
-            form.save()
-            course = form.cleaned_data['course']
-            number = form.cleaned_data['number']
-            instructor = form.cleaned_data['instructor']
-            semester = form.cleaned_data['semester']
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/sections.html'
+        if request.method == 'POST':
+            form = AddSectionForm(request.POST)
+            if form.is_valid():
+                form.save()
+                course = form.cleaned_data['course']
+                number = form.cleaned_data['number']
+                instructor = form.cleaned_data['instructor']
+                semester = form.cleaned_data['semester']
+            else:
+                return redirect('/invalid')
         else:
-            return redirect('/invalid')
+            form = AddSectionForm()
+        sections = Section.objects.order_by('-year')
+        return render(request, url, {'sections': sections, 'form': form})
     else:
-        form = AddSectionForm()
-    sections = Section.objects.order_by('-year')
-    return render(request, url, {'sections': sections, 'form': form})
-
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display details of selected section
 def sectionDetails(request, id=None):
-    url = 'staff/section-details.html'
-    sectionDetails = get_object_or_404(Section, pk=id)
-    return render(request, url, {'sectionDetails': sectionDetails})
-
-
-# to make registration of academic staff - i
-def academicStaffRegistrationI(request):
-    url = 'staff/academic-staff-registration-i.html'
-    if request.method == 'POST':
-        formU = AddUserForm(request.POST)
-        if formU.is_valid():
-            formU.save()
-            print(formU)
-            return redirect('/academic-staff-registration-ii')
-        else:
-            return redirect('/invalid')
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/section-details.html'
+        sectionDetails = get_object_or_404(Section, pk=id)
+        return render(request, url, {'sectionDetails': sectionDetails})
     else:
-        formU = AddUserForm()
-    return render(request, url, {'formU': formU})
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
-
-# to make registration of academic staff - ii
-def academicStaffRegistrationII(request):
-    url = 'staff/academic-staff-registration-ii.html'
-    desiredUser = User.objects.all().last()
-    if request.method == 'POST':
-        formS = AddStaffForm(request.POST)
-        if formS.is_valid():
-            staff = Staff(user=desiredUser, tc=formS.cleaned_data['tc'], gender=formS.cleaned_data['gender'],
-                          main_email=formS.cleaned_data['main_email'], school_email=formS.cleaned_data['school_email'],
-                          address=formS.cleaned_data['address'], birthday=formS.cleaned_data['birthday'],
-                          city=formS.cleaned_data['birthday'])
-            staff.save(force_insert=True)
-
-            return redirect('/succesfully')
-        else:
-            return redirect('/invalid')
+def removeAllSections(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        all_sections = Section.objects.all()
+        all_sections.delete()
+        return render(request, '/staff-home', {'action': 'Delete tasks'})
     else:
-        formS = AddStaffForm()
-    return render(request, url, {'formS': formS})
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
+def defineExamDates(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/define-exam-dates.html'
+        if request.method == 'POST':
+            addForm = AddExamDateForm(request.POST)
+            if addForm.is_valid():
+                addForm.save()
+            else:
+                return redirect('/invalid')
+        else:
+            addForm = AddExamDateForm()
+        examDates = ExamDate.objects.all()
+        return render(request, url, {'examDates': examDates, 'AddExamDateForm': AddExamDateForm})
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
+
+def examDetails(request, id=None):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/exam-details.html'
+        examDetails = get_object_or_404(ExamDate, pk=id)
+        return render(request, url, {'examDetails': examDetails})
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
+
+def makeAnnouncements(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/make-announcement.html'
+        if request.method == 'POST':
+            addForm = MakeAnnouncementForm(request.POST)
+            if addForm.is_valid():
+                addForm.save()
+            else:
+                return redirect('/invalid')
+        else:
+            addForm = MakeAnnouncementForm()
+        announcements = MakeAnnouncement.objects.order_by("date")
+        return render(request, url, {'announcements': announcements, 'MakeAnnouncementForm': MakeAnnouncementForm})
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
+
+def announcementDetails(request, id=None):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/announcement-details.html'
+        announcementDetails = get_object_or_404(MakeAnnouncement, pk=id)
+        return render(request, url, {'announcementDetails': announcementDetails})
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display all academic staffs
 def allAcademicStaff(request):
-    url = 'staff/all-academic-staff.html'
-    if request.method == 'POST':
-        formA = AddAcademicStaffForm(request.POST)
-        if formA.is_valid():
-            formA.save()
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/all-academic-staff.html'
+        if request.method == 'POST':
+            formA = AddAcademicStaffForm(request.POST)
+            if formA.is_valid():
+                formA.save()
+            else:
+                return redirect('/invalid')
         else:
-            return redirect('/invalid')
+            formA = AddAcademicStaffForm()
+        academicStaffs = AcademicStaff.objects.order_by('staff')
+        content = {'academicStaffs': academicStaffs, 'formA': formA}
+        return render(request, url, content)
     else:
-        formA = AddAcademicStaffForm()
-    academicStaffs = AcademicStaff.objects.order_by('staff')
-    content = {'academicStaffs': academicStaffs, 'formA': formA}
-    return render(request, url, content)
-
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display details of selected academic staff
 def academicStaffDetails(request, id=None):
-    url = 'staff/academic-staff-details.html'
-    academicStaffDetails = get_object_or_404(AcademicStaff, pk=id)
-    return render(request, url, {'academicStaffDetails': academicStaffDetails})
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/academic-staff-details.html'
+        academicStaffDetails = get_object_or_404(AcademicStaff, pk=id)
+        return render(request, url, {'academicStaffDetails': academicStaffDetails})
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
+
+def addAcademicStaffI(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/add-academic-staff-i.html'
+        if request.method == 'POST':
+            formU = AddUserForm(request.POST)
+            if formU.is_valid():
+                formU.save()
+                print(formU)
+                return redirect('/add-academic-staff-ii')
+            else:
+                return redirect('/invalid')
+        else:
+            formU = AddUserForm()
+        return render(request, url, {'formU': formU})
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
+
+def addAcademicStaffII(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/add-academic-staff-ii.html'
+        desiredUser = User.objects.all().last()
+        if request.method == 'POST':
+            formS = AddStaffForm(request.POST)
+            if formS.is_valid():
+                staff = Staff(user=desiredUser, tc=formS.cleaned_data['tc'], gender=formS.cleaned_data['gender'], school_email=formS.cleaned_data['school_email'], birthday=formS.cleaned_data['birthday'])
+                staff.save(force_insert=True)
+                return redirect('/succesfully')
+            else:
+                return redirect('/invalid')
+        else:
+            formS = AddStaffForm()
+        return render(request, url, {'formS': formS})
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display institute heads
 def instituteHeads(request):
-    content = Institute.objects.order_by('head')
-    instituteHeads = {'instituteHeads': content}
-    return render(request, 'staff/institute-heads.html', instituteHeads)
-
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        content = Institute.objects.order_by('head')
+        instituteHeads = {'instituteHeads': content}
+        return render(request, 'staff/institute-heads.html', instituteHeads)
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display department heads
 def departmentHeads(request):
-    content = Department.objects.order_by('dept_head')
-    departmentHeads = {'departmentHeads': content}
-    return render(request, 'staff/department-heads.html', departmentHeads)
-
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        content = Department.objects.order_by('dept_head')
+        departmentHeads = {'departmentHeads': content}
+        return render(request, 'staff/department-heads.html', departmentHeads)
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display program heads
 def programHeads(request):
-    content = Program.objects.order_by('head')
-    programHeads = {'programHeads': content}
-    return render(request, 'staff/program-heads.html', programHeads)
-
-
-# to display quoata managers and add new
-# def quoataManagers(request):
-#    url = 'quoata-managers.html'
-#    if request.method == 'POST':
-#        form = AddQuoataManagerForm(request.POST)
-#        if form.is_valid():
-#            form.save()
-#        else:
-#            return redirect('/invalid')
-#    else:
-#        form = AddQuoataManagerForm()
-#    quoataManagers = Program.objects.order_by('quota_manager')
-#    return render(request, url, {'quoataManagers': quoataManagers, 'form': form})
-
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        content = Program.objects.order_by('head')
+        programHeads = {'programHeads': content}
+        return render(request, 'staff/program-heads.html', programHeads)
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display all institute staff
 def allInstituteStaff(request):
-    url = 'staff/all-institute-staff.html'
-    instituteStaffs = Staff.objects.order_by('tc')
-    content = {'instituteStaffs': instituteStaffs}
-    return render(request, url, content)
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/all-institute-staff.html'
+        instituteStaffs = Staff.objects.order_by('tc')
+        content = {'instituteStaffs': instituteStaffs}
+        return render(request, url, content)
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
+
+def instituteStaffDetails(request, tc=None):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/academic-staff-details.html'
+        instituteStaff = get_object_or_404(Staff, tc=tc)
+        return render(request, url, {'instituteStaff': instituteStaff})
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 
 # to display all grand student
-def allGrandStudent(request):
-    content = Student.objects.order_by('user')
-    grandStudents = {'grandStudents': content}
-    return render(request, 'staff/all-grand-student.html', grandStudents)
-
+def allGradStudent(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        content = Student.objects.order_by('user')
+        gradStudents = {'gradStudents': content}
+        return render(request, 'staff/all-grand-student.html', gradStudents)
+    else:
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display details of selected grand student
-def grandStudentDetails(request, id=None):
-    url = 'staff/grand-student-details.html'
-    grandStudentDetails = get_object_or_404(Student, pk=id)
-    return render(request, url, {'grandStudentDetails': grandStudentDetails})
-
-
-# to make registration of visitor - i
-def applicationI(request):
-    url = 'staff/student-application-i.html'
-    if request.method == 'POST':
-        formU = AddUserForm(request.POST)
-        if formU.is_valid():
-            formU.save()
-            print(formU)
-            return redirect('/application-ii')
-        else:
-            return redirect('/invalid')
+def gradStudentDetails(request, id=None):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/grad-student-details.html'
+        gradStudentDetails = get_object_or_404(Student, pk=id)
+        return render(request, url, {'gradStudentDetails': gradStudentDetails})
     else:
-        formU = AddUserForm()
-    return render(request, url, {'formU': formU})
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
-
-# to make registration of staff - i
-def instituteStaffI(request):
-    url = 'staff/all-institute-staff.html'
-    if request.method == 'POST':
-        formU = AddUserForm(request.POST)
-        if formU.is_valid():
-            formU.save()
-        else:
-            return redirect('#')
+# to display all applications
+def applications(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        content = Visitor.objects.order_by('user')
+        return render(request, 'staff/applications.html', {'content':content})
     else:
-        formU = AddUserForm()
-    return render(request, url, {'formU': formU})
-
-
-# to make registration of visitor - ii
-def applicationII(request):
-    url = 'staff/student-application-ii.html'
-    desiredUser = User.objects.all().last()
-    if request.method == 'POST':
-        formV = AddVisitorForm(request.POST)
-        if formV.is_valid():
-            visitor = Visitor(user=desiredUser, tc=formV.cleaned_data['tc'], birthday=formV.cleaned_data['birthday'],
-                              gender=formV.cleaned_data['gender'],
-                              address=formV.cleaned_data['address'], city=formV.cleaned_data['city'],
-                              degree=formV.cleaned_data['degree'],
-                              university=formV.cleaned_data['university'], gpa=formV.cleaned_data['gpa'],
-                              ales=formV.cleaned_data['ales'],
-                              yds=formV.cleaned_data['yds'], program=formV.cleaned_data['program'])
-            visitor.save(force_insert=True)
-            return redirect('/succesfully')
-        else:
-            return redirect('/invalid')
-    else:
-        formV = AddVisitorForm()
-    return render(request, url, {'formV': formV})
-
-
-# to make registration of staff - ii
-
-
-# to apply
-def apply(request):
-    url = "staff/apply.html"
-    if request.method == 'POST':
-        form = AddVisitorForm(request.POST)
-        user_form = AddUserForm(request.POST)
-
-        if form.is_valid() and user_form.is_valid():
-            form.save()
-            user_form.save()
-        else:
-            return redirect('/invalid')
-    else:
-        form = AddVisitorForm()
-        user_form = AddUserForm()
-    return render(request, url, {'form': form, 'user_form': user_form})
-
-
-# to display all applies
-def applies(request):
-    content = Visitor.objects.order_by('user')
-    applies = {'applies': content}
-    return render(request, 'staff/applies.html', applies)
-
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display details of selected application
 def applicationDetails(request, tc=None):
-    url = 'staff/application-details.html'
-    visitorDetails = get_object_or_404(Visitor, tc=tc)
-    desiredUser = visitorDetails.user
-    if request.method == 'GET':
-        form = AddStudentForm()
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/application-details.html'
+        visitorDetails = get_object_or_404(Visitor, tc=tc)
+        desiredUser = visitorDetails.user
+        if request.method == 'GET':
+            form = AddStudentForm()
+        else:
+            form = AddStudentForm(request.POST)
+            if form.is_valid():
+                student = Student(user=desiredUser, st_id=form.cleaned_data['st_id'],
+                                  st_email=form.cleaned_data['st_email'], curriculum=form.cleaned_data['curriculum'],
+                                  program=form.cleaned_data['program'], advisor=form.cleaned_data['advisor'],
+                                  hold_state=form.cleaned_data['hold_state'],
+                                  reg_open_statue=form.cleaned_data['reg_open_statue'],
+                                  approval_statue=form.cleaned_data['approval_statue'])
+                student.save(force_insert=True)
+                return redirect('/succesfully')
+        applicationDetails = {'visitorDetails': visitorDetails, 'form': form}
+        return render(request, url, applicationDetails)
     else:
-        form = AddStudentForm(request.POST)
-        if form.is_valid():
-            student = Student(user=desiredUser, st_id=form.cleaned_data['st_id'],
-                              st_email=form.cleaned_data['st_email'], curriculum=form.cleaned_data['curriculum'],
-                              program=form.cleaned_data['program'], advisor=form.cleaned_data['advisor'],
-                              hold_state=form.cleaned_data['hold_state'],
-                              reg_open_statue=form.cleaned_data['reg_open_statue'],
-                              approval_statue=form.cleaned_data['approval_statue'])
-            student.save(force_insert=True)
-            return redirect('/succesfully')
-    applicationDetails = {'visitorDetails': visitorDetails, 'form': form}
-    return render(request, url, applicationDetails)
+        return HttpResponseRedirect('/login')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
+
+
+def displayStudent(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        students = Student.objects.order_by("program")
+        content = {'students' : students}
+        return render(request, 'staff/display-student.html', content)
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
+
+def displayStudentDetails(request, st_id=None):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        student = Student.objects.filter(st_id=st_id)
+        print(student)
+        return render(request, 'staff/display-student-details.html', {'student' : student})
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to remove selected application
 def removeSelectedApplication(request, tc=None):
@@ -1248,3 +1481,19 @@ def selectedCompletedCourseDetails(request, id=None):
             student = i.student.st_id
 
     return render(request, url, {'grade': grade, 'student': student})
+
+
+#### YENi EKLENENLER ####
+
+def staff_home_view(request):
+    if request.user.is_authenticated:
+        return render(request, 'staff/home.html')
+
+
+def instructor_home_view(request):
+    if request.user.is_authenticated:
+        return render(request, 'academicstaff/home.html')
+
+
+
+

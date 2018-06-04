@@ -50,7 +50,9 @@ class User(AbstractBaseUser, PermissionsMixin):
             try:
                 return self.staff.academicstaff.__class__
             except AcademicStaff.DoesNotExist:
-                return Staff
+                return self.staff.__class__
+
+
 
     def __str__(self):
         return self.full_name
@@ -140,10 +142,11 @@ class PersonalInformation(models.Model):
 class Student(models.Model):
     user = models.OneToOneField('User', models.CASCADE)
     st_email = models.EmailField('School Email Address', max_length=60, blank=True, null=True)
+    st_id = models.CharField('Student ID', max_length=9, null=True, blank=True)
 
     program = models.ForeignKey('Program', models.CASCADE)
     advisor = models.ForeignKey('AcademicStaff', models.SET_NULL, blank=True, null=True)
-
+    curriculum = models.ForeignKey('Curriculum', models.CASCADE, null=True)
     hold_state = models.BooleanField('Hold State', default=False)
     reg_open_statue = models.BooleanField('Registration Open Statue', default=False)
     approval_statue = models.BooleanField('Approval Statue', default=True)
@@ -750,3 +753,40 @@ class CompletedCourse(models.Model):
 
     def __str__(self):
         return str(self.student) + ' ' + str(self.ccr_course) + ' ' + str(self.grade)
+
+
+
+
+#### YENi EKLENENLER ####
+class ExamDate(models.Model):
+
+    proxy = True
+
+    place = models.CharField('Place', blank=False, null=True, max_length=6)
+    date = models.DateField('Date', blank=False, null=True)
+    slot = models.CharField('Slot', choices=EXAMSLOTS, null=True, blank=False, max_length=2)
+    section = models.ForeignKey('Section', models.CASCADE)
+    instructor = models.ForeignKey('AcademicStaff', models.CASCADE, null=True)
+
+    class Meta: 
+        verbose_name = 'Exam Date'
+        verbose_name_plural = 'Exam Dates'
+
+    def __str__(self):
+        return str(self.section.course) + ' ' + str(self.section.number) + ' ' + str(self.place) + ' ' + str(self.date)
+
+class MakeAnnouncement(models.Model):
+
+    proxy = True
+
+    title = models.CharField('Title', blank=False, null=True, max_length=100)
+    description = models.TextField('Description', blank=False, null=True, max_length=500)
+    date = models.DateField(auto_now_add=True)
+    sender = models.ForeignKey('Staff', models.CASCADE, blank=False, null=True)
+
+    class Meta:
+        verbose_name = 'Announcement'
+        verbose_name_plural = 'Announcements'
+
+    def __str__(self):
+        return str(self.title) + ' created by ' + str(self.sender)

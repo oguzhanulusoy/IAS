@@ -74,6 +74,8 @@ urlpatterns = [
     path('apply/',v.apply),
     path('login/', auth_views.login, name='login'),
     path('logout/', auth_views.logout, name='logout'),
+    path('makeAnnouncement/', v.makeAnnouncement),
+    path('defineExamDate/', v.defineExamDate),
 
 
 

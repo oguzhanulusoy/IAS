@@ -1,38 +1,28 @@
-{% extends 'staff/academic-staffs.html' %}
+{% extends 'staff-base.html' %}
 {% block content %}
-<!-- Page Content -->
 <div class="container">
-    <div class="row">
-        <!-- Menu -->
-        {% include 'staff/assets/menu/academic-staffs.html' %}
-        <div class="col-lg-9">
-            <div class="card card-outline-secondary my-4">
-                <!-- Title -->
-                <div class="card-header">
-                    {{ request.path }}
-                </div>
-                <div class="card-body">
-                    <p>You can see department heads.</p>
-                    <!-- Table -->
-                    <hr>
-                    <table>
-                        <tr>
-                            <th>Department Name</th>
-                            <th>Head</th>
-                            <th>Institute</th>
-                        </tr>
-                        {% for i in departmentHeads %}
-                        <tr>
-                            <td>{{ i.name }}</td>
-                            <td>{{ i.head }}</td>
-                            <td>{{ i.institute }}</td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                    <hr>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="row">
+		{% include 'left-menu.html' %}
+		<div class="col-md-6">
+			<div class="row">
+				<table>
+					<tr>
+						<th>Department Name</th>
+						<th>Head</th>
+						<th>Institute</th>
+					</tr>
+					{% for i in departmentHeads %}
+					<tr>
+						<td>{{ i.name }}</td>
+						<td>{{ i.head }}</td>
+						<td>{{ i.institute }}</td>
+					</tr>
+					{% endfor %}
+				</table>
+			</div>
+		</div>
+	</div>
 </div>
-{% endblock content %}
+</div>
+{% endblock %}
+

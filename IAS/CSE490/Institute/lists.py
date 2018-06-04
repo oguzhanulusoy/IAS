@@ -94,6 +94,8 @@ DEGREES = [('1', 'Bachelor'),
            ('2', 'Master'),
            ('3', 'Doctorate')]
 
+
+
 '''This list is to choose university.'''
 UNIVERSITIES = [
     ('1', 'Işık Üniversitesi'),
@@ -259,3 +261,9 @@ DAYS = (('M', 'Monday'),
 PLACES = (('1', '101'),
           ('2', '102'),
           ('3', '103'))
+
+
+#### YENi EKLENENLER ####
+SLOTS = (('1', '1'),
+        ('2', '2'),
+        ('3', '3'))

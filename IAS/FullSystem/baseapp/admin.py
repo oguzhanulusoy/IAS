@@ -45,3 +45,9 @@ admin.site.register(Student)
 admin.site.register(Institute)
 admin.site.register(Department)
 admin.site.register(Program)
+
+
+#### YENi EKLENENLER ####
+admin.site.register(ExamDate)
+admin.site.register(MakeAnnouncement)
+

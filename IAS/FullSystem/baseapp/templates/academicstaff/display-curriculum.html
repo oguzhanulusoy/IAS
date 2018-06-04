@@ -1,45 +1,42 @@
 
 
 {% extends 'base.html' %}
-
 {% block content %}
-<div class="row">
-    <div class="col-md-10 col-md-offset-1"  style="margin-top: 10px;">
-        <div class="col-md-12">
-
 <div class="container">
+	<div class="row">
+		{% include 'left-menu.html' %}
+		<div class="col-md-6">
+			<div class="row">
+			</div>
+			<h2>Curriculum</h2>
+			
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>Course Type</th>
+						<th>Course No</th>
+						<th>Term</th>
+					</tr>
+				</thead>
+				<tbody>
 
-<h2>Curriculum</h2>
-            
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th>Course Type</th>
-        <th>Course No</th>
-        <th>Term</th>
-      </tr>
-    </thead>
-    <tbody>
+					{% for i in curriculum %}
+					<tr>
 
-{% for i in curriculum %}
-      <tr>
-
-        <td>{{ i.type }}</td>
-        <td>{{ i.no }}</td>
-        <td>{{ i.semester }}</td>
+						<td>{{ i.type }}</td>
+						<td>{{ i.no }}</td>
+						<td>{{ i.semester }}</td>
 
 
-      </tr>
-     
-{% endfor %}
-    </tbody>
-  </table>
-
+					</tr>
+					
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
 </div>
 </div>
-</div>
+{% endblock %}
 
-
-
-{% endblock content %}

@@ -1,0 +1,53 @@
+{% extends 'staff-base.html' %}
+{% block content %}
+<div class="container">
+	<div class="row">
+		{% include 'left-menu.html' %}
+		<div class="col-md-6">
+			<div class="row">
+				<!-- Modal -->
+				<div class="container">
+					<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Make Announcement</button>
+					<div class="modal fade" id="myModal" role="dialog">
+						<div class="modal-dialog">
+							<!-- Modal content-->
+							<div class="modal-content">
+								<div class="modal-header">
+									<h4 class="modal-title">Make Announcement Screen</h4>
+								</div>
+								<div class="modal-body">
+									<p>Enter given fields correctly.</p>
+									<form action='' method='post'>{% csrf_token %}
+										{{ MakeAnnouncementForm.as_p }}
+										{{ MakeAnnouncementForm.non_field_errors }}
+										<input type='submit' value='Submit' />
+									</form>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br><br><br>
+				<table>
+					<th>Date</th>
+					<th>Title</th>
+					<th>Sender</th>
+					<th>View</th>
+				</tr>
+				{% for i in announcements %}
+				<tr>
+					<td>{{ i.date }}</td>
+					<td>{{ i.title }}</td>
+					<td>{{ i.sender }}</td>
+					<td><a href="/announcement-details/{{ i.id }}/">View</a></td>
+					{% endfor %}
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+{% endblock %}

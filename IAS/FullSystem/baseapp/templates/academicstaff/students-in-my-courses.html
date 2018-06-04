@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    {% include 'left-menu.html' %}
+    <div class="col-md-6">
+      <div class="row">
+      </div>
+<h2>Students of My Courses</h2>
+            
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Firstname</th>
+        <th>Lastname</th>
+        <th>Email</th>
+        <th>CCR</th>
+         <th>Schedule</th>
+          <th>Transcript</th>
+           <th>Curriculum</th>
+      </tr>
+    </thead>
+    <tbody>
+
+{% for i in students %}
+      <tr>
+        <td>{{ i.student.user.first_name }}</td>
+        <td>{{ i.student.user.last_name }}</td>
+        <td>{{ i.student.user.email }}</td>
+        <td><a href="/display-ccr/{{i.student.st_id}}/"> CCR</a></td>
+        <td><a href="/display-schedule/{{i.student.st_id}}/">Schedule</a></td>
+        <td><a href="/display-transcript/{{i.student.st_id}}/">Transcript</a></td>
+        <td><a href="/display-curriculum/{{i.student.st_id}}/">Curriculum</a></td>
+      </tr>
+     
+{% endfor %}
+    </tbody>
+  </table>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,29 @@
+{% extends 'staff-base.html' %}
+{% block content %}
+<div class="container">
+	<div class="row">
+		{% include 'left-menu.html' %}
+		<div class="col-md-6">
+			<hr>
+			<img src="{{ academicStaffDetails.staff.user.avatar }}">
+			<br><br><small class="text-muted">Personal Information  </small>
+			<br><small class="text-muted">First Name:  </small> {{ instituteStaff.staff.user.first_name }}
+			<br><small class="text-muted">Last Name:  </small> {{ instituteStaff.staff.user.last_name }}
+			<br><small class="text-muted">Academic Staff number:  </small>{{ instituteStaff.id }}
+			<br><small class="text-muted">TC Number:  </small> {{ instituteStaff.tc }}
+			<br><small class="text-muted">Birthday:  </small> {{ instituteStaff.birthday }}
+			<br><small class="text-muted">Gender:  </small> {{ instituteStaff.staff.gender }}
+			<br><small class="text-muted">Joined Date:  </small> {{ instituteStaff.joined_date }}
+			<br><br><small class="text-muted">Contact Information  </small>
+			<br><small class="text-muted">Phone Number:  </small> {{ instituteStaff.user.phone_number }}
+			<br><small class="text-muted">E-mail:  </small> {{ instituteStaff.user.email }}
+			<br><small class="text-muted">School Mail:  </small> {{ instituteStaff.school_email }}
+			<br><small class="text-muted">Address:  </small> {{ instituteStaff.address }}
+			<br><small class="text-muted">City:  </small> {{ instituteStaff.city }}
+			<hr>
+		</div>
+	</div>
+</div>
+</div>
+{% endblock %}
+

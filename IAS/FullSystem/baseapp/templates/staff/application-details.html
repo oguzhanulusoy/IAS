@@ -1,87 +1,69 @@
-{% extends 'staff/grand-students.html' %}
+{% extends 'staff-base.html' %}
 {% block content %}
-<!-- Page Content -->
 <div class="container">
 	<div class="row">
-		<!-- Menu -->
-		{% include 'staff/assets/menu/grand-students.html' %}
-		<div class="col-lg-9">
-			<div class="card card-outline-secondary my-4">
-				<!-- Title -->
-				<div class="card-header">
-					{{ request.path }}
-				</div>
-				<div class="card-body">
-					<p>You can see the details of visitor of {{ visitorDetails.user.first_name }} {{ visitorDetails.user.last_name }} </p>
-					<!-- Details -->
-					<hr>
-					<img src="{{ visitorDetails.user.avatar }}">
-
-					<br><br><small class="text-muted">About</small>
-					<br><small class="text-muted">First Name:  </small> {{ visitorDetails.user.first_name }}
-					<br><small class="text-muted">Last Name:  </small> {{ visitorDetails.user.last_name }}
-					<br><small class="text-muted">TC Number:  </small> {{ visitorDetails.tc }}
-					<br><small class="text-muted">Birthday:  </small> {{ visitorDetails.birthday }}
-					<br><small class="text-muted">Gender:  </small> {{ visitorDetails.gender }}
-
-					<br><br><small class="text-muted">Application Information</small>
-					<br><small class="text-muted">Application Date:  </small> {{ visitorDetails.application_date }}
-					<br><small class="text-muted">ALES:  </small> {{ visitorDetails.ales }}
-					<br><small class="text-muted">YDS:  </small> {{ visitorDetails.yds }}
-					<br><small class="text-muted">GPA:  </small> {{ visitorDetails.gpa }}
-					<br><small class="text-muted">Graduated University:  </small> {{ visitorDetails.university }}
-					<br><small class="text-muted">Degree:  </small> {{ visitorDetails.degree }}
-
-					<br><br><small class="text-muted">Contact Information</small>
-					<br><small class="text-muted">Phone Number:  </small> {{ visitorDetails.user.phone_number }}
-					<br><small class="text-muted">E-Mail:  </small> {{ visitorDetails.user.email }}
-					<br><small class="text-muted">Address:  </small> {{ visitorDetails.address }}
-					<br><small class="text-muted">Current City:  </small> {{ visitorDetails.city }}
-					
-					<br><br><small class="text-muted">Personal Information</small>
-					<br><small class="text-muted">Application Date:  </small> {{ visitorDetails.user.personal_information}}
-					<hr>
-					{% if visitorDetails.acceptance == 'IN PROGRESS' %}
-					<!-- Modal -->
-					<div class="container">
-						<!-- Modal Accept -->
-						<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#accept">Accept</button>
-						<div class="modal fade" id="accept" role="dialog">
-							<div class="modal-dialog">
-								<!-- Modal content-->
-								<div class="modal-content">
-									<div class="modal-header">
-										<h4 class="modal-title">Accept Screen</h4>
-									</div>
-									<div class="modal-body">
-										<p class="card-text">Please, enter given fields correctly.</p>
-										<form action='' method='post'>{% csrf_token %}
-											{{ form.as_p }}
-											{{ form.non_field_errors }}
-											<input type='submit' value='Submit' />
-										</form>
-									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-									</div>
-								</div>
+		{% include 'left-menu.html' %}
+		<div class="col-md-6">
+			<!-- Modal -->
+			<div class="container">
+				<!-- Modal Accept -->
+				<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#accept">Accept</button>
+				<div class="modal fade" id="accept" role="dialog">
+					<div class="modal-dialog">
+						<!-- Modal content-->
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title">Accept Screen</h4>
+							</div>
+							<div class="modal-body">
+								<p class="card-text">Please, enter given fields correctly.</p>
+								<form action='' method='post'>{% csrf_token %}
+									{{ form.as_p }}
+									{{ form.non_field_errors }}
+									<input type='submit' value='Submit' />
+								</form>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 							</div>
 						</div>
-						<!-- Modal Reject -->
-						<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#reject">Reject</button>
-						<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#reject"><a href="/removeSelectedApplication/{{visitorDetails.tc}}/">Delete</a>
-						</button>  
 					</div>
-					{% elif visitorDetails.acceptance == 'APPROVED' %}
-					<small class="text-muted">It has been approved.</small>
-					{% elif visitorDetails.acceptance == 'REJECTED' %}
-					<small class="text-muted">It has been rejected.</small>
-					{% endif %}
 				</div>
+				<!-- Modal Reject -->
+				<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#reject">Reject</button>
+				<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#reject"><a href="/removeSelectedApplication/{{visitorDetails.tc}}/">Delete</a>
+				</button>  
 			</div>
+			<br><br><br>
+			<hr>
+			<img src="{{ visitorDetails.user.avatar }}">
+
+			<br><br><small class="text-muted">About</small>
+			<br><small class="text-muted">First Name:  </small> {{ visitorDetails.user.first_name }}
+			<br><small class="text-muted">Last Name:  </small> {{ visitorDetails.user.last_name }}
+			<br><small class="text-muted">TC Number:  </small> {{ visitorDetails.tc }}
+			<br><small class="text-muted">Birthday:  </small> {{ visitorDetails.birthday }}
+			<br><small class="text-muted">Gender:  </small> {{ visitorDetails.gender }}
+
+			<br><br><small class="text-muted">Application Information</small>
+			<br><small class="text-muted">Application Date:  </small> {{ visitorDetails.application_date }}
+			<br><small class="text-muted">ALES:  </small> {{ visitorDetails.ales }}
+			<br><small class="text-muted">YDS:  </small> {{ visitorDetails.yds }}
+			<br><small class="text-muted">GPA:  </small> {{ visitorDetails.gpa }}
+			<br><small class="text-muted">Graduated University:  </small> {{ visitorDetails.university }}
+			<br><small class="text-muted">Degree:  </small> {{ visitorDetails.degree }}
+
+			<br><br><small class="text-muted">Contact Information</small>
+			<br><small class="text-muted">Phone Number:  </small> {{ visitorDetails.user.phone_number }}
+			<br><small class="text-muted">E-Mail:  </small> {{ visitorDetails.user.email }}
+			<br><small class="text-muted">Address:  </small> {{ visitorDetails.address }}
+			<br><small class="text-muted">Current City:  </small> {{ visitorDetails.city }}
+
+			<br><br><small class="text-muted">Personal Information</small>
+			<br><small class="text-muted">Application Date:  </small> {{ visitorDetails.user.personal_information}}
+			<hr>
 		</div>
 	</div>
 </div>
-{% endblock content %}
-
-
+</div>
+{% endblock %}

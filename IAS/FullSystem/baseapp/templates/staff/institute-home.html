@@ -1,0 +1,33 @@
+{% extends 'staff-base.html' %}
+{% block content %}
+<div class="container">
+	<div class="row">
+		{% include 'left-menu.html' %}
+		<div class="col-md-6">
+			<div class="row">
+				<ul class="list-group list-group-flush">
+					<a href="/institutes" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Institutes</a>
+					<a href="/departments" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Departments</a>
+					<a href="/programs" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Programs</a>
+					<a href="/curriculums" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Curriculums</a>
+					<a href="/courses" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Courses</a>
+					<a href="/courses" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Define Course</a>
+					<a href="/available-courses" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Available Courses</a>
+					<a href="{% url 'open_courses' %}" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Current Course Schedule</a>
+					<a href="/open-or-close-course" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Open/Close Course</a>
+					<a href="/remove-course" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Remove Course</a>
+					<a href="/course-types" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Course Types</a>
+				</ul>
+				<br>
+				<ul>
+					<a href="/sections" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Sections</a>
+					<a href="/remove-all-sections" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Remove All Sections</a>
+					<a href="/define-exam-dates" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Define Exam Dates</a>
+					<a href="/make-announcement" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Make Announcement</a>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+{% endblock %}

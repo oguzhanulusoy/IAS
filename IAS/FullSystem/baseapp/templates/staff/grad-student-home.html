@@ -1,0 +1,20 @@
+{% extends 'staff-base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        {% include 'left-menu.html' %}
+        <div class="col-md-6">
+            <div class="row">
+                    <ul class="list-group list-group-flush">
+                        <a href="/all-grad-student" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>All Grad Student</a>
+                        <a href="/applications" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Applications</a>
+                        <br>
+                        <a href="/remove-all-application" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Remove All Application</a>
+                    </ul>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

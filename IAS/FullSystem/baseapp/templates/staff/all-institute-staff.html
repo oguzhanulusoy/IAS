@@ -1,97 +1,29 @@
-{% extends 'staff/institute-staffs.html' %}
+{% extends 'staff-base.html' %}
 {% block content %}
-<!-- Page Content -->
 <div class="container">
-    <div class="row">
-        <!-- Menu -->
-        {% include 'staff/assets/menu/institute-staffs.html' %}
-        <div class="col-lg-9">
-            <div class="card card-outline-secondary my-4">
-                <!-- Title -->
-                <div class="card-header">
-                    {{ request.path }}
-                </div>
-                <div class="card-body">
-                    <p>You can see the names of all institute staff and expand them to reach more information about them.</p>
-                    <!-- Table -->
-                    <hr>
-                    <table>
-                        <tr>
-                            <th>Staff</th>
-                            <th>Institute</th>
-                            <th>University</th>
-                        </tr>
-                        {% for i in instituteStaffs %}
-                        <tr>
-                            <td>{{ i.staff }}</td>
-                            <td>{{ i.institute }}</td>
-                            <td>{{ i.university }}</td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                    <hr>
-                    <!-- Modal -->
-                    <div class="container">
-                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Institute Staff - 1</button>
-                        <!-- Modal -->
-                        <div class="modal fade" id="myModal" role="dialog">
-                            <div class="modal-dialog">
-                                <!-- Modal content-->
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Add Institute Staff - 1 Screen</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Please, type correctly given fields.</p>
-
-                                        <form action='' method='post'>{% csrf_token %}
-                                                {{ formU.as_p }}
-                                                {{ formU.non_field_errors }}                     
-                                                <input type='submit' value='Submit' />
-                                            </form>
-
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-<br>
-                    <!-- Modal -->
-                    <div class="container">
-                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Institute Staff - 2</button>
-                        <!-- Modal -->
-                        <div class="modal fade" id="myModal" role="dialog">
-                            <div class="modal-dialog">
-                                <!-- Modal content-->
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Add Institute Staff - 2 Screen</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Please, type correctly given fields.</p>
-
-                                        <form action='' method='post'>{% csrf_token %}
-                                                {{ formS.as_p }}
-                                                {{ formS.non_field_errors }}                     
-                                                <input type='submit' value='Submit' />
-                                            </form>
-
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="row">
+		{% include 'left-menu.html' %}
+		<div class="col-md-6">
+			<div class="row">
+				<table>
+					<tr>
+						<th>Staff</th>
+						<th>School E-mail</th>
+						<th>University</th>
+						<th>View</th>
+					</tr>
+					{% for i in instituteStaffs %}
+					<tr>
+						<td>{{ i.user }}</td>
+						<td>{{ i.school_email }}</td>
+						<td>{{ i.university }}</td>
+						<td><a href="/institute-staff-details/{{ i.tc }}/">View</a></td>
+					</tr>
+					{% endfor %}
+				</table>
+			</div>
+		</div>
+	</div>
 </div>
-{% endblock content %}
+</div>
+{% endblock %}

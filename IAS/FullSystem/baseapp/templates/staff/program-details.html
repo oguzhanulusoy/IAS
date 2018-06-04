@@ -1,32 +1,22 @@
-{% extends 'staff/institute.html' %}
+{% extends 'staff-base.html' %}
 {% block content %}
-<!-- Page Content -->
 <div class="container">
 	<div class="row">
-		<!-- Menu -->
-		{% include 'staff/assets/menu/institute.html' %}
-		<div class="col-lg-9">
-			<div class="card card-outline-secondary my-4">
-				<!-- Title -->
-				<div class="card-header">
-					{{ request.path }}
-				</div>
-				<div class="card-body">
-					<p>You can see the details of {{ programDetails.name }} </p>
-					<!-- Details -->
-					<hr>
-					<small class="text-muted">Program Number:  </small> {{ programDetails.id }}
-					<br><small class="text-muted">Name:  </small> {{ programDetails.name }}
-					<br><small class="text-muted">Code:  </small> {{ programDetails.code }}
-					<br><small class="text-muted">Type:  </small> {{ programDetails.type }}
-					<br><small class="text-muted">Thesis:  </small> {{ programDetails.thesis }}
-					<br><small class="text-muted">Department:  </small> {{ programDetails.department }}
-					<br><small class="text-muted">Head:  </small> {{ programDetails.head }}
-					<br><small class="text-muted">Quoata Manager:  </small> {{ programDetails.quota_manager }}
-					<hr>
-				</div>
-			</div>
+		{% include 'left-menu.html' %}
+		<div class="col-md-6">
+			<hr>
+			<small class="text-muted">Program Number:  </small> {{ programDetails.id }}
+			<br><small class="text-muted">Name:  </small> {{ programDetails.name }}
+			<br><small class="text-muted">Code:  </small> {{ programDetails.code }}
+			<br><small class="text-muted">Type:  </small> {{ programDetails.type }}
+			<br><small class="text-muted">Thesis:  </small> {{ programDetails.thesis }}
+			<br><small class="text-muted">Department:  </small> {{ programDetails.department }}
+			<br><small class="text-muted">Head:  </small> {{ programDetails.head }}
+			<br><small class="text-muted">Quoata Manager:  </small> {{ programDetails.quota_manager }}
+			<hr>
 		</div>
 	</div>
 </div>
-{% endblock content %}
+</div>
+{% endblock %}
+

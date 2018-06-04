@@ -60,79 +60,97 @@ urlpatterns = [
     url('application/$', application, name='application'),
 
 
-    # Ali
-    path('instructor/', instructor_base_view, name='instructor_base_view'),
-    path('instructor/curriculum/<st_username>/', display_curriculum),
-    path('instructor/transcript/<st_username>/', display_transcript),
-    path('instructor/schedule/<st_username>/', display_schedule),
-    path('instructor/students', instructor_advising_students_view, name="advising_students_view"),
-
-    path('student_courses/<pk>/', student_courses, name="student_courses"),
-    path('special_quota', special_quota, name='special_quota'),
-    path('open_special_quota', open_special_quota, name='open_special_quota'),
-    path('harf_notu/', harf_notu, name='harf_notu'),
-    path('get_section_students/<pk>/', get_section_students, name="get_section_students"),
-    path('give_note/', give_note, name="give_note"),
-    path('changeQuota/<pk>/', SectionUpdateView.as_view()),
-    path('studentsOfMyCourses/', studentsOfMyCourses, name="studentsOfMyCourses"),
-
-
-    path('myCourses/', myCourses, name="myCourses"),
-    path('myCourseDetails/<pk>/', myCourseDetails),
-    path('grade/<st_id>/', grade),
-    path('openNewSection/', openNewSection),
-    path('Reject/<st_id>/', ScheduleApproveOrReject, name="ScheduleApproveOrReject"),
-    path('sectionlar/', sectionlar, name="sectionlar"),
+    
 
     # Oğuz
 
-    path('base/', instructor_base_view),
-    path('academic-staffs/', academicStaffs),
-    path('institute-staffs/', instituteStaffs),
-    path('institute/', institute),
-    path('grand-students/', grandStudents),
-    path('institutes/', institutes),
-    path('departments/', departments),
-    path('programs/', programs),
-    path('program-details/<id>/', programDetails),
-    path('cirriculums/', cirriculums),
-    path('courses/', courses),
-    path('course-types/', courseTypes),
-    path('sections/', sections),
-    path('all-academic-staff/', allAcademicStaff),
-    path('institute-heads/', instituteHeads),
-    path('department-heads/', departmentHeads),
-    path('program-heads/', programHeads),
-    # path('quoata-managers/', quoataManagers),
-    path('all-institute-staff/', allInstituteStaff),
-    path('all-grand-student/', allGrandStudent),
-    path('applications/', applies),
-    path('invalid/', invalid),
-    path('academic-staff-registration-i/', academicStaffRegistrationI),
-    path('academic-staff-registration-ii/', academicStaffRegistrationII),
-    path('succesfully/', succesfully),
-    path('application-i/', applicationI),
-    path('application-ii/', applicationII),
-    path('application-details/<tc>/', applicationDetails),
-    path('course-details/<id>/', courseDetails),
-    path('remove-course/', removeCourseShow),
-    path('remove-course-details/<id>/', removeCourse),
-    path('close-course/', closeCourseShow),
-    path('close-course-details/<id>/', closeCourse),
-    path('institute-details/<id>/', instituteDetails),
-    path('department-details/<id>/', departmentDetails),
-    path('cirriculum-details/<id>/', cirriculumDetails),
-    path('section-details/<id>/', sectionDetails),
-    path('academic-staff-details/<id>/', academicStaffDetails),
-    path('grand-student-details/<id>/', grandStudentDetails),
-    path('available-courses/', availableCourses),
-    path('all-completed-courses/', allCompletedCourses),
-    path('all-completed-courses-details/<id>/', allCompletedCoursesDetails),
-    path('selected-completed-course-details/<id>/', selectedCompletedCourseDetails),
-    path('removeSelectedApplication/<tc>/', removeSelectedApplication),
-    path('removeAllAplications/', removeAllAplications),
-    path('removeAllSections/', removeAllSections),
-    path('apply/', apply),
+#### YENi EKLENENLER ####
+    #### MAIN MENUS ####
+    path('staff/', staff_home_view),
+
+    path('academic-staff/', academicStaff, name="academic-staff"),
+    path('institute-staff/', instituteStaff, name="institute-staff"),
+    path('grad-student/', gradStudent),
+    path('institute/', institute, name="institute"),
+
+    #### SUB MENU OF INSTITUTE ####
+    path('institutes/', institutes, name="institutes"),
+    path('departments/', departments, name="departments"),
+    path('programs/', programs, name="programs"),
+    path('curriculums/', curriculums, name="curriculums"),
+    path('courses/', courses, name="courses"),
+    path('available-courses/', availableCourses, name="available-courses"),
+    path('remove-course/', removeCourseHome, name="remove-course"),
+    path('open-or-close-course/', openCloseCourseHome, name="open-or-close-course"),
+    path('course-types/', courseTypes, name="course-types"),
+    path('sections/', sections, name="sections"),
+    path('define-exam-dates/', defineExamDates, name="define-exam-dates"),
+    path('make-announcement/', makeAnnouncements, name="make-announcement"),
+
+    path('institute-details/<id>/', instituteDetails, name="institute-details"),
+    path('department-details/<id>/', departmentDetails, name="department-details"),
+    path('program-details/<id>/', programDetails, name="program-details"),
+    path('curriculum-details/<id>/', curriculumDetails, name="curriculum-details"),
+    path('course-details/<id>/', courseDetails, name="course-details"),
+    path('remove-course-details/<id>/', removeCourse, name="remove-course-details"),
+    path('open-or-close-course-details/<id>/', openCloseCourse, name="open-or-close-course-details"),
+    path('section-details/<id>/', sectionDetails, name="section-details"),
+    path('exam-details/<id>/', examDetails, name="exam-details"),
+    path('announcement-details/<id>/', announcementDetails, name="announcement-details"),
+
+
+    #### SUB MENU OF ACADEMIC STAFF ####
+    path('all-academic-staff/', allAcademicStaff, name="all-academic-staff"),
+    path('add-academic-staff-i/', addAcademicStaffI, name="add-academic-staff-i"),
+    path('add-academic-staff-ii/', addAcademicStaffII, name="add-academic-staff-ii"),
+    path('institute-heads/', instituteHeads, name="institute-heads"),
+    path('department-heads/', departmentHeads, name="department-heads"),
+    path('program-heads/', programHeads, name="program-heads"),
+
+    path('academic-staff-details/<id>/', academicStaffDetails, name="academic-staff-details"),
+    
+    
+
+    #### SUB MENU OF INSTITUTE STAFF ####
+
+    path('all-institute-staff/', allInstituteStaff, name="all-institute-staff"),
+    path('institute-staff-details/<tc>/', instituteStaffDetails, name="institute-staff-details"),
+    
+
+    #### SUB MENU OF GRAD STUDENTS ####
+
+    path('all-grad-student/', allGradStudent, name="all-grad-student"),
+    path('applications/', applications, name="applications"),
+    path('application-details/<tc>/', applicationDetails, name="application-details"),
+
+
+    path('display-students/', displayStudent),
+    path('display-student-details/<st_id>/', displayStudentDetails),
+
+##### ALİ
+
+
+    path('instructor/', instructor_home_view, name='instructor_home_view'),
+    path('students-in-my-courses/', studentsInMyCourses),
+
+    path('my-students/', myStudents),
+    path('my-courses/', myCourses),
+    path('my-course-details/<pk>/', myCourseDetails),
+    path('grade/<st_id>/', grade),
+    path('all-sections/', sectionlar),
+    path('change-quota/<pk>/', SectionUpdateView.as_view()),
+    path('special-quota/', special_quota),
+    path('open-special-quota/', open_special_quota, name="open-special-quota"),
+    path('display-transcript/<st_id>/', display_transcript),
+    path('display-schedule/<st_id>/', displaySchedule),
+    path('display-ccr/<st_id>/', displayCCR),
+    path('display-curriculum/<st_id>/', displayCurriculum),
+    
+
+
+
+
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -94,4 +94,18 @@ class RemoveCourseForm(forms.ModelForm):
 		fields = ['is_deleted']
 
 
+#### YENi EKLENENLER ####
+
+# DEFINE EXAME
+class AddExamDateForm(forms.ModelForm):
+	class Meta:
+		model = ExamDate
+		fields = '__all__'
+
+# MAKE ANNOUNCEMENT
+class MakeAnnouncementForm(forms.ModelForm):
+	class Meta:
+		model = MakeAnnouncement
+		fields = '__all__'
+
 

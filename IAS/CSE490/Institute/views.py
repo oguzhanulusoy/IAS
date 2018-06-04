@@ -534,3 +534,32 @@ def selectedCompletedCourseDetails(request, id=None):
 
 
 
+#### YENi EKLENENLER ####
+def makeAnnouncement(request):
+    url = 'make-announcement.html'
+    if request.method == 'GET':
+        form = MakeAnnouncementForm()
+    else:
+        form = MakeAnnouncementForm(request.POST)
+        if form.is_valid():
+            sender = form.cleaned_data['sender']
+            title = form.cleaned_data['title']
+            description = form.cleaned_data['description']
+    return render(request, url, {'form':form})
+
+def defineExamDate(request):
+    url = 'define-exam-date.html'
+    if request.method == 'GET':
+        form = AddExamDateForm()
+    else:
+        form = AddExamDateForm(request.POST)
+        if form.is_valid():
+            place = form.cleaned_data['place']
+            date = form.cleaned_data['date']
+            slot = form.cleaned_data['slot']
+            section = form.cleaned_data['section']
+            instructor = form.cleaned_data['instructor']
+    return render(request, url, {'form':form})
+
+
+

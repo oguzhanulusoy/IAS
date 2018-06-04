@@ -1,0 +1,45 @@
+{% if user.is_authenticated %}
+{% if user.staff %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">IAS</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/staff">Home<span class="sr-only">(current)</span></a>
+            </li>
+
+            <li class="nav-item active">
+                <a class="nav-link" href="/institute">Institutes</a>
+            </li>
+
+            <li class="nav-item active">
+                <a class="nav-link" href="/academic-staff">Academic Staffs</a>
+            </li>
+
+            <li class="nav-item active">
+                <a class="nav-link" href="/institute-staff">Institute Staffs</a>
+            </li>
+
+            <li class="nav-item active">
+                <a class="nav-link" href="/grad-student">Grad Students</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            {% if user.is_authenticated %}
+            <span class="navbar-text" style="margin-right: 15px;">
+              {{ request.user.first_name }} {{ request.user.last_name }}
+          </span>
+          <a href="#" class="btn btn-outline-success my-2 my-sm-0 mr-sm-2">Profile</a>
+          <a href="{% url 'logout' %}" class="btn btn-outline-success my-2 my-sm-0 mr-sm-0">Logout</a>
+          {% else %}
+          <a href="#" class="btn btn-outline-success my-2 my-sm-0 mr-sm-2">Login</a>
+          <a href="#" class="btn btn-outline-success my-2 my-sm-0 mr-sm-0">Register</a>
+          {% endif %}
+      </form>
+  </div>
+</nav>
+{% endif %}
+{% endif %}

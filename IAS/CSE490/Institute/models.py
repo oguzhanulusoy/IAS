@@ -302,8 +302,8 @@ class Section(models.Model):
 
     def __str__(self):
         if self.number < 10:
-            return self.course.code + '.0' + str(self.number)
-        return self.course.code + str(self.number)
+            return str(self.course.title) + ' ' + self.course.code + '.0' + str(self.number)
+        return str(self.course.title) + ' ' + self.course.code + str(self.number)
 
     class Meta:
         unique_together = ('course', 'number')
@@ -424,3 +424,39 @@ class CompletedCourse(models.Model):
 
     def __str__(self):
         return str(self.student) + ' ' + str(self.ccr_course) + ' ' + str(self.grade)
+
+
+
+#### YENi EKLENENLER ####
+class ExamDate(models.Model):
+
+    proxy = True
+
+    place = models.CharField('Place', blank=False, null=True, max_length=6)
+    date = models.DateField('Date', blank=False, null=True)
+    slot = models.CharField('Slot', choices=SLOTS, null=True, blank=False, max_length=2)
+    section = models.ForeignKey('Section', models.CASCADE)
+    instructor = models.ForeignKey('AcademicStaff', models.CASCADE, null=True)
+
+    class Meta: 
+        verbose_name = 'Exam Date'
+        verbose_name_plural = 'Exam Dates'
+
+    def __str__(self):
+        return str(self.section.course) + ' ' + str(self.section.number) + ' ' + str(self.place) + ' ' + str(self.date)
+
+class MakeAnnouncement(models.Model):
+
+    proxy = True
+
+    title = models.CharField('Title', blank=False, null=True, max_length=100)
+    description = models.TextField('Description', blank=False, null=True, max_length=500)
+    date = models.DateField(auto_now_add=True)
+    sender = models.ForeignKey('Staff', models.CASCADE, blank=False, null=True)
+
+    class Meta:
+        verbose_name = 'Announcement'
+        verbose_name_plural = 'Announcements'
+
+    def __str__(self):
+        return str(self.title) + ' created by ' + str(self.sender)

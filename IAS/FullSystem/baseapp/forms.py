@@ -3,6 +3,7 @@ from .lists import *
 from .models import Program, Institute, Department
 from .models import User, Student, Visitor, Staff, AcademicStaff, PersonalInformation
 from .models import Section, CompletedCourse, TakenCourse, Course, CourseType, Curriculum
+from .models import *
 
 text_widget = forms.TextInput(attrs={'class': 'form-control'})
 password_widget = forms.PasswordInput(attrs={'class': 'form-control'})
@@ -207,3 +208,18 @@ class RemoveCourseForm(forms.ModelForm):
     class Meta:
         model = Course
         fields = ['is_deleted']
+
+
+#### YENi EKLENENLER ####
+
+# DEFINE EXAME
+class AddExamDateForm(forms.ModelForm):
+    class Meta:
+        model = ExamDate
+        fields = '__all__'
+
+# MAKE ANNOUNCEMENT
+class MakeAnnouncementForm(forms.ModelForm):
+    class Meta:
+        model = MakeAnnouncement
+        fields = '__all__'

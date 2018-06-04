@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+{% include 'head.html' %}
+<body>
+
+	{% include 'staff-navigation.html' %}
+	<br>
+
+	{% block content %}
+	{% endblock %}
+
+	{% include 'script.html' %}
+</body>
+</html>

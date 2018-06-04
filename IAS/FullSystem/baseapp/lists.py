@@ -294,3 +294,10 @@ BLOOD_TYPES = (('A Rh+', 'A Rh+'),
 
 MARITAL_STATUS = (('Single', 'Single'),
                   ('Married', 'Married'))
+
+
+#### YENi EKLENENLER ####
+EXAMSLOTS = (('1', '1'),
+        ('2', '2'),
+        ('3', '3'))
+

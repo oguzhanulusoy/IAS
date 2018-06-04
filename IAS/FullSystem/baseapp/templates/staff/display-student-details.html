@@ -1,0 +1,44 @@
+{% extends 'staff-base.html' %}
+{% block content %}
+<div class="container">
+	<div class="row">
+		{{  student.st_id }}
+		{% include 'left-menu.html' %}
+		<div class="col-md-6">
+			<div class="row">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>Firstname</th>
+							<th>Lastname</th>
+							<th>Email</th>
+							<th>CCR</th>
+							<th>Schedule</th>
+							<th>Transcript</th>
+							<th>Curriculum</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							{{ student.student}}
+							<td>{{ student.user.first_name }}</td>
+							<td>{{ student.user.last_name }}</td>
+							<td>{{ student.user.email }}</td>
+							<td><a href="/display-ccr/{{student.st_id}}/"> CCR</a></td>
+							<td><a href="/display-schedule/{{student.st_id}}/">Schedule</a></td>
+							<td><a href="/display-transcript/{{student.st_id}}/">Transcript</a></td>
+							<td><a href="/display-curriculum/{{student.st_id}}/">Curriculum</a></td>
+						</tr>
+					</tbody>
+				</table>
+				<br>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+{% endblock %}
+
+
+
+

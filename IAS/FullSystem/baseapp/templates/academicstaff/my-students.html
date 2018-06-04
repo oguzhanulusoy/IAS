@@ -1,0 +1,43 @@
+
+
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    {% include 'left-menu.html' %}
+    <div class="col-md-6">
+      <div class="row">
+      </div>
+  <h2>My Students</h2>
+             
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Firstname</th>
+        <th>Lastname</th>
+      </tr>
+    </thead>
+    <tbody>
+
+{% for student in students %}
+      <tr>
+        <td> {{student.user.first_name}} </td>
+        <td>{{student.user.last_name}}</td>
+      </tr>
+{% endfor %}
+    </tbody>
+  </table>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
