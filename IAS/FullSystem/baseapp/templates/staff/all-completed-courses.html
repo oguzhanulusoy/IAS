@@ -1,0 +1,30 @@
+{% extends 'staff-base.html' %}
+{% block content %}
+<div class="container">
+	<div class="row">
+		{% include 'left-menu.html' %}
+		<div class="col-md-6">
+			<div class="row">
+				<table>
+					<tr>
+						<th>Name</th>
+						<th>Department</th>
+						<th>Head</th>
+						<th>View</th>
+					</tr>
+					{% for i in programs %}
+					<tr>
+						<td>{{ i.name }}</td>
+						<td>{{ i.department }}</td>
+						<td>{{ i.dept_head }}</td>
+						<td><a href="/all-completed-courses-details/{{ i.id }}/">View</a></td>
+					</tr>
+					{% endfor %}
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+{% endblock %}
+

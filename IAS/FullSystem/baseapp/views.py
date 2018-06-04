@@ -1443,18 +1443,23 @@ def invalid(request):
 
 # to display all completed courses for all students in the system
 def allCompletedCourses(request):
-    url = 'staff/allCompletedCourses.html'
-    programs = Program.objects.order_by('name')
-    return render(request, url, {'programs': programs})
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/all-completed-courses.html'
+        programs = Program.objects.order_by('name')
+        return render(request, url, {'programs': programs})
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 
 # to display details of selected department-course relationship
 def allCompletedCoursesDetails(request, id=None):
-    url = 'staff/all-completed-courses-details.html'
-    relatedProgram = get_object_or_404(Program, pk=id)
-    courses = Course.objects.filter(program__name=relatedProgram.name)
-    return render(request, url, {'courses': courses})
-
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/all-completed-courses-details.html'
+        relatedProgram = get_object_or_404(Program, pk=id)
+        courses = Course.objects.filter(program__name=relatedProgram.name)
+        return render(request, url, {'courses': courses})
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 # to display details of selected course from all completed course
 def selectedCompletedCourseDetails(request, id=None):
@@ -1482,13 +1487,9 @@ def selectedCompletedCourseDetails(request, id=None):
 
     return render(request, url, {'grade': grade, 'student': student})
 
-
-#### YENi EKLENENLER ####
-
 def staff_home_view(request):
     if request.user.is_authenticated:
         return render(request, 'staff/home.html')
-
 
 def instructor_home_view(request):
     if request.user.is_authenticated:
