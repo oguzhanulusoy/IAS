@@ -4,16 +4,27 @@
     <div class="row">
         {% include 'left-menu.html' %}
         <div class="col-md-6">
-            <div class="row">
-                <ul class="list-group list-group-flush">
-                    <a href="/display-students" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Display Student with Details</a>
-                    <a href="/all-completed-courses" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>All Completed Courses</a>
-                    <a href="/all-grad-student" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>All Grad Student</a>
-                    <a href="/applications" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Applications</a>
-                    <a href="/delete-all-applications" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Remove All Application</a>
-                </ul>
-                <br>
+            {% if user.is_authenticated %}
+            <div class="alert alert-info">
+                Welcome, <strong>{{ user.first_name }} {{ user.last_name }}!</strong> You can manage all secretarial tasks and access to details over IAS.  
             </div>
+            {% endif %}
+            <b> Useful Links</b>
+            <hr>
+            + <a href="http://www.fmv.edu.tr/" target="_blank">Feyziye School Foundation</a>
+            <hr>
+            + <a href="http://www.isikun.edu.tr/" target="_blank">Isik University Home</a>
+            <hr>
+            + <a href="http://www.isikun.edu.tr/etkinlikler" target="_blank">Events on University</a>
+            <hr>
+            + <a href="http://www.isikun.edu.tr/duyurular" target="_blank">News from University</a>
+            <hr>
+            + <a href="http://www.isikun.edu.tr/idari-birimler" target="_blank">People in Isik</a>
+            <hr>
+            + <a href="https://owa.isikun.edu.tr/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fowa.isikun.edu.tr%2fowa%2f" target="_blank">Webmail</a>
+            <hr>
+            + <a href="http://course.isikun.edu.tr" target="_blank">Course Online</a>
+            <hr>
         </div>
     </div>
 </div>

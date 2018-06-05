@@ -5,25 +5,33 @@
 		{% include 'left-menu.html' %}
 		<div class="col-md-6">
 			<div class="row">
+
+				<div class="alert alert-warning">
+					<strong>Warning!</strong> You can display all entities, and add new object. Sections are defined at beginning of the semester, and deleted at end of the semester. Exam dates must not be draft program.
+				</div>
+
+
+
+
 				<ul class="list-group list-group-flush">
-					<a href="/institutes" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Institutes</a>
-					<a href="/departments" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Departments</a>
-					<a href="/programs" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Programs</a>
-					<a href="/curriculums" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Curriculums</a>
-					<a href="/courses" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Courses</a>
-					<a href="/courses" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Define Course</a>
-					<a href="/available-courses" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Available Courses</a>
-					<a href="{% url 'open_courses' %}" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Current Course Schedule</a>
-					<a href="/open-or-close-course" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Open/Close Course</a>
-					<a href="/remove-course" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Remove Course</a>
-					<a href="/course-types" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Course Types</a>
+					<a href="/institutes" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Institutes</a>
+					<a href="/departments" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Departments</a>
+					<a href="/programs" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Programs</a>
+					<a href="/curriculums" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Curriculums</a>
+					<a href="/courses" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Courses</a>
+					<a href="/courses" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Define Course</a>
+					<a href="/available-courses" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Available Courses</a>
+					<a href="{% url 'open_courses' %}" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Current Course Schedule</a>
 				</ul>
 				<br>
 				<ul>
-					<a href="/sections" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Sections</a>
-					<a href="/delete-all-sections" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Remove All Sections</a>
-					<a href="/define-exam-dates" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Define Exam Dates</a>
-					<a href="/make-announcement" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Make Announcement</a>
+					<a href="/open-or-close-course" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Open/Close Course</a>
+					<a href="/remove-course" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Remove Course</a>
+					<a href="/course-types" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Course Types</a>
+					<a href="/sections" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Sections</a>
+					<a href="/delete-all-sections" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Remove All Sections</a>
+					<a href="/define-exam-dates" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Define Exam Dates</a>
+					<a href="/make-announcement" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Make Announcement</a>
 				</ul>
 			</div>
 		</div>

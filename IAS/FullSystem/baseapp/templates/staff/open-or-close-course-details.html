@@ -4,32 +4,10 @@
 	<div class="row">
 		{% include 'left-menu.html' %}
 		<div class="col-md-6">
-			<!-- Modal -->
-			<div class="container">
-				<!-- Modal Delete Course-->
-				<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#closeCourse">Open/Close Course</button>
-				<div class="modal fade" id="closeCourse" role="dialog">
-					<div class="modal-dialog">
-						<!-- Modal content-->
-						<div class="modal-content">
-							<div class="modal-header">
-								<h4 class="modal-title">Close Course Screen</h4>
-							</div>
-							<div class="modal-body">
-								<p>Enter given fields correctly.</p>
-								<form action='' method='post'>{% csrf_token %}
-									{{ editForm.as_p }}
-									{{ editForm.non_field_errors }}
-									<input type='submit' value='Submit' />
-								</form>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#reject"><a href="/open-course/{{courseDetails.id}}">Open Course</a></button>
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#reject"><a href="/close-course/{{courseDetails.id}}">Close Course</a></button>
+
+			<br>
 			<hr>
 			<small class="text-muted">Course number:  </small> {{ courseDetails.id }}
 			<br><small class="text-muted">Name:  </small> {{ courseDetails.title }}

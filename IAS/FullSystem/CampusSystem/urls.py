@@ -57,7 +57,7 @@ urlpatterns = [
     path('staff/', staff_home_view),
     path('academic-staff/', academicStaff, name="academic-staff"),
     path('institute-staff/', instituteStaff, name="institute-staff"),
-    path('grad-student/', gradStudent, name="grad-student"),
+    path('grad-students/', gradStudents, name="grad-students"),
     path('institute/', institute, name="institute"),
     path('institutes/', institutes, name="institutes"),
     path('departments/', departments, name="departments"),
@@ -90,7 +90,7 @@ urlpatterns = [
     path('academic-staff-details/<id>/', academicStaffDetails, name="academic-staff-details"),
     path('all-institute-staff/', allInstituteStaff, name="all-institute-staff"),
     path('institute-staff-details/<tc>/', instituteStaffDetails, name="institute-staff-details"),
-    path('all-grad-student/', allGradStudent, name="all-grad-student"),
+    path('all-grad-students/', allGradStudents, name="all-grad-students"),
     path('applications/', applications, name="applications"),
     path('application-details/<tc>/', applicationDetails, name="application-details"),
     path('display-students/', displayStudent, name="display-students"),
@@ -100,6 +100,7 @@ urlpatterns = [
     path('selected-completed-course-details/<id>/', selectedCompletedCourseDetails, name="selected-completed-course-details"),
     path('succesfully/', succesfully, name="succesfully"),
     path('invalid/', invalid, name="invalid"),
+    path('grad-student-details/<st_id>/', gradStudentDetails, name="grad-student-details"),
     url(r'^delete-selected-application/(?P<tc>\d+)/$', deleteSelectedApplication, name='delete-selected-application'),
     url(r'^reject-selected-application/(?P<tc>\d+)/$', rejectSelectedApplication, name='reject-selected-application'),
     url(r'^delete-all-applications/$', deleteAllApplications, name='delete-all-applications'),
@@ -109,6 +110,8 @@ urlpatterns = [
     url(r'^delete-all-sections/$', deleteAllSections, name='delete-all-sections'),
     url(r'^delete-selected-section/(?P<id>\d+)/$', deleteSelectedSection, name='delete-selected-section'),
     url(r'^delete-staff/(?P<tc>\d+)/$', deleteStaff, name='delete-staff'),
+    url(r'^open-course/(?P<id>\d+)/$', openCourse, name='open-course'),
+    url(r'^close-course/(?P<id>\d+)/$', closeCourse, name='close-course'),
 
 
 

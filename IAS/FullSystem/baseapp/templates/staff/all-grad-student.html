@@ -14,14 +14,14 @@
 						<th>Advisor</th>
 						<th>View</th>
 					</tr>
-					{% for i in grandStudents %}
+					{% for i in gradStudents %}
 					<tr>
 						<td>{{ i.user }}</td>
 						<td>{{ i.st_id }}</td>
 						<td>{{ i.st_email }}</td>
 						<td>{{ i.program }}</td>
 						<td>{{ i.advisor }}</td>
-						<td><a href="/grand-student-details/{{ i.id}}/">View</a></td>
+						<td><a href="/grad-student-details/{{ i.st_id }}/">View</a></td>
 					</tr>
 					{% endfor %}
 				</table>

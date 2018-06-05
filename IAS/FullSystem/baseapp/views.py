@@ -801,7 +801,7 @@ def instituteStaff(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-def gradStudent(request):
+def gradStudents(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         return render(request, 'staff/grad-student-home.html', {})
     else:
@@ -1299,20 +1299,20 @@ def instituteStaffDetails(request, tc=None):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-def allGradStudent(request):
+def allGradStudents(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         content = Student.objects.order_by('user')
         gradStudents = {'gradStudents': content}
-        return render(request, 'staff/all-grand-student.html', gradStudents)
+        return render(request, 'staff/all-grad-student.html', gradStudents)
     else:
         return HttpResponseRedirect('/login')
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-def gradStudentDetails(request, id=None):
+def gradStudentDetails(request, st_id=None):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/grad-student-details.html'
-        gradStudentDetails = get_object_or_404(Student, pk=id)
+        gradStudentDetails = get_object_or_404(Student, st_id=st_id)
         return render(request, url, {'gradStudentDetails': gradStudentDetails})
     else:
         return HttpResponseRedirect('/login')
@@ -1431,6 +1431,20 @@ def rejectSelectedApplication(request, tc):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         Visitor.objects.filter(tc=tc).update(is_deleted=True)
         return redirect('/applications')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
+
+def openCourse(request, id):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        Course.objects.filter(id=id).update(is_valid=True)
+        return redirect('/open-or-close-course')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
+
+def closeCourse(request, id):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        Course.objects.filter(id=id).update(is_valid=False)
+        return redirect('/open-or-close-course')
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 

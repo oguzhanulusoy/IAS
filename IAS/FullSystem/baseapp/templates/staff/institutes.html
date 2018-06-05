@@ -36,14 +36,12 @@
 					<tr>
 						<th>Name</th>
 						<th>Head</th>
-						<th>Established Date</th>
 						<th>View</th>
 					</tr>
 					{% for i in institutes %}
 					<tr>
 						<td>{{ i.name }}</td>
 						<td>{{ i.head }}</td>
-						<td>{{ i.establishedDate }}</td>
 						<td><a href="/institute-details/{{ i.id }}/">View</a>
 						</tr>
 						{% endfor %}

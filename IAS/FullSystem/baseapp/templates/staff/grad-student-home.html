@@ -4,17 +4,22 @@
     <div class="row">
         {% include 'left-menu.html' %}
         <div class="col-md-6">
-            <div class="row">
-                    <ul class="list-group list-group-flush">
-                        <a href="/all-grad-student" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>All Grad Student</a>
-                        <a href="/applications" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Applications</a>
-                        <br>
-                        <a href="/delete-all-applications" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Remove All Application</a>
-                    </ul>
-                <br>
-            </div>
+
+           <div class="alert alert-warning">
+            <strong>Warning!</strong> You can access directly to student with details, completed courses through departments and programs. You are able to display and remove all applications with one click.
+        </div>
+        <div class="row">
+            <ul class="list-group list-group-flush">
+                <a href="/display-students" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Display Student with Details</a>
+                <a href="/all-completed-courses" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>All Completed Courses</a>
+                <a href="/all-grad-students" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>All Grad Student</a>
+                <a href="/applications" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Applications</a>
+                <a href="/delete-all-applications" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Remove All Application</a>
+            </ul>
+            <br>
         </div>
     </div>
+</div>
 </div>
 </div>
 {% endblock %}

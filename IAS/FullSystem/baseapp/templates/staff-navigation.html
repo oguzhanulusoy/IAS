@@ -24,16 +24,19 @@
             </li>
 
             <li class="nav-item active">
-                <a class="nav-link" href="/grad-student">Grad Students</a>
+                <a class="nav-link" href="{% url 'grad-students' %}">Grad Students</a>
             </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
             {% if user.is_authenticated %}
             <span class="navbar-text" style="margin-right: 15px;">
-              {{ request.user.first_name }} {{ request.user.last_name }}
+             
           </span>
-          <a href="#" class="btn btn-outline-success my-2 my-sm-0 mr-sm-2">Profile</a>
-          <a href="{% url 'logout' %}" class="btn btn-outline-success my-2 my-sm-0 mr-sm-0">Logout</a>
+
+          <a href="http://www.isikun.edu.tr/" class="btn btn-outline-success my-2 my-sm-0 mr-sm-2">Isik University</a>
+        
+          <a href="http://www.isikun.edu.tr/i/content/522_1_Akademik%20Takvim_18-19.pdf" class="btn btn-outline-success my-2 my-sm-0 mr-sm-2">Academic Calendar</a>
+          <a href="#" class="btn btn-outline-success my-2 my-sm-0 mr-sm-0">FAQ</a>
           {% else %}
           <a href="#" class="btn btn-outline-success my-2 my-sm-0 mr-sm-2">Login</a>
           <a href="#" class="btn btn-outline-success my-2 my-sm-0 mr-sm-0">Register</a>

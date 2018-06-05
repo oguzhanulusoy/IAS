@@ -5,14 +5,20 @@
         {% include 'left-menu.html' %}
         <div class="col-md-6">
             <div class="row">
+
+                <div class="alert alert-warning">
+                    <strong>Warning!</strong> You can display all academic staff individually, and access the heads.
+                </div>
+
+
                 <ul class="list-group list-group-flush">
-                    <a href="{% url 'open_courses' %}" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Current Course Schedule</a>
-                    <a href="/all-academic-staff" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>All Academic Staff</a>
-                    <a href="/add-academic-staff-i" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Add Academic Staff</a>
-                    <a href="/institute-heads" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Institute Heads</a>
-                    <a href="/department-heads" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Department Heads</a>
-                    <a href="/program-heads" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Program Heads</a>
-                    <a href="#" target="_blank" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Quota Managers</a>
+                    <a href="{% url 'open_courses' %}" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Current Course Schedule</a>
+                    <a href="/all-academic-staff" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>All Academic Staff</a>
+                    <a href="/add-academic-staff-i" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Add Academic Staff</a>
+                    <a href="/institute-heads" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Institute Heads</a>
+                    <a href="/department-heads" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Department Heads</a>
+                    <a href="/program-heads" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Program Heads</a>
+                    <a href="#" class="list-group-item list-group-item-action"><span class="oi oi-list-rich"></span>Quota Managers</a>
                 </ul>
                 <br>
             </div>
