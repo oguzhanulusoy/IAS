@@ -778,10 +778,13 @@ def sectionlar(request):
 
     return render(request, url, {'sections': sections})
 
+def instructor_home_view(request):
+    if request.user.is_authenticated:
+        return render(request, 'academicstaff/home.html')
+
 
 #### OGUZHAN ULUSOY ####
 
-# to display academic staff home
 def academicStaff(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         return render(request, 'staff/academic-staff-home.html', {})
@@ -790,7 +793,6 @@ def academicStaff(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display institute staff home
 def instituteStaff(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         return render(request, 'staff/institute-staff-home.html', {})
@@ -799,8 +801,6 @@ def instituteStaff(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-
-# to display grand student home
 def gradStudent(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         return render(request, 'staff/grad-student-home.html', {})
@@ -809,8 +809,6 @@ def gradStudent(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-
-# to display institute home
 def institute(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         return render(request, 'staff/institute-home.html', {})
@@ -819,7 +817,6 @@ def institute(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display institutes
 def institutes(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/institutes.html'
@@ -840,7 +837,6 @@ def institutes(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display details of selected institute
 def instituteDetails(request, id=None):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/institute-details.html'
@@ -851,7 +847,6 @@ def instituteDetails(request, id=None):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display departments
 def departments(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/departments.html'
@@ -874,8 +869,6 @@ def departments(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-
-# to display details of selected department
 def departmentDetails(request, id=None):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/department-details.html'
@@ -886,7 +879,6 @@ def departmentDetails(request, id=None):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display programs
 def programs(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/programs.html'
@@ -913,7 +905,6 @@ def programs(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display details of selected program
 def programDetails(request, id=None):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/program-details.html'
@@ -924,8 +915,6 @@ def programDetails(request, id=None):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-
-# to display cirriculums
 def curriculums(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/curriculums.html'
@@ -946,7 +935,6 @@ def curriculums(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display details of selected cirriculum
 def curriculumDetails(request, id=None):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/curriculum-details.html'
@@ -957,7 +945,6 @@ def curriculumDetails(request, id=None):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display all courses and define new course
 def courses(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/courses.html'
@@ -986,7 +973,6 @@ def courses(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display available courses
 def availableCourses(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/available-courses.html'
@@ -997,7 +983,6 @@ def availableCourses(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display details of selected course
 def courseDetails(request, id=None):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/course-details.html'
@@ -1019,7 +1004,6 @@ def courseDetails(request, id=None):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display courses that would be removed
 def removeCourseHome(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/remove-course.html'
@@ -1030,7 +1014,6 @@ def removeCourseHome(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display courses that would be closed
 def openCloseCourseHome(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/open-or-close-course.html'
@@ -1041,7 +1024,6 @@ def openCloseCourseHome(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display details of selected course and remove
 def removeCourse(request, id=None):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/remove-course-details.html'
@@ -1061,7 +1043,6 @@ def removeCourse(request, id=None):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to dispaly details of selected course and close
 def openCloseCourse(request, id=None):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/open-or-close-course-details.html'
@@ -1081,7 +1062,6 @@ def openCloseCourse(request, id=None):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display course types
 def courseTypes(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/course-types.html'
@@ -1102,7 +1082,6 @@ def courseTypes(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display sections
 def sections(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/sections.html'
@@ -1125,7 +1104,6 @@ def sections(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display details of selected section
 def sectionDetails(request, id=None):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/section-details.html'
@@ -1202,7 +1180,6 @@ def announcementDetails(request, id=None):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display all academic staffs
 def allAcademicStaff(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/all-academic-staff.html'
@@ -1222,7 +1199,6 @@ def allAcademicStaff(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display details of selected academic staff
 def academicStaffDetails(request, id=None):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/academic-staff-details.html'
@@ -1232,7 +1208,6 @@ def academicStaffDetails(request, id=None):
         return HttpResponseRedirect('/login')
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
-
 
 def addAcademicStaffI(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
@@ -1273,7 +1248,6 @@ def addAcademicStaffII(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display institute heads
 def instituteHeads(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         content = Institute.objects.order_by('head')
@@ -1284,7 +1258,6 @@ def instituteHeads(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display department heads
 def departmentHeads(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         content = Department.objects.order_by('dept_head')
@@ -1295,7 +1268,6 @@ def departmentHeads(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display program heads
 def programHeads(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         content = Program.objects.order_by('head')
@@ -1306,7 +1278,6 @@ def programHeads(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display all institute staff
 def allInstituteStaff(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/all-institute-staff.html'
@@ -1328,8 +1299,6 @@ def instituteStaffDetails(request, tc=None):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-
-# to display all grand student
 def allGradStudent(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         content = Student.objects.order_by('user')
@@ -1340,7 +1309,6 @@ def allGradStudent(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display details of selected grand student
 def gradStudentDetails(request, id=None):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/grad-student-details.html'
@@ -1351,7 +1319,6 @@ def gradStudentDetails(request, id=None):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display all applications
 def applications(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         content = Visitor.objects.order_by('user')
@@ -1361,12 +1328,13 @@ def applications(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display details of selected application
 def applicationDetails(request, tc=None):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/application-details.html'
         visitorDetails = get_object_or_404(Visitor, tc=tc)
         desiredUser = visitorDetails.user
+        desiredVisitor = Visitor.objects.filter(tc=tc)
+        visitorProgram = VisitorProgram.objects.filter(visitor=desiredVisitor)
         if request.method == 'GET':
             form = AddStudentForm()
         else:
@@ -1380,14 +1348,12 @@ def applicationDetails(request, tc=None):
                                   approval_statue=form.cleaned_data['approval_statue'])
                 student.save(force_insert=True)
                 return redirect('/succesfully')
-        applicationDetails = {'visitorDetails': visitorDetails, 'form': form}
+        applicationDetails = {'visitorDetails': visitorDetails, 'form': form, 'visitorProgram':visitorProgram}
         return render(request, url, applicationDetails)
     else:
         return HttpResponseRedirect('/login')
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
-
-
 
 def displayStudent(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
@@ -1405,43 +1371,77 @@ def displayStudentDetails(request, st_id=None):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to remove selected application
-def removeSelectedApplication(request, tc=None):
-    url = 'staff/applies.html'
-    visitor = Visitor.objects.get(tc=tc)
-    visitor.delete()
-    return render(request, url, {'action': 'Delete tasks'})
+def deleteAllApplications(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        Visitor.objects.all().delete()
+        return redirect('/succesfully')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
+def deleteAllExams(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        ExamDate.objects.all().delete()
+        return redirect('/succesfully')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
-# to remove all applications
-def removeAllAplications(request):
-    url = 'staff/succesfully.html'
-    all_visitors = Visitor.objects.all()
-    all_visitors.delete()
-    return render(request, url, {'action': 'Delete tasks'})
+def deleteAllAnnouncements(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        MakeAnnouncement.objects.all().delete()
+        return redirect('/succesfully')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
+def deleteAllSections(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        Section.objects.all().delete()
+        return redirect('/succesfully')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
-# to remove all sections
-def removeAllSections(request):
-    url = 'staff/succesfully.html'
-    all_sections = Section.objects.all()
-    all_sections.delete()
-    return render(request, url, {'action': 'Delete tasks'})
+def deleteSelectedApplication(request, tc):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        stock_to_delete = get_object_or_404(Visitor, tc=tc).delete()
+        return redirect('/applications')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
+def deleteSelectedSection(request, id):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        stock_to_delete = get_object_or_404(Section, id=id).delete()
+        return redirect('/sections')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
-# to redirect succesfully
+def deleteStaff(request, tc=None):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        stock_to_delete = get_object_or_404(Staff, tc=tc).delete()
+        return redirect('/succesfully')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
+
+def deleteSelectedExamDate(request, id):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        stock_to_delete = get_object_or_404(ExamDate, id=id).delete()
+        return redirect('/define-exam-dates')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
+
+def rejectSelectedApplication(request, tc):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        Visitor.objects.filter(tc=tc).update(is_deleted=True)
+        return redirect('/applications')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
+
 def succesfully(request):
     url = 'staff/succesfully.html'
     return render(request, url, {})
 
-
-# to redirect invalid
 def invalid(request):
     url = 'staff/invalid.html'
     return render(request, url, {})
 
-
-# to display all completed courses for all students in the system
 def allCompletedCourses(request):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/all-completed-courses.html'
@@ -1450,8 +1450,6 @@ def allCompletedCourses(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-
-# to display details of selected department-course relationship
 def allCompletedCoursesDetails(request, id=None):
     if request.user.is_authenticated and request.user.get_type() is Staff:
         url = 'staff/all-completed-courses-details.html'
@@ -1461,39 +1459,21 @@ def allCompletedCoursesDetails(request, id=None):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-# to display details of selected course from all completed course
 def selectedCompletedCourseDetails(request, id=None):
-    # to determine the redirecting page
     url = 'staff/selected-completed-course-details.html'
-
-    # to retrieve data of clicked course
     courseDetails = get_object_or_404(Course, pk=id)
-
-    # to retrieve data of all completed courses
     completedCourses = CompletedCourse.objects.all()
-
-    # to store students of relevant completed course
     student = []
-
     grade = []
-
-    # to find related courses in the completed courses list
     for i in completedCourses:
-
-        # to make matching desired course with all course
         if courseDetails.title == i.act_course.title:
             grade = i.grade
             student = i.student.st_id
-
     return render(request, url, {'grade': grade, 'student': student})
 
 def staff_home_view(request):
     if request.user.is_authenticated:
         return render(request, 'staff/home.html')
-
-def instructor_home_view(request):
-    if request.user.is_authenticated:
-        return render(request, 'academicstaff/home.html')
 
 
 

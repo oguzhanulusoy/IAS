@@ -223,3 +223,9 @@ class MakeAnnouncementForm(forms.ModelForm):
     class Meta:
         model = MakeAnnouncement
         fields = '__all__'
+
+# DELETE APPLICATION
+class RemoveApplicationForm(forms.ModelForm):
+    class Meta:
+        model = Visitor
+        fields = ['is_deleted']

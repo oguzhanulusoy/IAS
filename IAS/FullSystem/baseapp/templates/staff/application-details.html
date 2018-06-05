@@ -4,6 +4,8 @@
 	<div class="row">
 		{% include 'left-menu.html' %}
 		<div class="col-md-6">
+
+			{% if visitorDetails.is_deleted == False %}
 			<!-- Modal -->
 			<div class="container">
 				<!-- Modal Accept -->
@@ -30,10 +32,15 @@
 					</div>
 				</div>
 				<!-- Modal Reject -->
-				<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#reject">Reject</button>
-				<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#reject"><a href="/removeSelectedApplication/{{visitorDetails.tc}}/">Delete</a>
-				</button>  
+				<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#reject"><a href="/reject-selected-application/{{visitorDetails.tc}}">Reject</a></button>
+
+
+				<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#reject"><a href="/delete-selected-application/{{visitorDetails.tc}}">Delete</a></button>
+
+
 			</div>
+
+			{% endif %}
 			<br><br><br>
 			<hr>
 			<img src="{{ visitorDetails.user.avatar }}">
@@ -52,6 +59,7 @@
 			<br><small class="text-muted">GPA:  </small> {{ visitorDetails.gpa }}
 			<br><small class="text-muted">Graduated University:  </small> {{ visitorDetails.university }}
 			<br><small class="text-muted">Degree:  </small> {{ visitorDetails.degree }}
+			<br><small class="text-muted">Program:  </small> {{ visitorDetails.program }}
 
 			<br><br><small class="text-muted">Contact Information</small>
 			<br><small class="text-muted">Phone Number:  </small> {{ visitorDetails.user.phone_number }}

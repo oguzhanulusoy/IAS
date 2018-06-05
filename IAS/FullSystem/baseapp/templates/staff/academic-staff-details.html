@@ -4,12 +4,14 @@
 	<div class="row">
 		{% include 'left-menu.html' %}
 		<div class="col-md-6">
+			<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#reject"><a href="/delete-staff/{{academicStaffDetails.staff.tc}}">Delete</a></button>
+			<br>
 			<hr>
 			<img src="{{ academicStaffDetails.staff.user.avatar }}">
 			<br><br><small class="text-muted">Personal Information  </small>
-			<br><small class="text-muted">First Name:  </small> {{ instituteStaff.user.first_name }}
-			<br><small class="text-muted">Last Name:  </small> {{ instituteStaff.user.last_name }}
-			<br><small class="text-muted">Academic Staff number:  </small>{{ instituteStaff.id }}
+			<br><small class="text-muted">First Name:  </small> {{ academicStaffDetails.staff.user.first_name }}
+			<br><small class="text-muted">Last Name:  </small> {{ academicStaffDetails.staff.user.last_name }}
+			<br><small class="text-muted">Academic Staff number:  </small>{{ academicStaffDetails.user.id }}
 			<br><small class="text-muted">Institute:  </small> {{ academicStaffDetails.institute }}
 			<br><small class="text-muted">TC Number:  </small> {{ academicStaffDetails.staff.tc }}
 			<br><small class="text-muted">Birthday:  </small> {{ academicStaffDetails.staff.birthday }}

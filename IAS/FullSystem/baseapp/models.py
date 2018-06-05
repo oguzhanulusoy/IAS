@@ -79,6 +79,8 @@ class Visitor(models.Model):
     gpa = models.DecimalField('GPA', decimal_places=2, max_digits=4, validators=[MinValueValidator(2),
                                                                                  MaxValueValidator(4)])
 
+    program = models.ForeignKey('Program', models.CASCADE, blank=False, null=True)
+
     # Exam Information
     ales = models.PositiveIntegerField('ALES', validators=[MinValueValidator(50),
                                                            MaxValueValidator(100)])
@@ -87,6 +89,8 @@ class Visitor(models.Model):
 
     # Acceptance Status
     accepted = models.BooleanField('Accepted', default=False)
+
+    is_deleted = models.BooleanField('Deleted', default=False)
 
     @classmethod
     def create(cls, user, tc, birthday, gender, address, city, degree, university, gpa, ales, yds):

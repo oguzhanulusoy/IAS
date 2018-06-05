@@ -100,6 +100,15 @@ urlpatterns = [
     path('selected-completed-course-details/<id>/', selectedCompletedCourseDetails, name="selected-completed-course-details"),
     path('succesfully/', succesfully, name="succesfully"),
     path('invalid/', invalid, name="invalid"),
+    url(r'^delete-selected-application/(?P<tc>\d+)/$', deleteSelectedApplication, name='delete-selected-application'),
+    url(r'^reject-selected-application/(?P<tc>\d+)/$', rejectSelectedApplication, name='reject-selected-application'),
+    url(r'^delete-all-applications/$', deleteAllApplications, name='delete-all-applications'),
+    url(r'^delete-selected-exam-date/(?P<id>\d+)/$', deleteSelectedExamDate, name='delete-selected-exam-date'),
+    url(r'^delete-all-exams/$', deleteAllExams, name='delete-all-exams'),
+    url(r'^delete-all-announcements/$', deleteAllAnnouncements, name='delete-all-announcements'),
+    url(r'^delete-all-sections/$', deleteAllSections, name='delete-all-sections'),
+    url(r'^delete-selected-section/(?P<id>\d+)/$', deleteSelectedSection, name='delete-selected-section'),
+    url(r'^delete-staff/(?P<tc>\d+)/$', deleteStaff, name='delete-staff'),
 
 
 
