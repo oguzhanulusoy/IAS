@@ -7,20 +7,18 @@
 			<div class="row">
 				<table>
 					<tr>
-						<th>Student</th>
-						<th>ID</th>
-						<th>E-Mail</th>
-						<th>Program</th>
-						<th>Advisor</th>
-						<th>View</th>
+						<th>First Name</th>
+						<th>Last Name</th>
+						<th>Student ID</th>
+						<th>School E-Mail</th>
+						<th>Details</th>
 					</tr>
-					{% for i in gradStudents %}
+					{% for i in students %}
 					<tr>
-						<td>{{ i.user }}</td>
+						<td>{{ i.user.first_name }}</td>
+						<td>{{ i.user.last_name }}</td>
 						<td>{{ i.st_id }}</td>
 						<td>{{ i.st_email }}</td>
-						<td>{{ i.program }}</td>
-						<td>{{ i.advisor }}</td>
 						<td><a href="/grad-student-details/{{ i.st_id }}/"><span class="oi oi-external-link"></span></a></td>
 					</tr>
 					{% endfor %}

@@ -1348,6 +1348,7 @@ def applicationDetails(request, tc=None):
                                   approval_statue=form.cleaned_data['approval_statue'])
                 student.save(force_insert=True)
                 return redirect('/succesfully')
+        stock_to_delete = get_object_or_404(Visitor, tc=tc).delete()
         applicationDetails = {'visitorDetails': visitorDetails, 'form': form, 'visitorProgram':visitorProgram}
         return render(request, url, applicationDetails)
     else:
@@ -1365,9 +1366,9 @@ def displayStudent(request):
 
 def displayStudentDetails(request, st_id=None):
     if request.user.is_authenticated and request.user.get_type() is Staff:
-        student = Student.objects.filter(st_id=st_id)
-        print(student)
-        return render(request, 'staff/display-student-details.html', {'student' : student})
+        desiredStudent = Student.objects.filter(st_id=st_id)
+        print(desiredStudent)
+        return render(request, 'staff/display-student-details.html', {'desiredStudent' : desiredStudent})
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
@@ -1470,6 +1471,27 @@ def allCompletedCoursesDetails(request, id=None):
         relatedProgram = get_object_or_404(Program, pk=id)
         courses = Course.objects.filter(program__name=relatedProgram.name)
         return render(request, url, {'courses': courses})
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
+
+def classLists(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/class-lists.html'
+        sections = Section.objects.order_by('course')
+        return render(request, url, {'sections' : sections})
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
+
+def classListDetails(request, id=None):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/class-list-details.html'
+        section = get_object_or_404(Section, id=id)
+        allTakenCourses = TakenCourse.objects.all()
+        students = []
+        for i in allTakenCourses:
+            if i.act_course.id == section.id:
+                students.append(i.student)
+        return render(request, url, {'students':students})
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 

@@ -20,14 +20,14 @@
 					</thead>
 					<tbody>
 						<tr>
-							{{ student.student}}
-							<td>{{ student.user.first_name }}</td>
-							<td>{{ student.user.last_name }}</td>
-							<td>{{ student.user.email }}</td>
-							<td><a href="/display-ccr/{{student.st_id}}/"> CCR</a></td>
-							<td><a href="/display-schedule/{{student.st_id}}/">Schedule</a></td>
-							<td><a href="/display-transcript/{{student.st_id}}/">Transcript</a></td>
-							<td><a href="/display-curriculum/{{student.st_id}}/">Curriculum</a></td>
+							{{ desiredStudent.student}}
+							<td>{{ desiredStudent.user.first_name }}</td>
+							<td>{{ desiredStudent.user.last_name }}</td>
+							<td>{{ desiredStudent.user.email }}</td>
+							<td><a href="/display-ccr/{{desiredStudent.st_id}}/"> CCR</a></td>
+							<td><a href="/display-schedule/{{desiredStudent.st_id}}/">Schedule</a></td>
+							<td><a href="/display-transcript/{{desiredStudent.st_id}}/">Transcript</a></td>
+							<td><a href="/display-curriculum/{{desiredStudent.st_id}}/">Curriculum</a></td>
 						</tr>
 					</tbody>
 				</table>

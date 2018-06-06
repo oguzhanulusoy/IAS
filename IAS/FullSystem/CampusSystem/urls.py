@@ -112,6 +112,8 @@ urlpatterns = [
     url(r'^delete-staff/(?P<tc>\d+)/$', deleteStaff, name='delete-staff'),
     url(r'^open-course/(?P<id>\d+)/$', openCourse, name='open-course'),
     url(r'^close-course/(?P<id>\d+)/$', closeCourse, name='close-course'),
+    path('class-lists/', classLists, name="class-lists"),
+    path('class-list-details/<id>/', classListDetails, name="class-list-details"),
 
 
 

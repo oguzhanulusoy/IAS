@@ -12,16 +12,22 @@
 						<th>Student</th>
 						<th>E-mail</th>
 						<th>Advisor</th>
-						<th>View</th>
+						<th>CCR</th>
+						<th>Schedule</th>
+						<th>Transcript</th>
+						<th>Curriculum</th>
 					</tr>
 					{% for i in students %}
 					<tr>
 						<td>{{ i.program }}</td>
-						<td>{{ i.st_id }}</td>
-						<td>{{ i.user }}</td>
+						<td><a href="/grad-student-details/{{ i.st_id}}">{{ i.st_id }}</a></td>
+						<td><a href="/grad-student-details/{{ i.st_id}}">{{ i.user }}</a></td>
 						<td>{{ i.st_email }}</td>
 						<td>{{ i.advisor }}</td>
-						<td><a href="/display-student-details/{{ i.st_id}}/">View </a></td>
+						<td><a href="/display-ccr/{{i.st_id}}/"> CCR</a></td>
+						<td><a href="/display-schedule/{{i.st_id}}/">Schedule</a></td>
+						<td><a href="/display-transcript/{{i.st_id}}/">Transcript</a></td>
+						<td><a href="/display-curriculum/{{i.st_id}}/">Curriculum</a></td>
 					</tr>
 					{% endfor %}
 				</table>
