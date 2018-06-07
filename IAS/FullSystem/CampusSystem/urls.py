@@ -118,6 +118,7 @@ urlpatterns = [
     path('display-program-details/<code>/', displayProgramDetails, name="display-program-details"),
     path('push-hold-state/', pushHoldState, name="push-hold-state"),
     path('pop-hold-state/', popHoldState, name="pop-hold-state"),
+    path('search/', bigSearch, name="big-search"),
 
 
 

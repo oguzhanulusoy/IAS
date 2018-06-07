@@ -1,0 +1,39 @@
+{% extends 'staff-base.html' %}
+{% block content %}
+<div class="container">
+	<div class="row">
+		{% include 'left-menu.html' %}
+		<div class="col-md-6">
+			<div class="alert alert-warning">
+  <strong>Warning!</strong> Before you start to ask for, every student information is displayed.
+</div>
+			<form action="" method="post">
+				{% csrf_token %}
+				<input type="text" name="search" class="form-control">
+
+				<button type="submit">Submit</button>
+			</form>
+			<hr>
+
+			<h5>Results</h5>
+			<hr>
+			{% for student in students %}
+
+			<br>Student ID: {{ student.st_id }}
+			<br>Student: {{ student.user.first_name }} {{ student.user.last_name}}
+			<br>Phone: {{ student.user.phone_number }}
+			<br>E-Mail: {{ student.st_email }}
+			<br>Advisor: {{ student.advisor }}
+			<br>Program: {{ student.program }}
+			<br>Curriculum: {{ student.curriculum }}
+			<br>Hold State: {{ student.hold_state }}
+			<br>Approval Statue: {{ student.approval_statue }}
+			<br>
+
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+

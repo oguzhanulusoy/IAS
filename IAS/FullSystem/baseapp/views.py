@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from CampusSystem.settings import EMAIL_HOST_USER as sender
 from django.template.defaulttags import register
-
+from django.db.models import Q
 import datetime
 import random
 import threading
@@ -1098,6 +1098,8 @@ def sections(request):
         else:
             form = AddSectionForm()
         sections = Section.objects.order_by('-year')
+
+
         return render(request, url, {'sections': sections, 'form': form})
     else:
         return HttpResponseRedirect('/login')
@@ -1547,4 +1549,15 @@ def popHoldState(request):
     form = LoginForm()
     return render(request, 'home.html', {'form':form})
 
-
+def bigSearch(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        students = Student.objects.all()
+        query=request.POST.get('search')
+        print(query)
+        if query:
+            students=students.filter(Q(st_id__icontains=query) | Q(st_email__icontains=query) | Q(program__name__icontains=query)
+                | Q(user__first_name__icontains=query) | Q(user__last_name__icontains=query) | Q(user__phone_number__icontains=query) | 
+                Q(advisor__staff__user__first_name__icontains=query)).distinct()
+            #print(query)
+          
+        return render(request, 'staff/results.html', {'students':students})

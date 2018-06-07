@@ -12,6 +12,9 @@ from .rules import *
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+
+    proxy = True
+
     username = models.CharField(_('username'), max_length=15, unique=True)
     email = models.EmailField(_('email address'), unique=True)
     first_name = models.CharField(_('first name'), max_length=30)
@@ -63,6 +66,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Visitor(models.Model):
     # Personal Information
+    proxy = True
+
     user = models.OneToOneField('User', on_delete=models.CASCADE)
     tc = models.CharField('TC Number', max_length=11, unique=True)
     birthday = models.DateField('Birthday')
@@ -102,6 +107,10 @@ class Visitor(models.Model):
 
 
 class VisitorProgram(models.Model):
+
+    proxy = True
+
+
     visitor = models.ForeignKey('Visitor', models.CASCADE)
     program = models.ForeignKey('Program', models.CASCADE)
 
@@ -117,6 +126,10 @@ class VisitorProgram(models.Model):
 
 
 class PersonalInformation(models.Model):
+
+    proxy = True
+
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     id_number = models.CharField('ID Number', max_length=11)
     gender = models.CharField('Gender', max_length=10, blank=True, choices=GENDER)
@@ -144,6 +157,10 @@ class PersonalInformation(models.Model):
 
 
 class Student(models.Model):
+
+    proxy = True
+
+
     user = models.OneToOneField('User', models.CASCADE)
     st_email = models.EmailField('School Email Address', max_length=60, blank=True, null=True)
     st_id = models.CharField('Student ID', max_length=9, null=True, blank=True)
@@ -369,6 +386,8 @@ class Student(models.Model):
 
 class Staff(models.Model):
     # Personal Information
+    proxy = True
+
     user = models.OneToOneField('User', models.CASCADE)
     tc = models.CharField('TC Number', max_length=11, unique=True)
     birthday = models.DateField('Birthday')
@@ -387,6 +406,8 @@ class Staff(models.Model):
 
 class AcademicStaff(models.Model):
     # Personal Information
+    proxy = True
+
     staff = models.OneToOneField('Staff', models.CASCADE)
     university = models.CharField('University', max_length=60, choices=UNIVERSITIES, default='Işık Üniversitesi')
     institute = models.ForeignKey('Institute', models.SET_NULL, blank=True, null=True)
@@ -407,6 +428,8 @@ class AcademicStaff(models.Model):
 
 
 class Institute(models.Model):
+    proxy = True
+
     name = models.CharField('Institute Name', max_length=60)
     head = models.ForeignKey('AcademicStaff', models.SET_NULL, related_name='inst_head', blank=True, null=True)
 
@@ -418,6 +441,8 @@ class Institute(models.Model):
 
 
 class Department(models.Model):
+    proxy = True
+
     name = models.CharField('Name', max_length=60)
     institute = models.ForeignKey('Institute', models.CASCADE)
     dept_head = models.ForeignKey('AcademicStaff', models.SET_NULL, blank=True, null=True)
@@ -429,7 +454,10 @@ class Department(models.Model):
         return self.name
 
 
+
 class Program(models.Model):
+    proxy = True
+
     name = models.CharField('Name', max_length=60)
     code = models.CharField('Code', max_length=4)
     type = models.CharField('Type', max_length=60, choices=PROGRAM_TYPES)
@@ -453,6 +481,8 @@ class Program(models.Model):
 
 
 class Curriculum(models.Model):
+    proxy = True
+
     program = models.ForeignKey('Program', models.CASCADE, verbose_name='Program', blank=False)
     year = models.PositiveIntegerField(verbose_name='Year', blank=False, default=datetime.now().year,
                                        validators=[MinValueValidator(2000),
@@ -469,6 +499,8 @@ class Curriculum(models.Model):
 
 
 class Course(models.Model):
+    proxy = True
+
     code = models.CharField('Course Code', max_length=7, unique=True)
     title = models.CharField('Course Title', max_length=60, blank=False)
     description = models.TextField('Course Description', max_length=255, blank=True)
@@ -488,6 +520,7 @@ class Course(models.Model):
 
 
 class Section(models.Model):
+    proxy = True
     course = models.ForeignKey('Course', on_delete=models.CASCADE, verbose_name='Course')
     number = models.PositiveIntegerField('Section Number', validators=[MinValueValidator(1)])
     quota = models.PositiveIntegerField('Quota', validators=[MinValueValidator(0)])
@@ -545,6 +578,7 @@ class Section(models.Model):
 
 
 class Schedule(models.Model):
+    proxy = True
     section = models.ForeignKey('Section', verbose_name='Section', max_length=10, on_delete=models.CASCADE)
     day = models.CharField('Section Day', max_length=15, choices=DAYS)
     slot = models.CharField('Section Slot', max_length=2, choices=SLOTS)
@@ -600,6 +634,7 @@ def write_roman(num):
 
 
 class CourseType(models.Model):
+    proxy = True
     title = models.CharField('Title', max_length=60)
     code = models.CharField('Code', max_length=15, unique=True)
 
@@ -611,6 +646,7 @@ class CourseType(models.Model):
 
 
 class CcrCourse(models.Model):
+    proxy = True
     ccr = models.ForeignKey('Curriculum', models.CASCADE)
     type = models.ForeignKey('CourseType', models.CASCADE)
     no = models.PositiveIntegerField('Course Number', validators=[MinValueValidator(1)], editable=False, default=1)
@@ -661,6 +697,7 @@ class CcrCourse(models.Model):
 
 
 class OfferedCourse(models.Model):
+    proxy = True
     ccr_course = models.ForeignKey('CcrCourse', models.CASCADE)
     act_course = models.ForeignKey('Course', models.CASCADE)
 
@@ -682,6 +719,7 @@ class OfferedCourse(models.Model):
 
 
 class TakenCourse(models.Model):
+    proxy = True
     student = models.ForeignKey('Student', models.CASCADE)
     ccr_course = models.ForeignKey('CcrCourse', models.CASCADE)
     act_course = models.ForeignKey('Section', models.CASCADE)
@@ -726,6 +764,7 @@ class TakenCourse(models.Model):
 
 
 class CompletedCourse(models.Model):
+    proxy = True
     student = models.ForeignKey('Student', models.CASCADE)
     ccr_course = models.ForeignKey('CcrCourse', models.CASCADE)
     act_course = models.ForeignKey('Section', models.CASCADE)
