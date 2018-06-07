@@ -229,3 +229,6 @@ class RemoveApplicationForm(forms.ModelForm):
     class Meta:
         model = Visitor
         fields = ['is_deleted']
+
+class SearchForm(forms.Form):
+    search = forms.CharField(label='Search Area', max_length=300, required=True, widget=text_widget)

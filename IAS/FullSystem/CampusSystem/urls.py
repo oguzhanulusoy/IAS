@@ -114,6 +114,10 @@ urlpatterns = [
     url(r'^close-course/(?P<id>\d+)/$', closeCourse, name='close-course'),
     path('class-lists/', classLists, name="class-lists"),
     path('class-list-details/<id>/', classListDetails, name="class-list-details"),
+    path('display-programs/', displayPrograms, name="display-programs"),
+    path('display-program-details/<code>/', displayProgramDetails, name="display-program-details"),
+    path('push-hold-state/', pushHoldState, name="push-hold-state"),
+    path('pop-hold-state/', popHoldState, name="pop-hold-state"),
 
 
 

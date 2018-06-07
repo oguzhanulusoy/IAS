@@ -1511,6 +1511,40 @@ def staff_home_view(request):
     if request.user.is_authenticated:
         return render(request, 'staff/home.html')
 
+def displayPrograms(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/display-programs.html'
+        programs = Program.objects.all()
+        return render(request, url, {'programs':programs})
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
+def displayProgramDetails(request, code=None):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        url = 'staff/display-program-details.html'
+        students = Student.objects.all()
+        print(students)
+        desiredStudents = []
+        for student in students:
+            if student.program.code == code:
+                desiredStudents.append(student)
+        print(desiredStudents)
+        return render(request, url, {'desiredStudents':desiredStudents})
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
+
+def pushHoldState(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        Student.objects.all().update(hold_state=True)
+        return redirect('/succesfully')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
+
+def popHoldState(request):
+    if request.user.is_authenticated and request.user.get_type() is Staff:
+        Student.objects.all().update(hold_state=False)
+        return redirect('/succesfully')
+    form = LoginForm()
+    return render(request, 'home.html', {'form':form})
 
 
